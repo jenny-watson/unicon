@@ -1,0 +1,12 @@
+{
+  "category": "length",
+  "si": "m",
+  "model": {
+    "slope": 1000,
+    "intercept": 0
+  },
+  "alias": [
+    "km",
+    "kilometres"
+  ]
+}

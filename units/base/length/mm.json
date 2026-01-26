@@ -1,0 +1,13 @@
+{
+  "category": "length",
+  "si": "m",
+  "model": {
+    "slope": 0.001,
+    "intercept": 0
+  },
+  "alias": [
+    "mm",
+    "millimetres",
+    "millimeters"
+  ]
+}

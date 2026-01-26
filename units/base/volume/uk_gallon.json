@@ -1,0 +1,13 @@
+{
+  "category": "volume",
+  "si": "litre",
+  "model": {
+    "slope": 4.5461,
+    "intercept": 0
+  },
+  "alias": [
+    "uk gallon",
+    "uk gallons",
+    "uk gal"
+  ]
+}

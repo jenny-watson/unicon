@@ -1,0 +1,14 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 28.3,
+    "intercept": 0
+  },
+  "alias": [
+    "oz",
+    "ozs",
+    "ounce",
+    "ounces"
+  ]
+}

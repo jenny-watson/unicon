@@ -1,0 +1,18 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "g",
+    "gs",
+    "gram",
+    "grams",
+    "gm",
+    "gms",
+    "gramme",
+    "grammes"
+  ]
+}

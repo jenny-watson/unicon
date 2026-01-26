@@ -1,0 +1,16 @@
+{
+  "category": "volume",
+  "si": "litre",
+  "model": {
+    "slope": 3.7854,
+    "intercept": 0
+  },
+  "alias": [
+    "gallon",
+    "gallons",
+    "gal",
+    "us gallon",
+    "us gallons",
+    "us gal"
+  ]
+}

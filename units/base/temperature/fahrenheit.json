@@ -1,0 +1,12 @@
+{
+  "category": "temperature",
+  "si": "celcius",
+  "model": {
+    "slope": 0.5556,
+    "intercept": -17.7778
+  },
+  "alias": [
+    "fahrenheit",
+    "f"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "category": "volume",
+  "si": "litre",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "litre",
+    "l",
+    "litres",
+    "liters",
+    "ltr",
+    "lts",
+    "liter"
+  ]
+}

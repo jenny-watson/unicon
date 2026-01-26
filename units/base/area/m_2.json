@@ -1,0 +1,15 @@
+{
+  "category": "area",
+  "si": "ha",
+  "model": {
+    "slope": 0.0001,
+    "intercept": 0
+  },
+  "alias": [
+    "m2",
+    "metres squared",
+    "square metres",
+    "meters squared",
+    "square meters"
+  ]
+}

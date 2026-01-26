@@ -1,0 +1,13 @@
+{
+  "category": "length",
+  "si": "m",
+  "model": {
+    "slope": 0.9144,
+    "intercept": 0
+  },
+  "alias": [
+    "yard",
+    "yards",
+    "yd"
+  ]
+}

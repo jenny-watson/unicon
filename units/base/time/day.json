@@ -1,0 +1,13 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 1.1574074074e-05,
+    "intercept": 0
+  },
+  "alias": [
+    "day",
+    "d",
+    "days"
+  ]
+}

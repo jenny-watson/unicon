@@ -1,0 +1,14 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 1e06,
+    "intercept": 0
+  },
+  "alias": [
+    "t",
+    "ts",
+    "tonne",
+    "tonnes"
+  ]
+}

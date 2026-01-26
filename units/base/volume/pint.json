@@ -1,0 +1,13 @@
+{
+  "category": "volume",
+  "si": "litre",
+  "model": {
+    "slope": 0.4732,
+    "intercept": 0
+  },
+  "alias": [
+    "pint",
+    "pints",
+    "pt"
+  ]
+}

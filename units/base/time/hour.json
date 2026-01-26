@@ -1,0 +1,13 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 0.0002777778,
+    "intercept": 0
+  },
+  "alias": [
+    "hour",
+    "hours",
+    "h"
+  ]
+}

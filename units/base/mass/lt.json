@@ -1,0 +1,15 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 1016046.9,
+    "intercept": 0
+  },
+  "alias": [
+    "lt",
+    "long ton",
+    "long tons",
+    "long tonne",
+    "long tonnes"
+  ]
+}

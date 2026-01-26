@@ -1,0 +1,14 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 0.01666667,
+    "intercept": 0
+  },
+  "alias": [
+    "minute",
+    "minutes",
+    "min",
+    "mins"
+  ]
+}

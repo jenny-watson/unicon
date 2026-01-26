@@ -1,0 +1,14 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "sec",
+    "secs",
+    "second",
+    "seconds"
+  ]
+}

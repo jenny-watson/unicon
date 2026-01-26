@@ -1,0 +1,12 @@
+{
+  "category": "temperature",
+  "si": "celcius",
+  "model": {
+    "slope": 1,
+    "intercept": -273.15
+  },
+  "alias": [
+    "kelvin",
+    "k"
+  ]
+}

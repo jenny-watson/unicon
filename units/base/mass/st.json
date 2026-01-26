@@ -1,0 +1,24 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 907184.7,
+    "intercept": 0
+  },
+  "alias": [
+    "st",
+    "sts",
+    "ton",
+    "tons",
+    "short ton",
+    "short tons",
+    "short tonne",
+    "short tonnes",
+    "us ton",
+    "us tons",
+    "us short ton",
+    "us short tons",
+    "us short tonne",
+    "us short tonnes"
+  ]
+}

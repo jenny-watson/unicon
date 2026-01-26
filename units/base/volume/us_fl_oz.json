@@ -1,0 +1,14 @@
+{
+  "category": "volume",
+  "si": "litre",
+  "model": {
+    "slope": 0.0296,
+    "intercept": 0
+  },
+  "alias": [
+    "us fl. oz",
+    "us fluid ounce",
+    "fl. oz",
+    "fluid ounce"
+  ]
+}

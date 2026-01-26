@@ -1,0 +1,16 @@
+{
+  "category": "mass",
+  "si": "g",
+  "model": {
+    "slope": 1e-03,
+    "intercept": 0
+  },
+  "alias": [
+    "mg",
+    "mgs",
+    "milligram",
+    "milligrams",
+    "milligramme",
+    "milligrammes"
+  ]
+}
