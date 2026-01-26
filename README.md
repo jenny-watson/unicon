@@ -4,7 +4,7 @@
 
 ## Overview
 
-This project is a very quick and dirty extract of some unit conversion functionality we (Trinity Natural Capital Engineering have been working on in order to meet the needs of various ongoing projects.
+This project is a very quick and dirty extract of some unit conversion functionality we (Trinity Natural Capital Engineering) have been working on in order to meet the needs of various ongoing projects.
 
 The basic design intent behind the approach is to create a simple, succinct set of schemas that provide the information required to perform unit conversion, offer minimum required functionality, avoid duplication of information and provide for ease of maintenance/update/addition.
 
@@ -12,7 +12,7 @@ The intent of this project is to provide a reprex for this core functionality an
 
 ## Repo contents/design
 
-The `units` subdirectory contains JSON schemas which contain all required information for the conversion functionality.
+The `units` sub-directory contains JSON schemas which contain all required information for the conversion functionality.
 
 The files at `units/base/*/*.json` provide the core schemas, with:
 
@@ -23,7 +23,7 @@ The files at `units/base/*/*.json` provide the core schemas, with:
 
 The files at `units/derived/*.json` provide a definition of derived units as a function of their base unit components (e.g. rate-type units like tonnes per hectare, or density-type units like kg per litre).
 
-The files at `units/operators/*.json` provide defintions for the operators that are inherent in the derived units.
+The files at `units/operators/*.json` provide definitions for the operators that are inherent in the derived units.
 
 The file `si.json` provides a checkable directory for the standard index units required by the base models.
 
@@ -37,5 +37,5 @@ The following is suggested for our joint efforts on this project:
 2. Write a wrapper function to export from the package to perform conversion for a user based on the core data/models.
 3. Work through the package development process, complete documentation, and ensure all checks etc are passing.
 4. Implement Continuous Integration to run checks etc. via GitHub Actions whenever development occurs.
-5. Consider vulnarabilities of the approach and write unit tests or structural improvements to address them.
+5. Consider vulnerabilities of the approach and write unit tests or structural improvements to address them.
 6. Stretch goal: Write an integrated `plumber` API endpoint for this functionality.
