@@ -1,7 +1,7 @@
 library(tidyverse)
 
 # derive base unit read in paths and read
-fdir <- file.path("units", "base")
+fdir <- file.path("inst", "units", "base")
 files <- list.files(fdir, recursive = TRUE, pattern = "\\.json$", full.names = FALSE)
 paths <- list.files(fdir, recursive = TRUE, pattern = "\\.json$", full.names = TRUE)
 split <- str_split(files, "/")
@@ -12,7 +12,7 @@ base <- map(paths, ~jsonlite::read_json(.x, simplifyVector = TRUE, simplifyDataF
 
 # read in unit standard master
 # this is similar to the SI concept but adapted for our needs
-si <- jsonlite::read_json(file.path("units", "si.json"), simplifyVector = FALSE) # needed in build????
+si <- jsonlite::read_json(file.path("inst", "units", "si.json"), simplifyVector = FALSE) # needed in build????
 
 # make tabular
 # id will be added to aliases and distinct rows taken to avoid pointless repetition
@@ -21,14 +21,14 @@ si <- jsonlite::read_json(file.path("units", "si.json"), simplifyVector = FALSE)
 unit_conv <- imap_dfr(base, ~tibble(id = .y, alias = .x$alias, category = .x$category, si = .x$si, model = list(.x$model)))
 
 ## derived units
-fdir <- file.path("units", "derived")
+fdir <- file.path("inst", "units", "derived")
 derived <- map(
   list.files(fdir, pattern = "\\.json$", full.names = TRUE),
   jsonlite::read_json
 ) %>%
   set_names(str_replace(list.files(fdir, pattern = "\\.json"), "\\.json", ""))
 
-fdir <- file.path("units", "operators")
+fdir <- file.path("inst", "units", "operators")
 operators <- map(
   list.files(fdir, pattern = "\\.json$", full.names = TRUE),
   ~jsonlite::read_json(.x, simplifyVector = TRUE)
