@@ -1,13 +1,23 @@
-## may need to rename cols to have pattern x, x_value
+#' unit_conv_scale uses unit_conv() but on multiple columns.
+#' Will need to rename cols to have pattern x, x_value for measures, quantities to ensure correct linkage.
+#' Input *must* be a dataframe.
+#'
+#' @param df a data frame
+#' @param measure the column that contains the units - must be character
+#' @param quantity the column that contains the values - must be integer
+#'
+#' @returns a dataframe with two additional columns, si and si_quantity
+#'
+#' @examples
+#' df = data.frame(info = letters[1:10],
+#'                 length = c(rep('inch', 10)),
+#'                 length_value = c(10:19),
+#'                 temp = c(rep('k', 10)),
+#'                 temp_value = c(360:369))
 
-df = data.frame(info = letters[1:10],
-               length = c(rep('inch', 10)),
-               length_value = c(10:19),
-               temp = c(rep('k', 10)),
-               temp_value = c(360:369))
+#' unit_conv_scale(measures = c('length', 'temp')
+#`                 quantities = c('length_value', 'temp_value'))
 
-measures = c('length', 'temp')
-quantities = c('length_value', 'temp_value')
 
 unit_conv_scale = function(df,
                            measures,
