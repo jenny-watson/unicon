@@ -1,0 +1,105 @@
+## may need to rename cols to have pattern x, x_value
+
+df = data.frame(info = letters[1:10],
+               length = c(rep('inch', 10)),
+               length_value = c(10:19),
+               temp = c(rep('k', 10)),
+               temp_value = c(360:369))
+
+measures = c('length', 'temp')
+quantities = c('length_value', 'temp_value')
+
+unit_conv_scale = function(df,
+                           measures,
+                           quantities){
+
+  ## get all other cols apart from ones transforming
+  other_cols = setdiff(setdiff(names(df), quantities), measures)
+
+  ## get data into 2 cols so that you can apply unit_conv()
+
+  df_long =
+
+    ## pivot longer = sure there is a better way of doing this
+    full_join(
+
+      df |>
+        select(-(all_of(quantities))) |>
+        pivot_longer(cols = measures,
+                     names_to = 'measure',
+                     values_to = 'unit'),
+
+      df |>
+        select(-(all_of(measures))) |>
+        pivot_longer(cols = quantities,
+                     names_to = 'quantity_title',
+                     values_to = 'value') |>
+        mutate(quantity_title = str_remove(quantity_title, '_value')),
+
+      by = c(other_cols,
+             'measure' = 'quantity_title')) |>
+
+    ## use unit_conv function
+    unit_conv(measure = unit,
+              quantity = value) |>
+
+
+    ## set up cols to do pivot_wider
+    mutate(measure_value = paste0(measure, '_value'),
+           measure_si = paste0(measure, '_si'),
+           measure_si_value = paste0(measure, '_si_value'))
+
+  ## do pivot_wider separately to ensure names are correct and get data back into original format
+
+  df_wide = df_long |>
+    select(all_of(other_cols),
+           measure,
+           unit) |>
+    pivot_wider(id_cols = other_cols,
+                names_from = measure,,
+                values_from = unit) |>
+
+    left_join(d_long |>
+                select(all_of(other_cols),
+                       measure_value,
+                       value) |>
+                pivot_wider(id_cols = other_cols,
+                            names_from = measure_value,
+                            values_from = value),
+              by = other_cols) |>
+
+    left_join(d_long |>
+                select(all_of(other_cols),
+                       measure_si,
+                       si) |>
+                pivot_wider(id_cols = other_cols,
+                            names_from = measure_si,
+                            values_from = si),
+              by = other_cols) |>
+
+    left_join(d_long |>
+                select(all_of(other_cols),
+                       measure_si_value,
+                       si_quantity) |>
+                pivot_wider(id_cols = other_cols,
+                            names_from = measure_si_value,
+                            values_from = si_quantity),
+              by = other_cols)
+
+  return(df_wide)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
