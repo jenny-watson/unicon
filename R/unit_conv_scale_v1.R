@@ -23,8 +23,20 @@ unit_conv_scale = function(df,
                            measures,
                            quantities){
 
+  ## make sure data types are correct
+
+  if (!is.character(dplyr::pull(df, measures))) {
+    stop("measure must be character", call. = FALSE)
+  }
+
+  if (!is.numeric(dplyr::pull(df, quantities))) {
+    stop("quantity must be numeric", call. = FALSE)
+  }
+
+
   ## get all other cols apart from ones transforming
   other_cols = setdiff(setdiff(names(df), quantities), measures)
+
 
   ## get data into 2 cols so that you can apply unit_conv()
 
@@ -69,7 +81,7 @@ unit_conv_scale = function(df,
                 names_from = measure,,
                 values_from = unit) |>
 
-    left_join(d_long |>
+    left_join(df_long |>
                 select(all_of(other_cols),
                        measure_value,
                        value) |>
@@ -78,7 +90,7 @@ unit_conv_scale = function(df,
                             values_from = value),
               by = other_cols) |>
 
-    left_join(d_long |>
+    left_join(df_long |>
                 select(all_of(other_cols),
                        measure_si,
                        si) |>
@@ -87,7 +99,7 @@ unit_conv_scale = function(df,
                             values_from = si),
               by = other_cols) |>
 
-    left_join(d_long |>
+    left_join(df_long |>
                 select(all_of(other_cols),
                        measure_si_value,
                        si_quantity) |>
@@ -95,6 +107,12 @@ unit_conv_scale = function(df,
                             names_from = measure_si_value,
                             values_from = si_quantity),
               by = other_cols)
+
+  ## warning if model is missing
+
+  if (any(is.na(df_wide))) {
+    warning("NA values detected — results may be incomplete")
+  }
 
   return(df_wide)
 
