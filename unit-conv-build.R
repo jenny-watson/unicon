@@ -107,6 +107,6 @@ rm(
 )
 
 # write out
-write_rds(unit_alias, "data/unit-alias.rds")
-write_rds(unit_models, "data/unit-models.rds")
-write_rds(unit_si, "data/unit-si.rds")
+write_rds(unit_alias, "data/unit_alias.rds")
+write_rds(unit_models, "data/unit_models.rds")
+write_rds(unit_si, "data/unit_si.rds")
