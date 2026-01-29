@@ -20,11 +20,11 @@
 #'                         'k',
 #'                         'uk_gallon'),
 #'                value = c(10:19))
-
+#'
 #' d_si = d |>
 #'   unit_conv(measure = unit,
 #'             quantity = value)
-
+#'
 #' Warning message:
 #' In unit_conv(d, measure = unit, quantity = value) :
 #'   NA values detected — results may be incomplete
@@ -49,18 +49,18 @@ unit_conv = function(df,
 
   dataframe = df |>
     dplyr::left_join(unit_alias, ## join alias to find id
-                     dplyr::join_by({{measure}} == alias)) |> ## {{}} allows any column to be passed regardless of name
+                     dplyr::join_by({{measure}} == .data$alias)) |> ## {{}} allows any column to be passed regardless of name
     dplyr::left_join(unit_models, ## get slope and intercept info
-                     dplyr::join_by(id)) |>
+                     dplyr::join_by(.data$id)) |>
     dplyr::left_join(unit_si, ## get SI info
-                     dplyr::join_by(id)) |>
-    tidyr::unnest_wider(model) |> ## unnest model vars for calcs
-    dplyr::mutate(si_quantity = ({{quantity}} * slope) + intercept) |>
-    dplyr::select(-c(id, ## drop unneeded cols so df looks same before function with added cols
-                     slope,
-                     intercept,
-                     type,
-                     category))
+                     dplyr::join_by(.data$id)) |>
+    tidyr::unnest_wider(.data$model) |> ## unnest model vars for calcs
+    dplyr::mutate(si_quantity = ({{quantity}} * .data$slope) + .data$intercept) |>
+    dplyr::select(-c(.data$id, ## drop unneeded cols so df looks same before function with added cols
+                     .data$slope,
+                     .data$intercept,
+                     .data$type,
+                     .data$category))
 
   ## warning if model is missing
 
