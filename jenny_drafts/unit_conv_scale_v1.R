@@ -1,6 +1,7 @@
 #' unit_conv_scale uses unit_conv() but on multiple columns.
 #' Will need to rename cols to have pattern x, x_value for measures, quantities to ensure correct linkage.
 #' Input *must* be a dataframe.
+#' Function is ugly, might be a better way of doing this using map and/or reduce functions
 #'
 #' @param df a data frame
 #' @param measure the column that contains the units - must be character
