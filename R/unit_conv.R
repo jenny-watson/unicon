@@ -2,6 +2,10 @@
 #' Input *must* be a dataframe.
 #' To apply to multiple columns please use `unit_conv_scale`.
 #'
+#' @importFrom dplyr left_join mutate select join_by
+#' @importFrom tidyr unnest_wider
+#' @importFrom rlang .data
+#'
 #' @param df a data frame
 #' @param measure the column that contains the units - must be character
 #' @param quantity the column that contains the values - must be integer
@@ -25,9 +29,9 @@
 #'   unit_conv(measure = unit,
 #'             quantity = value)
 #'
-#' Warning message:
-#' In unit_conv(d, measure = unit, quantity = value) :
-#'   NA values detected — results may be incomplete
+#' @export
+
+
 
 
 
@@ -49,23 +53,23 @@ unit_conv = function(df,
 
   dataframe = df |>
     dplyr::left_join(unit_alias, ## join alias to find id
-                     dplyr::join_by({{measure}} == .data$alias)) |> ## {{}} allows any column to be passed regardless of name
+                     dplyr::join_by({{measure}} == alias)) |> ## {{}} allows any column to be passed regardless of name
     dplyr::left_join(unit_models, ## get slope and intercept info
-                     dplyr::join_by(.data$id)) |>
+                     dplyr::join_by(id)) |>
     dplyr::left_join(unit_si, ## get SI info
-                     dplyr::join_by(.data$id)) |>
-    tidyr::unnest_wider(.data$model) |> ## unnest model vars for calcs
-    dplyr::mutate(si_quantity = ({{quantity}} * .data$slope) + .data$intercept) |>
-    dplyr::select(-c(.data$id, ## drop unneeded cols so df looks same before function with added cols
-                     .data$slope,
-                     .data$intercept,
-                     .data$type,
-                     .data$category))
+                     dplyr::join_by(id)) |>
+    tidyr::unnest_wider(model) |> ## unnest model vars for calcs
+    dplyr::mutate(si_quantity = ({{quantity}} * slope) + intercept) |>
+    dplyr::select(-c(id, ## drop unneeded cols so df looks same before function with added cols
+                     slope,
+                     intercept,
+                     type,
+                     category))
 
   ## warning if model is missing
 
   if (any(is.na(dataframe))) {
-    warning("NA values detected — results may be incomplete")
+    warning("NA values detected so results may be incomplete")
   }
 
   return(dataframe)

@@ -40,7 +40,4 @@ d_si = d |>
   unit_conv(measure = unit,
             quantity = value)
 
-Warning message:
-In unit_conv(d, measure = unit, quantity = value) :
-  NA values detected — results may be incomplete
 }
