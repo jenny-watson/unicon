@@ -1,3 +1,5 @@
 ^unit\.conversion\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^data-raw$
+^jenny_drafts$
