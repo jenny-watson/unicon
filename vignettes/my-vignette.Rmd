@@ -1,0 +1,54 @@
+---
+title: "unit.conversion"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(unit.conversion)
+```
+
+# Introduction
+
+The International System of Units (SI) standardises unit measurements, preventing different unit systems (most notably metric and imperial) being used interchangeably throughout the world to convey the same information, allowing meaningful comparisons. Simple calculations are often needed to ensure that measurements are in SI units, requiring conversion from one unit to another, for example yards to metres. If a unit of measurement is derived based on data from other units, such as speed, a calculation is required, converting the base units into SI first. This may trip up the best mathematicians or lead to annoying additions in code to solve these issues. 
+
+The {unit.conversion} package provides:
+
+1. A database of *base* and *derived* units and their SI equivalents, including their various names and notations, and the equations using base units to calculate derived units.
+2. Functions to convert non-SI units to SI units and vice versa.
+3. Functions to derive additional derived units from existing data, for example, volume to concentration.
+
+# Database of base and derived units
+
+The unit.conversion package runs on three key mappings:
+
+1. Names for units and the recognised aliases used in this package. E.g. cm, centimetres, and centimeters are names for cm.
+2. Calculations for converting non-SI derived units into SI derived units. E.g. multiplying cm/s by 0.01 to achieve m/s.
+3. Lists of what the recognised SI unit is. E.g. cm is m.
+
+These data are used in the functions described below.
+
+# Conversion of non-SI units to SI units and vice versa
+
+## Converting to SI
+
+## Converting from SI
+
+# Derivation of additional units from existing data
+
+# Adding missing database information
+
+Please raise an issue in the [GitHub](https://github.com/unit.conversion/) repository and the authors will add these in. 
+
+
+
