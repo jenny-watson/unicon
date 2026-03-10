@@ -1,11 +1,10 @@
 test_that("All base unit schemas have expected attributes", {
-
   # generate checks
   fields <- c("category", "si", "model", "alias")
-  checks <- imap(base, ~list(
-      full = all(fields %in% names(.x)),
-      clean = all(names(.x) %in% fields),
-      id = .y
+  checks <- imap(base, ~ list(
+    full = all(fields %in% names(.x)),
+    clean = all(names(.x) %in% fields),
+    id = .y
   ))
 
   # summarise
@@ -36,7 +35,7 @@ test_that("All SI units are present in base units for aliases and models", {
 ####################################################################################################
 
 test_that("SI models are as expected", {
-  si_models <- map(si, ~base[[.x]]$model)
+  si_models <- map(si, ~ base[[.x]]$model)
   iwalk(si_models, function(model, cat) {
     expect_true(model$slope == 1, info = paste0("Model incorrect for ", cat, " SI unit"))
     expect_true(model$intercept == 0, info = paste0("Model incorrect for ", cat, " SI unit"))

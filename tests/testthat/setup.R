@@ -7,9 +7,9 @@ fdir <- system.file("units", "base", lib.loc = .libPaths(), package = pkg)
 files <- list.files(fdir, recursive = TRUE, pattern = "\\.json$", full.names = FALSE)
 paths <- list.files(fdir, recursive = TRUE, pattern = "\\.json$", full.names = TRUE)
 split <- stringr::str_split(files, "/")
-unit_groups <- map_chr(split, ~.x[[1L]])
-unit_ids <- stringr::str_replace(map_chr(split, ~.x[[2L]]), "\\.json$", "")
-base <- map(paths, ~jsonlite::read_json(.x, simplifyVector = TRUE, simplifyDataFrame = FALSE)) %>%
+unit_groups <- map_chr(split, ~ .x[[1L]])
+unit_ids <- stringr::str_replace(map_chr(split, ~ .x[[2L]]), "\\.json$", "")
+base <- map(paths, ~ jsonlite::read_json(.x, simplifyVector = TRUE, simplifyDataFrame = FALSE)) %>%
   set_names(unit_ids)
 
 # read in unit standard master

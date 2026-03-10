@@ -6,7 +6,6 @@
 #' @import dplyr purrr
 #' @export
 unicon.help <- function(...) {
-
   # list up args
   args <- list(...)
 
@@ -18,7 +17,7 @@ unicon.help <- function(...) {
   # subselect by args
   unit_full <- reduce2(
     names(args), args,
-    ~filter(..1, str_detect(.data[[..2]], ..3)),
+    ~ filter(..1, str_detect(.data[[..2]], ..3)),
     .init = unit_full
   )
 

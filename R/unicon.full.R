@@ -15,7 +15,6 @@
 #' @importFrom stringr str_replace_all str_to_lower
 #' @export
 unicon.full <- function(value.in, unit.in, unit.out = NA, pull = TRUE) {
-
   # check, all values must be either length 1 or consistent length
   l1 <- length(value.in)
   l2 <- length(unit.in)
@@ -32,34 +31,32 @@ unicon.full <- function(value.in, unit.in, unit.out = NA, pull = TRUE) {
     alias.in = str_replace_all(str_to_lower(.data$unit.in), "\\s+", ""),
     alias.out = str_replace_all(str_to_lower(.data$unit.out), "\\s+", "")
   ) %>%
-    left_join(select(unit_alias, alias.in = .data$alias, id.in = .data$id), by = "alias.in", multiple = "any") %>%      # input id
-    left_join(select(unit_alias, alias.out = .data$alias, id.out = .data$id), by = "alias.out", multiple = "any") %>%   # output id if given
-    left_join(select(unit_si, id.in = .data$id, si.in = .data$si), by = "id.in", multiple = "any") %>%                  # si unit for input id
-    left_join(select(unit_si, id.out = .data$id, si.out = .data$si), by = "id.out", multiple = "any") %>%               # si unit for output id, needed for checks only
+    left_join(select(unit_alias, alias.in = .data$alias, id.in = .data$id), by = "alias.in", multiple = "any") %>% # input id
+    left_join(select(unit_alias, alias.out = .data$alias, id.out = .data$id), by = "alias.out", multiple = "any") %>% # output id if given
+    left_join(select(unit_si, id.in = .data$id, si.in = .data$si), by = "id.in", multiple = "any") %>% # si unit for input id
+    left_join(select(unit_si, id.out = .data$id, si.out = .data$si), by = "id.out", multiple = "any") %>% # si unit for output id, needed for checks only
     mutate(
-      error.in = is.na(.data$id.in),                                                     # user gave inputput units , but no matches
-      error.out = !is.na(.data$unit.out) & is.na(.data$id.out),                          # user gave output units , but no matches
-      error.si = .data$si.in != .data$si.out,                                            # user gave incompatible unit conversion (may be NA if no conversion explicitly spec'd)
-      id.out = ifelse(is.na(.data$unit.out), .data$si.in, .data$id.out)                  # use input si unit as output id if none given by user
+      error.in = is.na(.data$id.in), # user gave inputput units , but no matches
+      error.out = !is.na(.data$unit.out) & is.na(.data$id.out), # user gave output units , but no matches
+      error.si = .data$si.in != .data$si.out, # user gave incompatible unit conversion (may be NA if no conversion explicitly spec'd)
+      id.out = ifelse(is.na(.data$unit.out), .data$si.in, .data$id.out) # use input si unit as output id if none given by user
     ) %>%
-    left_join(rename(unit_models, id.in = .data$id, model.in = .data$model), by = "id.in", multiple = "any") %>%                # model for input <--> si
-    left_join(rename(unit_models, id.out = .data$id, model.out = .data$model), by = "id.out", multiple = "any")                 # model for si <--> output
+    left_join(rename(unit_models, id.in = .data$id, model.in = .data$model), by = "id.in", multiple = "any") %>% # model for input <--> si
+    left_join(rename(unit_models, id.out = .data$id, model.out = .data$model), by = "id.out", multiple = "any") # model for si <--> output
 
   # solve conversion models
   conv_tab <- conv_tab %>%
     mutate(
-      value.si = map2_dbl(.data$value.in, .data$model.in, ~.x * .y$slope + .y$intercept),         # forward model, input --> si
-      value.out = map2_dbl(.data$value.si, .data$model.out, ~(.x - .y$intercept) * 1 / .y$slope), # reverse model, si --> output
-      value.out = ifelse(.data$error.si %in% TRUE, NA_real_, .data$value.out)                     # ensure no misleading results produced if unit type mismatches
+      value.si = map2_dbl(.data$value.in, .data$model.in, ~ .x * .y$slope + .y$intercept), # forward model, input --> si
+      value.out = map2_dbl(.data$value.si, .data$model.out, ~ (.x - .y$intercept) * 1 / .y$slope), # reverse model, si --> output
+      value.out = ifelse(.data$error.si %in% TRUE, NA_real_, .data$value.out) # ensure no misleading results produced if unit type mismatches
     )
 
   if (isTRUE(pull)) {
     out <- conv_tab$value.out
     if (any(is.na(out))) warning("Some units failed to convert. Set `pull = FALSE` for detailed output.")
     return(conv_tab$value.out)
-
   } else {
-
     # full warn on failure
     if (any(conv_tab$error.in)) warning("Some input units failed to find matches.")
     if (any(conv_tab$error.out)) warning("Some output units failed to find matches.")
