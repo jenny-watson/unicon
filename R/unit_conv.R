@@ -57,15 +57,15 @@ unit_conv <- function(df,
   dataframe <- df |>
     left_join(
       unit_alias, ## join alias to find id
-      join_by({{ measure }} == alias)
+      join_by({{ measure }} == "alias")
     ) |> ## {{}} allows any column to be passed regardless of name
     left_join(
       unit_models, ## get slope and intercept info
-      join_by(id)
+      by = "id"
     ) |>
     left_join(
       unit_si, ## get SI info
-      join_by(id)
+      by = "id"
     ) |>
     unnest_wider(.data$model) |> ## unnest model vars for calcs
     mutate(si_quantity = ({{ quantity }} * .data$slope) + .data$intercept) |>
@@ -83,5 +83,5 @@ unit_conv <- function(df,
     warning("NA values detected so results may be incomplete")
   }
 
-  dataframe
+  return(dataframe)
 }
