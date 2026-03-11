@@ -2,7 +2,8 @@
 % Please edit documentation in R/unit_conv.R
 \name{unit_conv}
 \alias{unit_conv}
-\title{unit_conv converts measurement data (e.g. km, gallons, kelvin) into Trinity's standard units.
+\title{unit_conv converts measurement data (e.g. km, gallons, kelvin) into
+standard units.
 Input \emph{must} be a dataframe.
 To apply to multiple columns please use \code{unit_conv_scale}.}
 \usage{
@@ -19,25 +20,32 @@ unit_conv(df, measure, quantity)
 a dataframe with two additional columns, si and si_quantity
 }
 \description{
-unit_conv converts measurement data (e.g. km, gallons, kelvin) into Trinity's standard units.
+unit_conv converts measurement data (e.g. km, gallons, kelvin) into
+standard units.
 Input \emph{must} be a dataframe.
 To apply to multiple columns please use \code{unit_conv_scale}.
 }
 \examples{
-d = data.frame(unit = c('inch',
-                        'cm',
-                        'meters',
-                        'mile',
-                        'yard',
-                        'stone',
-                        'pints',
-                        'mls',
-                        'k',
-                        'uk_gallon'),
-               value = c(10:19))
+d <- data.frame(
+  unit = c(
+    "inch",
+    "cm",
+    "meters",
+    "mile",
+    "yard",
+    "stone",
+    "pints",
+    "mls",
+    "k",
+    "uk_gallon"
+  ),
+  value = c(10:19)
+)
 
-d_si = d |>
-  unit_conv(measure = unit,
-            quantity = value)
+d_si <- d |>
+  unit_conv(
+    measure = unit,
+    quantity = value
+  )
 
 }
