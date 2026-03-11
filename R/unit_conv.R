@@ -83,5 +83,5 @@ unit_conv <- function(df,
     warning("NA values detected so results may be incomplete")
   }
 
-  return(dataframe)
+  dataframe
 }
