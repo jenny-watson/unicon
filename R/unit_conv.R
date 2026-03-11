@@ -13,58 +13,68 @@
 #' @returns a dataframe with two additional columns, si and si_quantity
 #'
 #' @examples
-#' d = data.frame(unit = c('inch',
-#'                         'cm',
-#'                         'meters',
-#'                         'mile',
-#'                         'yard',
-#'                         'stone',
-#'                         'pints',
-#'                         'mls',
-#'                         'k',
-#'                         'uk_gallon'),
-#'                value = c(10:19))
+#' d <- data.frame(
+#'   unit = c(
+#'     "inch",
+#'     "cm",
+#'     "meters",
+#'     "mile",
+#'     "yard",
+#'     "stone",
+#'     "pints",
+#'     "mls",
+#'     "k",
+#'     "uk_gallon"
+#'   ),
+#'   value = c(10:19)
+#' )
 #'
-#' d_si = d |>
-#'   unit_conv(measure = unit,
-#'             quantity = value)
+#' d_si <- d |>
+#'   unit_conv(
+#'     measure = unit,
+#'     quantity = value
+#'   )
 #'
 #' @export
 
 
-
-
-
-unit_conv = function(df,
-                     measure,
-                     quantity){
-
+unit_conv <- function(df,
+                      measure,
+                      quantity) {
   ## make sure data types are correct
 
-  if (!is.character(dplyr::pull(df, {{measure}}))) {
+  if (!is.character(dplyr::pull(df, {{ measure }}))) {
     stop("measure must be character", call. = FALSE)
   }
 
-  if (!is.numeric(dplyr::pull(df, {{quantity}}))) {
+  if (!is.numeric(dplyr::pull(df, {{ quantity }}))) {
     stop("quantity must be numeric", call. = FALSE)
   }
 
   ## join and calcs
 
-  dataframe = df |>
-    dplyr::left_join(unit_alias, ## join alias to find id
-                     dplyr::join_by({{measure}} == alias)) |> ## {{}} allows any column to be passed regardless of name
-    dplyr::left_join(unit_models, ## get slope and intercept info
-                     dplyr::join_by(id)) |>
-    dplyr::left_join(unit_si, ## get SI info
-                     dplyr::join_by(id)) |>
+  dataframe <- df |>
+    dplyr::left_join(
+      unit_alias, ## join alias to find id
+      dplyr::join_by({{ measure }} == alias)
+    ) |> ## {{}} allows any column to be passed regardless of name
+    dplyr::left_join(
+      unit_models, ## get slope and intercept info
+      dplyr::join_by(id)
+    ) |>
+    dplyr::left_join(
+      unit_si, ## get SI info
+      dplyr::join_by(id)
+    ) |>
     tidyr::unnest_wider(model) |> ## unnest model vars for calcs
-    dplyr::mutate(si_quantity = ({{quantity}} * slope) + intercept) |>
-    dplyr::select(-c(id, ## drop unneeded cols so df looks same before function with added cols
-                     slope,
-                     intercept,
-                     type,
-                     category))
+    dplyr::mutate(si_quantity = ({{ quantity }} * slope) + intercept) |>
+    dplyr::select(-c(
+      id, ## drop unneeded cols so df looks same before function with added cols
+      slope,
+      intercept,
+      type,
+      category
+    ))
 
   ## warning if model is missing
 
@@ -73,7 +83,4 @@ unit_conv = function(df,
   }
 
   return(dataframe)
-
 }
-
-
