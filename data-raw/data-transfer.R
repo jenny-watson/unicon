@@ -28,7 +28,7 @@ load_json_files <- function(file_pathway) {
       ".json" ## remove ext
     ))
 
-  return(json)
+  json
 }
 
 ## load base data
@@ -96,7 +96,7 @@ join <- derived_data |>
   mutate(
     category = id,
     id = paste0(id.x, id.o, id.y),
-    alias = paste0(alias.x, alias.o, alias.y), # is it a problem per doesnt have spaces?
+    alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
     si = paste0(si.x, id.o, si.y),
     slope = slope.x / slope.y,
     intercept = 0,
@@ -115,7 +115,6 @@ join <- derived_data |>
 ## make sure complete and clean
 unit_alias <- join |>
   distinct(id, alias) |> ## ensure all unique
-
   ## add in folder name as alias to ensure all combinations captured
   bind_rows(
     join |>
