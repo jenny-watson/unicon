@@ -3,11 +3,11 @@
 #' input values with associated unit aliases and receive conversions to any
 #' required output alias. Designed to handle the widest possible range of naming
 #' conventions, permutations and plain mis-spellings of commonly used units.
-#' @param value.in Numeric scalar or vector, values to convert.
-#' @param unit.in Character scalar or vector, input units for \code{value.in}.
-#' Must be of \code{length(1L)} or \code{length(value.in)}.
-#' @param unit.out Character scalar or vector, output units for conversion. Must
-#' be of \code{length(1L)} or \code{length(value.in)}. Defaults to \code{NA}; if
+#' @param value_in Numeric scalar or vector, values to convert.
+#' @param unit_in Character scalar or vector, input units for \code{value_in}.
+#' Must be of \code{length(1L)} or \code{length(value_in)}.
+#' @param unit_out Character scalar or vector, output units for conversion. Must
+#' be of \code{length(1L)} or \code{length(value_in)}. Defaults to \code{NA}; if
 #' default is passed, function will return standard index (SI) units as
 #' conversion.
 #' @param pull Logical; should the function pull out and return the converted
