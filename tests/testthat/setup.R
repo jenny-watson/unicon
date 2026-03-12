@@ -1,5 +1,5 @@
 # retrieve package
-pkg <- "unit.conversion"
+pkg <- "unicon"
 
 # unit conversion source ###########################################################################
 # derive base unit read in paths and read
