@@ -21,8 +21,8 @@ test_that("function works", {
   ) # ignores difference between tbl_df and tbl_object used to demo test
 })
 
-
-test_that("blanks and associated warnings work", { # warning still on this test although I've included the warning?
+# warning still on this test although I've included the warning?
+test_that("blanks and associated warnings work", {
 
   df <- data.frame(
     m = c("stone", "mls"),
