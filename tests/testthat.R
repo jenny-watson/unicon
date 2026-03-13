@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(unit.conversion)
+library(unicon)
 
-test_check("unit.conversion")
+test_check("unicon")
