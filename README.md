@@ -1,5 +1,9 @@
 # Unit conversion working project
 
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->
+
 *Alasdair Sykes, 23/01/26*
 
 ## Overview
