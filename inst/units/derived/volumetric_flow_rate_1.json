@@ -1,0 +1,5 @@
+{
+    "x": "mass_flow_rate",
+    "y": "density",
+    "operator": "divide"
+}

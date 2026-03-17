@@ -1,0 +1,5 @@
+{
+    "x": "change_in_speed",
+    "y": "time",
+    "operator": "divide"
+}
