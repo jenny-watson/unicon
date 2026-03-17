@@ -54,7 +54,8 @@ derived_data <- imap_dfr(
     y = .x$y,
     operator = .x$operator
   )
-)
+) |>
+  mutate(id = str_remove(str_remove(id, '_1'), '_2'))
 
 ## load operators data
 operators_data <- imap_dfr(
