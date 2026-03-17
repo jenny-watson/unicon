@@ -1,5 +1,5 @@
 ---
-title: "unit.conversion"
+title: "unicon"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}
@@ -15,14 +15,14 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(unit.conversion)
+library(unicon)
 ```
 
 # Introduction
 
 The International System of Units (SI) standardises unit measurements, preventing different unit systems (most notably metric and imperial) being used interchangeably throughout the world to convey the same information, allowing meaningful comparisons. Simple calculations are often needed to ensure that measurements are in SI units, requiring conversion from one unit to another, for example yards to metres. If a unit of measurement is derived based on data from other units, such as speed, a calculation is required, converting the base units into SI first. This may trip up the best mathematicians or lead to annoying additions in code to solve these issues. 
 
-The {unit.conversion} package provides:
+The {unicon} package provides:
 
 1. A database of *base* and *derived* units and their SI equivalents, including their various names and notations, and the equations using base units to calculate derived units.
 2. Functions to convert non-SI units to SI units and vice versa.
@@ -48,7 +48,7 @@ These data are used in the functions described below.
 
 # Adding missing database information
 
-Please raise an issue in the [GitHub](https://github.com/unit.conversion/) repository and the authors will add these in. 
+Please raise an issue in the [GitHub](https://github.com/unicon/) repository and the authors will add these in. 
 
 
 
