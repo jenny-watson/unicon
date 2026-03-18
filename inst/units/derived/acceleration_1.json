@@ -1,5 +1,5 @@
 {
-    "x": "change_in_speed",
+    "x": "speed",
     "y": "time",
     "operator": "divide"
 }
