@@ -55,7 +55,7 @@ derived_data <- imap_dfr(
     operator = .x$operator
   )
 ) |>
-  mutate(id = str_remove(str_remove(id, '_1'), '_2'))
+  mutate(id = str_remove(str_remove(id, "_1"), "_2"))
 
 ## load operators data
 operators_data <- imap_dfr(
@@ -67,6 +67,87 @@ operators_data <- imap_dfr(
     alias = .x$alias
   )
 )
+
+# category relationships
+## unique categories
+u_cat <- base_data |>
+  distinct(category) |>
+  bind_rows(
+    derived_data |>
+      pivot_longer(
+        cols = -operator,
+        names_to = "type",
+        values_to = "category"
+      )
+  ) |>
+  distinct(category)
+
+## one copy of each relationship
+cat_rel <- derived_data |>
+  select(
+    den_1 = id,
+    num = x,
+    den_2 = y
+  )
+
+## all copies of relationships with operators
+category_relationships <- bind_rows(
+  left_join(u_cat,
+    cat_rel,
+    by = c("category" = "num")
+  ),
+  left_join(u_cat,
+    cat_rel,
+    by = c("category" = "den_1")
+  ),
+  left_join(u_cat,
+    cat_rel,
+    by = c("category" = "den_2")
+  )
+) |>
+  # get rid of blank joins
+  filter(!(is.na(num) & is.na(den_1) & is.na(den_1))) |>
+  mutate(
+    operator = if_else(is.na(num),
+      "multiply",
+      "divide"
+    ),
+    uid = 1:n()
+  ) |>
+  # remove blank parent cells
+  pivot_longer(
+    cols = c(
+      num,
+      den_1,
+      den_2
+    ),
+    names_to = "type",
+    values_to = "parent_metric"
+  ) |>
+  filter(!is.na(parent_metric)) |>
+  # assign so correct order (matters for divide relationships)
+  mutate(parent_type = case_when(
+    operator == "multiply" & type == "den_1" ~ "parent_1",
+    operator == "multiply" & type == "den_2" ~ "parent_2",
+    operator == "divide" & type == "num" ~ "parent_1",
+    operator == "divide" & type == "den_1" ~ "parent_2",
+    operator == "divide" & type == "den_2" ~ "parent_2"
+  )) |>
+  pivot_wider(
+    id_cols = c(
+      uid,
+      category,
+      operator
+    ),
+    names_from = parent_type,
+    values_from = parent_metric
+  ) |>
+  select(
+    category,
+    parent_1,
+    operator,
+    parent_2
+  )
 
 ## join datasets together
 join <- derived_data |>
@@ -108,7 +189,111 @@ join <- derived_data |>
   bind_rows(
     base_data |>
       mutate(type = "base")
+  ) |>
+  ## doesn't work for all if metric is derived twice or derived via multiply
+  filter(
+    !is.na(slope),
+    category != "acceleration"
+  ) |> # wrong units from mass and force
+  bind_rows(
+    ## correct acceleration
+    category_relationships |>
+      filter(
+        category == "acceleration",
+        parent_1 == "speed"
+      ) |>
+      left_join(
+        join |>
+          rename_with(~ paste0(., ".x")),
+        by = c("parent_1" = "category.x"),
+        relationship = "many-to-many"
+      ) |>
+      left_join(
+        join |>
+          rename_with(~ paste0(., ".y")),
+        by = c("parent_2" = "category.y"),
+        relationship = "many-to-many"
+      ) |>
+      left_join(
+        operators_data |>
+          rename_with(~ paste0(., ".o")),
+        by = c("operator" = "operator.o"),
+        relationship = "many-to-many"
+      ) |>
+      mutate(
+        category,
+        id = paste0(id.x, id.o, id.y),
+        alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
+        si = paste0(si.x, id.o, si.y),
+        slope = slope.x / slope.y, ############ is this correct? ##################
+        intercept = 0,
+        type = "derived",
+        .keep = "none"
+      ),
+    ## correct mass flow rate
+    category_relationships |>
+      filter(category == "mass_flow_rate") |>
+      left_join(
+        join |>
+          rename_with(~ paste0(., ".x")),
+        by = c("parent_1" = "category.x"),
+        relationship = "many-to-many"
+      ) |>
+      left_join(
+        join |>
+          rename_with(~ paste0(., ".y")),
+        by = c("parent_2" = "category.y"),
+        relationship = "many-to-many"
+      ) |>
+      select(
+        category,
+        starts_with("id"),
+        starts_with("alias"),
+        starts_with("si"),
+        starts_with("slope")
+      ) |>
+      mutate( # get last bit of x and first bit of y then mass/time # this is slow
+        id.xy = sub(".*__", "", id.x),
+        id.yx = sub("__.*", "", id.y),
+        alias.xy = case_when(
+          str_detect(alias.x, "per") ~ sub(".*per", "", alias.x),
+          str_detect(alias.x, "/") ~ sub(".*/", "", alias.x)
+        ),
+        alias.yx = case_when(
+          str_detect(alias.y, "per") ~ sub("per.*", "", alias.y),
+          str_detect(alias.y, "/") ~ sub("/.*", "", alias.y)
+        ),
+        si.xy = sub(".*__", "", si.x),
+        si.yx = sub("__.*", "", si.y),
+        # to get proper naming convention
+        operator = "divide"
+      ) |>
+      left_join(
+        operators_data |>
+          rename_with(~ paste0(., ".o")),
+        by = c("operator" = "operator.o"),
+        relationship = "many-to-many"
+      ) |>
+      mutate(
+        category,
+        id = paste0(id.yx, id.o, id.xy),
+        alias = paste0(alias.yx, alias.o, alias.xy), # problem per has no spaces?
+        si = paste0(si.yx, id.o, si.xy),
+        slope = slope.x * slope.y, ############ is this correct? ##################
+        intercept = 0,
+        type = "derived",
+        .keep = "none"
+      ) |>
+      distinct()
   )
+
+# check = anti_join(
+#   distinct(category_relationships,
+#            category),
+#   distinct(join,
+#            category),
+#   by = 'category')
+
 
 ## final datasets
 
@@ -128,7 +313,6 @@ unit_alias <- join |>
   mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", ""))
 
 # standard units
-## but have this info already so why replicating it/should delete json file?
 unit_si <- join |>
   distinct(
     id,
@@ -153,62 +337,6 @@ unit_models <- join |>
   # make into list rather than mini dataframes
   mutate(model = map(model, ~ as.list(.x)))
 
-# category relationships
-## unique categories
-u_cat = base_data |>
-  distinct(category) |>
-  bind_rows(
-    derived_data |>
-      pivot_longer(cols = -operator,
-                   names_to = 'type',
-                   values_to = 'category')) |>
-  distinct(category)
-
-## one copy of each relationship
-cat_rel = derived_data |>
-  select(den_1 = id,
-         num = x,
-         den_2 = y)
-
-## all copies of relationships with operators
-category_relationships = bind_rows(
-  left_join(t,
-            d,
-            by = c('category' = 'num')),
-  left_join(t,
-            d,
-            by = c('category' = 'den_1')),
-  left_join(t,
-            d,
-            by = c('category' = 'den_2'))) |>
-  # get rid of blank joins
-  filter(!(is.na(num) & is.na(den_1) & is.na(den_1))) |>
-  mutate(operator = if_else(is.na(num),
-                            'multiply',
-                            'divide'),
-         uid = 1:n()) |>
-  # remove blank parent cells
-  pivot_longer(cols = c(num,
-                        den_1,
-                        den_2),
-               names_to = 'type',
-               values_to = 'parent_metric') |>
-  filter(!is.na(parent_metric)) |>
-  # assign so correct order (matters for divide relationships)
-  mutate(parent_type = case_when(operator == 'multiply' & type == 'den_1' ~ 'parent_1',
-                                 operator == 'multiply' & type == 'den_2' ~ 'parent_2',
-                                 operator == 'divide' & type == 'num' ~ 'parent_1',
-                                 operator == 'divide' & type == 'den_1' ~ 'parent_2',
-                                 operator == 'divide' & type == 'den_2' ~ 'parent_2')) |>
-  pivot_wider(id_cols = c(uid,
-                          category,
-                          operator),
-              names_from = parent_type,
-              values_from = parent_metric) |>
-  select(category,
-         parent_1,
-         operator,
-         parent_2)
 
 ## write to package internal data
 usethis::use_data(
