@@ -1,0 +1,12 @@
+{
+  "category": "force",
+  "si": "N",
+  "model": {
+    "slope": 0.00980665,
+    "intercept": 0
+  },
+  "alias": [
+    "gram-force",
+    "gf"
+  ]
+}

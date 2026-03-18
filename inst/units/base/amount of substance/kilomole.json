@@ -1,0 +1,14 @@
+{
+  "category": "amount of substance",
+  "si": "mol",
+  "model": {
+    "slope": 1000,
+    "intercept": 0
+  },
+  "alias": [
+    "kilomole",
+    "kilomoles",
+    "kmol",
+    "kmols"
+  ]
+}

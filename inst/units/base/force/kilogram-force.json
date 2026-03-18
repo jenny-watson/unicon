@@ -1,0 +1,14 @@
+{
+  "category": "force",
+  "si": "N",
+  "model": {
+    "slope": 9.80665,
+    "intercept": 0
+  },
+  "alias": [
+    "kilogram-force",
+    "kgf",
+    "kilopond",
+    "kp"
+  ]
+}

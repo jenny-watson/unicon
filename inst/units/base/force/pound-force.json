@@ -1,0 +1,12 @@
+{
+  "category": "force",
+  "si": "N",
+  "model": {
+    "slope": 4.44822,
+    "intercept": 0
+  },
+  "alias": [
+    "pound-force",
+    "lbf"
+  ]
+}

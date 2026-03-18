@@ -1,0 +1,14 @@
+{
+  "category": "amount of substance",
+  "si": "mol",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "mole",
+    "moles",
+    "mol",
+    "mols"
+  ]
+}
