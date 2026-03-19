@@ -194,15 +194,16 @@ staging_join <- derived_data |>
   bind_rows(
     base_data |>
       mutate(type = "base")
+  ) |>
+  ## doesn't work for all if metric is derived twice or derived via multiply
+  filter(
+    !is.na(slope),
+    category != "acceleration" # wrong units from mass and force
   )
 
-# make corrections, doesn't work for all if metric is derived twice or derived via multiply
+# make corrections,
 join <- bind_rows(
-  staging_join |>
-    filter(
-      !is.na(slope),
-      category != "acceleration" # wrong units from mass and force
-    ),
+  staging_join,
   ## correct acceleration
   category_relationships |>
     filter(
@@ -237,7 +238,6 @@ join <- bind_rows(
       type = "derived",
       .keep = "none"
     ),
-
   ## correct mass flow rate
   ### first get all unit combinations
   category_relationships |>
