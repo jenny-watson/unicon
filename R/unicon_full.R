@@ -78,9 +78,9 @@ unicon_full <- function(value_in,
       multiple = "any"
     ) |>
     mutate(
-      # user gave inputput units , but no matches
+      # user gave input units, but no matches
       error_in = is.na(.data$id_in),
-      # user gave output units , but no matches
+      # user gave output units, but no matches
       error_out = !is.na(.data$unit_out) & is.na(.data$id_out),
       # user gave incompatible unit conversion
       # (may be NA if no conversion explicitly spec'd)
