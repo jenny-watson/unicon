@@ -53,27 +53,29 @@ The relationships between metrics that are included in this package are:
 
 1.  **Length * Length = Area** where lengths can be different values. Please note *Area* is also listed as a base unit.
 
-2.  **Length * Length * Length = Volume** where lengths can be different values. Please note *Volume* is also listed as a base unit.
+2.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from first equation. 
 
-3.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. 
+3.	**Area Density = Mass / Volume**
 
-4.	**Area Density = Mass / Volume**
+4.	**Speed = Distance / Time**
 
-5.	**Speed = Distance / Time**
+5.	**Acceleration = Change in Speed / Time**
 
-6.	**Acceleration = Change in Speed / Time**
+6.	**Force = Acceleration * Mass** where *Mass* is assumed as 9.81 if considering gravitational force
 
-7.	**Force = Acceleration * Mass**  where *Mass* can be assumed as 9.81 if considering gravitational pull
+7.	**Pressure = Force / Area**
 
-8.	**Pressure = Force / Area**
+8.	**Concentration = Moles / Volume**
 
-9.	**Concentration = Moles / Volume**
+9.	**Volumetric Flow Rate = Area * Speed**
 
-10.	**Volumetric Flow Rate = Area * Speed**
+10. **Volumetric Flow Rate = Volume / Time**
 
-11. **Volumetric Flow Rate = Volume / Time**
+11.	**Mass Flow Rate = Volume Density * Volumetric Flow Rate**
 
-12.	**Mass Flow Rate = Volume Density * Volumetric Flow Rate**
+## Use cases
+
+e.g. want volume, calc area then calc vol
 
 # Adding missing database information
 
