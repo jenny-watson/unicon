@@ -1,0 +1,14 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 31557600,
+    "intercept": 0
+  },
+  "alias": [
+    "year",
+    "years",
+    "yr",
+    "yrs"
+  ]
+}

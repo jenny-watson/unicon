@@ -1,0 +1,15 @@
+{
+  "category": "time",
+  "si": "s",
+  "model": {
+    "slope": 604800,
+    "intercept": 0
+  },
+  "alias": [
+    "week",
+    "weeks",
+    "wk",
+    "wks",
+    "w"
+  ]
+}
