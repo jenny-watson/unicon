@@ -6,9 +6,8 @@
     "intercept": 0
   },
   "alias": [
-    "sec",
-    "secs",
-    "second",
-    "seconds"
+    "millisecond",
+    "ms",
+    "milliseconds"
   ]
 }
