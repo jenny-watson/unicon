@@ -57,7 +57,7 @@ The relationships between metrics that are included in this package are:
 
 3.	**Area Density = Mass / Volume**
 
-4.	**Speed = Distance / Time**
+4.	**Speed = Length / Time**
 
 5.	**Acceleration = Change in Speed / Time**
 
@@ -94,6 +94,7 @@ Other things to note are:
 
 * Area and volume are considered to be base units as well as derived units
 * Speed is listed as speed not velocity
+* Length is listed as length not distance
 * If trying to calculate force or acceleration using the assumption mass is equal to gravitational force, the value **9.81** is used
 * Month is **NOT** included in the package due to the variation in the number of days and weeks per month
 * Year is recorded as **365.25 days** to account for leap years.
