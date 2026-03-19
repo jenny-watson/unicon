@@ -198,7 +198,9 @@ staging_join <- derived_data |>
   ## doesn't work for all if metric is derived twice or derived via multiply
   filter(
     !is.na(slope),
-    category != "acceleration" # wrong units from mass and force
+    category != "acceleration", # wrong units from mass and force
+    !(category == 'area' & si == 'litre__m'),
+    !(category == 'length' & si == 'ha__m')
   )
 
 # make corrections,
