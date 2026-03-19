@@ -1,6 +1,9 @@
 ---
 title: "unicon"
 output: rmarkdown::html_vignette
+toc: true
+toc_float: true
+number_sections: true
 vignette: >
   %\VignetteIndexEntry{my-vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,21 +23,19 @@ library(unicon)
 
 # Introduction
 
-The International System of Units (SI) standardises unit measurements, preventing different unit systems (most notably metric and imperial) being used interchangeably throughout the world to convey the same information, allowing meaningful comparisons. Simple calculations are often needed to ensure that measurements are in SI units, requiring conversion from one unit to another, for example yards to metres. If a unit of measurement is derived based on data from other units, such as speed, a calculation is required, converting the base units into SI first. This may trip up the best mathematicians or lead to annoying additions in code to solve these issues. 
+Different unit systems (most notably metric and imperial) are used interchangeably around the world to convey the same information. The International System of Units (SI, from the french *'Système international d'unités'*) aims to standardise unit measurements, allowing meaningful comparisons. However, the problem remains if data is collected using non-SI measurement systems. The {unicon} ('unit conversion') package provides a simple tool to enable users to quickly convert between different units of measurement using:
 
-The {unicon} package provides:
-
-1. A database of *base* and *derived* units and their SI equivalents, including their various names and notations, and the equations using base units to calculate derived units.
-2. Functions to convert non-SI units to SI units and vice versa.
-3. Functions to derive additional derived units from existing data, for example, volume to concentration.
+1. A database of base and derived units, including their various names, notations, and SI equivalents;
+2. Functions to convert non-SI units to SI units and vice versa;
+3. Functions to calculate additional units from existing data.
 
 # Database of base and derived units
 
-The unit.conversion package runs on three key mappings:
+Three key mappings are created within the package:
 
-1. Names for units and the recognised aliases used in this package. E.g. cm, centimetres, and centimeters are names for cm.
+1. Names and aliases for units. E.g. cm, centimetres, and centimeters are aliases for cm.
 2. Calculations for converting non-SI derived units into SI derived units. E.g. multiplying cm/s by 0.01 to achieve m/s.
-3. Lists of what the recognised SI unit is. E.g. cm is m.
+3. A list of what the recognised SI unit is within the {unicon} package. E.g. SI for length is m.
 
 These data are used in the functions described below.
 
@@ -44,75 +45,54 @@ These data are used in the functions described below.
 
 ## Converting from SI
 
-# Derivation of additional units from existing data
+# Calculation of additional units from existing data
+
+## Metric relationships 
+
+The relationships between metrics that are included in this package are:
+
+1.  **Length * Length = Area** where lengths can be different values. Please note *Area* is also listed as a base unit.
+
+2.  **Length * Length * Length = Volume** where lengths can be different values. Please note *Volume* is also listed as a base unit.
+
+3.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. 
+
+4.	**Area Density = Mass / Volume**
+
+5.	**Speed = Distance / Time**
+
+6.	**Acceleration = Change in Speed / Time**
+
+7.	**Force = Acceleration * Mass**  where *Mass* can be assumed as 9.81 if considering gravitational pull
+
+8.	**Pressure = Force / Area**
+
+9.	**Concentration = Moles / Volume**
+
+10.	**Volumetric Flow Rate = Area * Speed**
+
+11. **Volumetric Flow Rate = Volume / Time**
+
+12.	**Mass Flow Rate = Volume Density * Volumetric Flow Rate**
 
 # Adding missing database information
 
 Please raise an issue in the [GitHub](https://github.com/unicon/) repository and the authors will add these in. 
 
+# Caveats
 
-###
+{unicon} deviates slightly away from SI standards to increase real-life usefulness: 
 
-
-
-The International Standard of Units (SI, from the french *'Système international d'unités'*) is the most employed unit of measurement used around the world. It has seven base units:
-
-* Time - second (s)
-* Length - metre (m)
-* Mass - kilogram (kg)
-* Temperature - kelvin (K)
-* Amount of Substance - mole (mol)
-* Electric Current - ampere (A)
-* Luminous Intensity - candela (cd)
-
-
-The Imperial System of Units was first developed by the British in the nineteeth century, and has wide adoption across countries previously part of the British Empire. This measurement system's base units comprise of:
-
-* Length (e.g. yards)
-* Mass (e.g. stone)
-* Area (e.g. acre)
-* Volume (e.g. pint)
-
-
-The {unicon} ('unit conversion') package aims to provide a tool to enable users to convert quickly between different unit of measurements, either to or from SI units or to or from other units via SI units. 
-
-
-# Relationships 
-
-Length * Length = Area
-where lengths can be different values 
-
-Length * Length * Length = Volume
-Or Area * Length = Volume
-where lengths can be different values 
-
-1.	Density = Mass / Volume
-
-2.	Speed (or Velocity) = Distance / Time
-
-3.	Acceleration = Change in Speed (speed 1 - speed 2) / Time
-
-4.	Force = mass * Acceleration or mass * 9.81 (gravitational pull)
-
-5.	Pressure = Force / area
-
-6.	Concentration = mol / Volume 
-
-7.	Volumetric Flow Rate = Area * Speed = Volume / Time 
-
-8.	Mass Flow Rate = Density * Volumetric Flow Rate
-
-
-
-
-
-# unicon differences to SI
-
-* For mass, the standard is grams (g) not kilograms (kg)
-* Celcuis not kelvin
-* Area and Volume are considered to be base units rather than derived
+* For mass, the standard unit is grams (g) not kilograms (kg)
+* For temperature, the standard unit is grams celcuis (c) not kelvin (k)
 * For area, the standard is hectares (ha) not metres squared (m2)
 * For volume, the standard is litres (l) not metres cubed (m3)
+
+Other things to note are:
+
+* Area and volume are considered to be base units as well as derived units
 * Speed is listed as speed not velocity
-* if mass missing 9.81 is assumed for calculating acceleration or force
+* If trying to calculate force or acceleration using the assumption mass is equal to gravitational force, the value **9.81** is used
+* Month is **NOT** included in the package due to the variation in the number of days and weeks per month
+* Year is recorded as **365.25 days** to account for leap years.
 
