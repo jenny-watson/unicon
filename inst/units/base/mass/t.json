@@ -2,7 +2,7 @@
   "category": "mass",
   "si": "g",
   "model": {
-    "slope": 1e06,
+    "slope": 1000000,
     "intercept": 0
   },
   "alias": [

@@ -2,7 +2,7 @@
   "category": "force",
   "si": "N",
   "model": {
-    "slope": 1e-04,
+    "slope": 0.00001,
     "intercept": 0
   },
   "alias": [

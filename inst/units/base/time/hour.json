@@ -2,7 +2,7 @@
   "category": "time",
   "si": "s",
   "model": {
-    "slope": 0.0002777778,
+    "slope": 3600,
     "intercept": 0
   },
   "alias": [
