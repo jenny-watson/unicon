@@ -106,7 +106,7 @@ unicon_catrel <- function(parent_1_unit_in,
   if (pull(distinct(relationship_check, category)) == 'acceleration') {
 
     warning("Please ensure you have read the vignettes and calculated change in
-            speed beforehand ")
+            speed before using this function")
 
   }
 
