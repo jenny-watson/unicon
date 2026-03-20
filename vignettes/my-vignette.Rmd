@@ -36,16 +36,9 @@ Three key mappings are created within the package:
 1. Names and aliases for units. E.g. cm, centimetres, and centimeters are aliases for cm.
 2. Calculations for converting non-SI derived units into SI derived units. E.g. multiplying cm/s by 0.01 to achieve m/s.
 3. A list of what the recognised SI unit is within the {unicon} package. E.g. SI for length is m.
+4. Relationships between different metrics to allow calculation of new metrics. E.g. Area * Length = Volume.
 
 These data are used in the functions described below.
-
-# Conversion of non-SI units to SI units and vice versa
-
-## Converting to SI
-
-## Converting from SI
-
-# Calculation of additional units from existing data
 
 ## Metric relationships 
 
@@ -53,7 +46,7 @@ The relationships between metrics that are included in this package are:
 
 1.  **Length * Length = Area** where lengths can be different values. Please note *Area* is also listed as a base unit.
 
-2.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from first equation. 
+2.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from first equation if unknown. 
 
 3.	**Area Density = Mass / Volume**
 
@@ -73,9 +66,66 @@ The relationships between metrics that are included in this package are:
 
 11.	**Mass Flow Rate = Volume Density * Volumetric Flow Rate**
 
-## Use cases
+# Examples
 
-e.g. want volume, calc area then calc vol
+To convert data into SI units:
+
+```{r}
+
+# e.g. miles to SI metres
+
+unicon_full(value_in = 8,
+            unit_in = 'miles')
+
+```
+
+To calculate a non-SI unit:
+
+```{r}
+
+# e.g. miles to km (function does this via m)
+
+unicon_full(value_in = 8,
+            unit_in = 'miles',
+            unit_out = 'km')
+
+```
+
+To calculate a new metric from existing data:
+
+```{r}
+
+# e.g. speed from length / time
+
+unicon_catrel(parent_1_unit_in = 'miles',
+              parent_2_unit_in = 'hour',
+              parent_1_value_in = c(1,2,3,4,5,6),
+              parent_2_value_in = c(9,8,7,5,4,2),
+              unit_out = 'km/day')
+
+# if unit_out unspecified, will convert to SI (in this example m/s)
+
+```
+
+## Acceleration 
+
+```{r}
+
+## acceleration = change in speed / time
+## i.e. (speed 1 - speed 2) / time
+
+speed_1 = unicon_full(value_in = 8,
+            unit_in = 'miles')
+
+speed_2 = unicon_full(value_in = 16,
+            unit_in = 'km')
+
+unicon_catrel(parent_1_unit_in = 'm/s',
+              parent_2_unit_in = 'h',
+              parent_1_value_in = (speed_1 - speed_2),
+              parent_2_value_in = 2)
+
+```
 
 # Adding missing database information
 
