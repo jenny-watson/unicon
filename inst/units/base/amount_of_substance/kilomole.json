@@ -1,5 +1,5 @@
 {
-  "category": "amount of substance",
+  "category": "amount_of_substance",
   "si": "mol",
   "model": {
     "slope": 1000,

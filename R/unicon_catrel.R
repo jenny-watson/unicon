@@ -99,7 +99,15 @@ unicon_catrel <- function(parent_1_unit_in,
     )
 
   if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
-    stop("There is no recorded relationship between parent units")
+    stop("There is no recorded relationship between parent units.
+         Please change assignment of parent_1 and parent_2 and re-run.")
+  }
+
+  if (pull(distinct(relationship_check, category)) == 'acceleration') {
+
+    warning("Please ensure you have read the vignettes and calculated change in
+            speed beforehand ")
+
   }
 
   if (is.na(pull(distinct(relationship_check, unit_out))) == FALSE) {
