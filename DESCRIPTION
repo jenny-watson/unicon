@@ -23,6 +23,5 @@ Depends:
 Imports: 
     dplyr,
     purrr,
-    rlang,
     stringr,
     tidyr
