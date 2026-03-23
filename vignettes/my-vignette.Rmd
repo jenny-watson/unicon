@@ -71,60 +71,64 @@ The relationships between metrics that are included in this package are:
 To convert data into SI units:
 
 ```{r}
-
 # e.g. miles to SI metres
 
-unicon_full(value_in = 8,
-            unit_in = 'miles')
-
+unicon_full(
+  value_in = 8,
+  unit_in = "miles"
+)
 ```
 
 To calculate a non-SI unit:
 
 ```{r}
-
 # e.g. miles to km (function does this via m)
 
-unicon_full(value_in = 8,
-            unit_in = 'miles',
-            unit_out = 'km')
-
+unicon_full(
+  value_in = 8,
+  unit_in = "miles",
+  unit_out = "km"
+)
 ```
 
 To calculate a new metric from existing data:
 
 ```{r}
-
 # e.g. speed from length / time
 
-unicon_catrel(parent_1_unit_in = 'miles',
-              parent_2_unit_in = 'hour',
-              parent_1_value_in = c(1,2,3,4,5,6),
-              parent_2_value_in = c(9,8,7,5,4,2),
-              unit_out = 'km/day')
+unicon_catrel(
+  parent_1_unit_in = "miles",
+  parent_2_unit_in = "hour",
+  parent_1_value_in = c(1, 2, 3, 4, 5, 6),
+  parent_2_value_in = c(9, 8, 7, 5, 4, 2),
+  unit_out = "km/day"
+)
 
 # if unit_out unspecified, will convert to SI (in this example m/s)
-
 ```
 
 ## Acceleration 
 
 ```{r}
-
 ## acceleration = change in speed / time
 ## i.e. (speed 1 - speed 2) / time
 
-speed_1 = unicon_full(value_in = 8,
-            unit_in = 'miles')
+speed_1 <- unicon_full(
+  value_in = 8,
+  unit_in = "miles"
+)
 
-speed_2 = unicon_full(value_in = 16,
-            unit_in = 'km')
+speed_2 <- unicon_full(
+  value_in = 16,
+  unit_in = "km"
+)
 
-unicon_catrel(parent_1_unit_in = 'm/s',
-              parent_2_unit_in = 'h',
-              parent_1_value_in = (speed_1 - speed_2),
-              parent_2_value_in = 2)
-
+unicon_catrel(
+  parent_1_unit_in = "m/s",
+  parent_2_unit_in = "h",
+  parent_1_value_in = (speed_1 - speed_2),
+  parent_2_value_in = 2
+)
 ```
 
 # Adding missing database information
