@@ -152,7 +152,8 @@ category_relationships <- bind_rows(
     parent_1,
     operator,
     parent_2
-  )
+  ) |>
+  distinct() # removes length * length = area duplicate
 
 ## join datasets together
 staging_join <- derived_data |>
