@@ -17,6 +17,9 @@
 #' be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
 #' \code{NA}; if default is passed, function will return standard index (SI)
 #' units as conversion.
+#' @param operator_in 'divide' or 'multiply' input. Only needed if parents are area
+#' & length (calculating length or volume) or speed and time (calculating
+#' distance or acceleration)
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
@@ -28,6 +31,7 @@ unicon_catrel <- function(parent_1_unit_in,
                           parent_1_value_in,
                           parent_2_value_in,
                           unit_out = NA,
+                          operator_in = NA,
                           pull = TRUE) {
   # check, all values must be either length 1 or consistent length
   l1 <- length(parent_1_unit_in)
@@ -54,14 +58,14 @@ unicon_catrel <- function(parent_1_unit_in,
     # convert both parent metrics to SI first and bind to df as vectors
     bind_cols(
       parent_1_si_value = unicon_full(
-        value_in = df$parent_1_value_in,
-        unit_in = df$parent_1_unit_in,
+        value_in = parent_1_value_in,
+        unit_in = parent_1_unit_in,
         unit_out = NA,
         pull = TRUE
       ),
       parent_2_si_value = unicon_full(
-        value_in = df$parent_2_value_in,
-        unit_in = df$parent_2_unit_in,
+        value_in = parent_2_value_in,
+        unit_in = parent_2_unit_in,
         unit_out = NA,
         pull = TRUE
       )
@@ -98,18 +102,48 @@ unicon_catrel <- function(parent_1_unit_in,
       )
     )
 
+  ## if no relationship, check if parents should be swapped
   if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
-    stop("There is no recorded relationship between parent units.
-         Please change assignment of parent_1 and parent_2 and re-run.")
+    relationship_check <- relationship_check |>
+      # change parent 1 to parent 2 and parent 2 to parent 1
+      rename_with(~ str_replace(., "1", "9")) |>
+      rename_with(~ str_replace(., "2", "1")) |>
+      rename_with(~ str_replace(., "9", "2")) |>
+      select(-c(
+        category,
+        operator
+      )) |>
+      # find relationship between parent 1 and 2
+      left_join(category_relationships,
+        by = c(
+          "parent_1_category" = "parent_1",
+          "parent_2_category" = "parent_2"
+        )
+      )
   }
 
-  if (pull(distinct(relationship_check, category)) == 'acceleration') {
+  ## if still no parent relationship, stop
+  if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
+    stop("There is no recorded relationship between parent units")
+  }
 
+  if (pull(distinct(relationship_check, category)) == "acceleration") {
     warning("Please ensure you have read the vignettes and calculated change in
             speed before using this function")
-
   }
 
+  ## filter duplicate join
+  if (length(parent_1_value_in) != nrow(relationship_check) && !is.na(operator_in)) {
+    relationship_check <- relationship_check |>
+      filter(operator == operator_in)
+  }
+
+  ## duplicate operators and categories so need to specify
+  if (length(parent_1_value_in) != nrow(relationship_check) && is.na(operator_in)) {
+    stop("Please specify operator_in")
+  }
+
+  # check that the unit_out specified is valid
   if (is.na(pull(distinct(relationship_check, unit_out))) == FALSE) {
     unit_out_check <- relationship_check |>
       distinct(
