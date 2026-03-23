@@ -17,6 +17,9 @@
 #' be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
 #' \code{NA}; if default is passed, function will return standard index (SI)
 #' units as conversion.
+#' @param operator_in 'divide' or 'multiply' input. Only needed if parents are area
+#' & length (calculating length or volume) or speed and time (calculating
+#' distance or acceleration)
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
@@ -28,6 +31,7 @@ unicon_catrel <- function(parent_1_unit_in,
                           parent_1_value_in,
                           parent_2_value_in,
                           unit_out = NA,
+                          operator_in = NA,
                           pull = TRUE) {
   # check, all values must be either length 1 or consistent length
   l1 <- length(parent_1_unit_in)
@@ -92,28 +96,29 @@ unicon_catrel <- function(parent_1_unit_in,
     ) |>
     # find relationship between parent 1 and 2
     left_join(category_relationships,
-              by = c(
-                "parent_1_category" = "parent_1",
-                "parent_2_category" = "parent_2"
-              )
+      by = c(
+        "parent_1_category" = "parent_1",
+        "parent_2_category" = "parent_2"
+      )
     )
 
   ## if no relationship, check if parents should be swapped
   if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
-
-    relationship_check = relationship_check |>
+    relationship_check <- relationship_check |>
       # change parent 1 to parent 2 and parent 2 to parent 1
-      rename_with(~ str_replace(., '1', '9')) |>
-      rename_with(~ str_replace(., '2', '1')) |>
-      rename_with(~ str_replace(., '9', '2')) |>
-      select(-c(category,
-                operator)) |>
+      rename_with(~ str_replace(., "1", "9")) |>
+      rename_with(~ str_replace(., "2", "1")) |>
+      rename_with(~ str_replace(., "9", "2")) |>
+      select(-c(
+        category,
+        operator
+      )) |>
       # find relationship between parent 1 and 2
       left_join(category_relationships,
-                by = c(
-                  "parent_1_category" = "parent_1",
-                  "parent_2_category" = "parent_2"
-                )
+        by = c(
+          "parent_1_category" = "parent_1",
+          "parent_2_category" = "parent_2"
+        )
       )
   }
 
@@ -122,13 +127,23 @@ unicon_catrel <- function(parent_1_unit_in,
     stop("There is no recorded relationship between parent units")
   }
 
-  if (pull(distinct(relationship_check, category)) == 'acceleration') {
-
+  if (pull(distinct(relationship_check, category)) == "acceleration") {
     warning("Please ensure you have read the vignettes and calculated change in
             speed before using this function")
-
   }
 
+  ## filter duplicate join
+  if (length(parent_1_value_in) != nrow(relationship_check) && !is.na(operator_in)) {
+    relationship_check <- relationship_check |>
+      filter(operator == operator_in)
+  }
+
+  ## duplicate operators and categories so need to specify
+  if (length(parent_1_value_in) != nrow(relationship_check) && is.na(operator_in)) {
+    stop("Please specify operator_in")
+  }
+
+  # check that the unit_out specified is valid
   if (is.na(pull(distinct(relationship_check, unit_out))) == FALSE) {
     unit_out_check <- relationship_check |>
       distinct(
@@ -143,7 +158,7 @@ unicon_catrel <- function(parent_1_unit_in,
             by = "id"
           ) |>
           select(alias,
-                 unit_category = category
+            unit_category = category
           ),
         by = c("unit_out" = "alias")
       )
@@ -158,7 +173,7 @@ unicon_catrel <- function(parent_1_unit_in,
     left_join(
       unit_si |>
         distinct(category,
-                 si_unit_out = si
+          si_unit_out = si
         ),
       by = "category"
     ) |>
@@ -170,8 +185,8 @@ unicon_catrel <- function(parent_1_unit_in,
       ),
       # assign a unit_out to SI if not already assigned in function
       unit_out = if_else(is.na(unit_out),
-                         si_unit_out,
-                         unit_out
+        si_unit_out,
+        unit_out
       )
     )
 
@@ -189,21 +204,21 @@ unicon_catrel <- function(parent_1_unit_in,
     final <- workings |>
       bind_cols(value_out = value_out) |>
       select(parent_1_unit_in,
-             parent_1_value_in,
-             parent_1_category,
-             parent_1_si_unit = parent_1_si,
-             parent_1_si_value,
-             parent_2_unit_in,
-             parent_2_value_in,
-             parent_2_category,
-             parent_2_si_unit = parent_2_si,
-             parent_2_si_value,
-             operator,
-             category_out = category,
-             si_unit_out,
-             si_value_out,
-             unit_out,
-             value_out
+        parent_1_value_in,
+        parent_1_category,
+        parent_1_si_unit = parent_1_si,
+        parent_1_si_value,
+        parent_2_unit_in,
+        parent_2_value_in,
+        parent_2_category,
+        parent_2_si_unit = parent_2_si,
+        parent_2_si_value,
+        operator,
+        category_out = category,
+        si_unit_out,
+        si_value_out,
+        unit_out,
+        value_out
       )
   }
 }
