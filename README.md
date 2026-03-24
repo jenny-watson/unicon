@@ -1,8 +1,6 @@
-# Unit conversion working project
+# unicon <a img src="man/figures/logo.png" align="right" height="138" /></a>
 
-  <!-- badges: start -->
-  [![R-CMD-check](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml)
-  <!-- badges: end -->
+<!-- badges: start --> [![R-CMD-check](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml) <!-- badges: end -->
 
 *Alasdair Sykes, 23/01/26*
 
@@ -20,10 +18,10 @@ The `units` sub-directory contains JSON schemas which contain all required infor
 
 The files at `units/base/*/*.json` provide the core schemas, with:
 
-1. a unit category,
-2. a standard index unit (consistent across categories),
-3. a conversion model in the form of slope and intercept to convert to the standard index unit, and
-4. a unit alias array, providing other ways of naming the unit
+1.  a unit category,
+2.  a standard index unit (consistent across categories),
+3.  a conversion model in the form of slope and intercept to convert to the standard index unit, and
+4.  a unit alias array, providing other ways of naming the unit
 
 The files at `units/derived/*.json` provide a definition of derived units as a function of their base unit components (e.g. rate-type units like tonnes per hectare, or density-type units like kg per litre).
 
@@ -37,9 +35,9 @@ Finally, the R script `unit-conv-build.R` reads in the files from the `units` di
 
 The following is suggested for our joint efforts on this project:
 
-1. Convert the repo/its contents into a package format and get it versioned on GitHub.
-2. Write a wrapper function to export from the package to perform conversion for a user based on the core data/models.
-3. Work through the package development process, complete documentation, and ensure all checks etc are passing.
-4. Implement Continuous Integration to run checks etc. via GitHub Actions whenever development occurs.
-5. Consider vulnerabilities of the approach and write unit tests or structural improvements to address them.
-6. Stretch goal: Write an integrated `plumber` API endpoint for this functionality.
+1.  Convert the repo/its contents into a package format and get it versioned on GitHub.
+2.  Write a wrapper function to export from the package to perform conversion for a user based on the core data/models.
+3.  Work through the package development process, complete documentation, and ensure all checks etc are passing.
+4.  Implement Continuous Integration to run checks etc. via GitHub Actions whenever development occurs.
+5.  Consider vulnerabilities of the approach and write unit tests or structural improvements to address them.
+6.  Stretch goal: Write an integrated `plumber` API endpoint for this functionality.
