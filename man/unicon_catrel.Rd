@@ -10,6 +10,7 @@ unicon_catrel(
   parent_1_value_in,
   parent_2_value_in,
   unit_out = NA,
+  operator_in = NA,
   pull = TRUE
 )
 }
@@ -32,6 +33,10 @@ second parent metric and use in calculations of new metric}
 be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
 \code{NA}; if default is passed, function will return standard index (SI)
 units as conversion.}
+
+\item{operator_in}{'divide' or 'multiply' input. Only needed if parents are area
+& length (calculating length or volume) or speed and time (calculating
+distance or acceleration)}
 
 \item{pull}{Logical; should the function pull out and return the converted
 values (TRUE) or should a full table with conversion record be returned?
