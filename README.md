@@ -66,18 +66,23 @@ If your use of `unicon` falls firmly into the “casual” category, you can
 probably skip this section. However, we recommend reading it (or
 returning to it later) if you plan to rely on `unicon`’s functions in
 any kind of higher stakes setting, or on developing/modifying your own
-conversion protocols.
+conversion protocols. In this section, we aim to take you through some
+of the methods and design approach behind the `unicon` system.
 
-# Mermaid example
+All unit conversions are performed with respect to a single reference
+unit defined per category:
 
 ``` mermaid
-graph TD
-  A[Start] --> B{Decision}
-  B -->|Yes| C[Do thing]
-  B -->|No| D[Do other thing]
-  C --> E[End]
-  D --> E
+graph LR
+  A[/Input Unit/] --> B(Standard Reference Unit)
+  B --> C[/Output Unit/]
 ```
+
+Within the package data, each unit type is provided with its own
+human-readable ID, and defined in terms of its relationship to that
+single reference unit.
+
+The following is the schema for the unit ID `acres`, a unit of area:
 
 ``` json
 {
@@ -94,6 +99,34 @@ graph TD
   ]
 } 
 ```
+
+Within `unicon`, the standard reference unit for area is a hectare (ID:
+`ha`), and an acre is defined as approximately 0.4 of a hectare. If
+converting from acres to any other unit of area, the quantity provided
+will always first be converted to hectares. This allows the package to
+focus on maintaining only one conversion relationship per unit.
+
+The other main attribute of a unit is its `alias` list. This is a list
+of the human-readable names by which the unit may be called in the real
+world. For the unit with ID `acre`, its possible aliases are `c(`
+`ac, acre, acres` `)`
+
+TBC here
+
+    ## # A tibble: 11,599 × 6
+    ##    id      alias       type    category    si      model           
+    ##    <chr>   <chr>       <chr>   <chr>       <chr>   <list>          
+    ##  1 acre    ac          base    area        ha      <named list [2]>
+    ##  2 acre    acre        base    area        ha      <named list [2]>
+    ##  3 acre    acres       base    area        ha      <named list [2]>
+    ##  4 celcius celcius     base    temperature celcius <named list [2]>
+    ##  5 celcius c           base    temperature celcius <named list [2]>
+    ##  6 celcius celsius     base    temperature celcius <named list [2]>
+    ##  7 cm      cm          base    length      m       <named list [2]>
+    ##  8 cm      centimetres base    length      m       <named list [2]>
+    ##  9 cm      centimeters base    length      m       <named list [2]>
+    ## 10 cm__day cm/day      derived speed       m__s    <named list [2]>
+    ## # ℹ 11,589 more rows
 
 ## Usage — `unicon_full`
 
