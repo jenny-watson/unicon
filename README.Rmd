@@ -27,7 +27,7 @@ The package is designed to provide:
 2. A mimimal set of functions for easily and transparently converting one unit to another.
 3. A simple, safe system for adding to and testing the conversion library to maximise maintainability and usefulness.
 
-*Why `unicon`? Because the authors are too lazy to type **un**it_**con**vert` the number of times that developing this package would otherwise require, and because this simple expediency serendipitously lands us a single, scant consonant away from a legendary mythical creature* :unicorn:
+Why `unicon`? Because the authors are too lazy to type **un**it_**con**vert the number of times that developing this package would otherwise require, and because this simple expediency serendipitously lands us a consonant away from a legendary mythical creature :unicorn:
 
 This package was imagined and written by [Dr Jenny Watson](https://github.com/jenny-watson) and [Dr Alasdair Sykes](https://github.com/aj-sykes92). If you use this package in your work, please cite it as:
 
@@ -48,7 +48,7 @@ remotes::install_github("jenny-watson/unicon@*release")
 
 ## Usage --- `unicon_full`
 
-The core user function of the `unicon` package is `unicon_full`. Use it like this:
+The core user-facing function of the `unicon` package is `unicon_full`. Use it like this:
 
 ```{r unicon_full-1}
 library(unicon)
@@ -69,7 +69,7 @@ The function uses `unicon`'s extensive library of unit aliases to match the high
 
 
 
-A number of features are built into the function to help keep conversions safe and transparent. Firstly, the user may wish to see the full calculation thread which leads to this outcome, which can be achieved by setting the `pull` argument to FALSE:
+A number of features are built into the function to help keep conversions safe and transparent. Firstly, the user may wish to see the full calculation thread which leads to this outcome, which can be achieved by setting the `pull` argument to FALSE. This yields a tibble, which we'll `glimpse`:
 
 ```{r unicon_full-2}
 unicon_full(
@@ -77,7 +77,8 @@ unicon_full(
   unit_in = raw_units,
   unit_out = "tonnes / ha",
   pull = FALSE
-)
+) %>%
+  glimpse()
 ```
 
 This returns the following information, representing the calculation process in rough left --> right chronology:
@@ -108,11 +109,11 @@ All the core input arguments are vectorised and will attempt to replicate if sup
 
 ## A brief note on design and methodology
 
-If your use of `unicon` falls firmly into the "casual" category, you can probably skip this section. However, we recommend reading it (or returning to it later) if you plan to rely on `unicon`'s functions in any kind of higher stakes setting, or on developing/modifying your own conversion protocols. In this section, we aim to take you through some of the methods and design approach behind the `unicon` system.
+If your use of `unicon` falls firmly into the "casual" category, you can probably skip this section. However, we recommend reading it (or returning to it later) if you plan to rely on `unicon`'s functions in any kind of higher-stakes setting, or on developing/modifying your own conversion protocols. In this section, we aim to take you through some of the methods and design approach behind the `unicon` system.
 
 All unit conversions are performed with respect to a single reference unit defined per category:
 
-```{r, echo=FALSE, results='asis'}
+```{r simple-process, echo=FALSE, results='asis'}
 cat(
 "```mermaid
 graph LR
@@ -138,6 +139,12 @@ This approach is fundamental, and allows the package to focus on maintaining onl
 
 The other main attribute of a unit is its `alias` list. This is a list of the human-readable names by which the unit may be called in the real world. For the unit with ID `acre`, its possible aliases are ``r as.character(acre$alias)``.
 
+```mermaid
+graph LR
+  A[/Input Unit/] --> B(Standard Reference Unit)
+  B --> C[/Output Unit/]
+```
+
 Together, these pieces of information form the core "profile" of a unit, representing the main things we need to know about it in order to convert to or from it, and to correctly recognise it in the real world.
 
 ### Derived units
@@ -149,7 +156,7 @@ For example, if we know how to convert kilograms to pounds and from hectares to 
 In `unicon`, a separate JSON schema exists to define derived units; since this schema is extremely minimal:
 
 ```{r}
-TBC HERE
+
 ```
 
 
