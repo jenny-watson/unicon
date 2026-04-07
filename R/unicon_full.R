@@ -29,6 +29,13 @@ unicon_full <- function(value_in,
   if (l2 != l1 && l2 != 1L) stop("Length for unit_in argument incompatible")
   if (l3 != l1 && l3 != 1L) stop("Length for unit_out argument incompatible")
 
+  # message to confirm conversion output if no unit_out given
+  if (all(is.na(unit_out))) {
+    message("No output unit given. Converting all values to standard reference unit.")
+  } else if (any(is.na(unit_out))) {
+    message("Output unit missing in some cases. Converting to standard reference unit where missing.") #nolint
+  }
+
   # compose output table
   conv_tab <- tibble(
     value_in = value_in,
