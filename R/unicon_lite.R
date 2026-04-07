@@ -25,6 +25,13 @@ unicon_lite <- function(value_in,
   if (l2 != l1 && l2 != 1L) stop("Length for id_in argument incompatible")
   if (l3 != l1 && l3 != 1L) stop("Length for id_out argument incompatible")
 
+  # message to confirm conversion output if no unit_out given
+  if (all(is.na(id_out))) {
+    message("No output ID given. Converting all values to standard reference unit.")
+  } else if (any(is.na(id_out))) {
+    message("Output ID missing in some cases. Converting to standard reference unit where missing.")
+  }
+
   # compose output table
   conv_tab <- tibble(
     value_in = value_in,
