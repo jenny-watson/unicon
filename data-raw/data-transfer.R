@@ -115,7 +115,7 @@ category_relationships <- bind_rows(
       "multiply",
       "divide"
     ),
-    uid = 1:n()
+    uid = row_number()
   ) |>
   # remove blank parent cells
   pivot_longer(
