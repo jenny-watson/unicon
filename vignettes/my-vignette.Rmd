@@ -238,9 +238,12 @@ Within the package data, each base unit is provided with its own human-readable 
 The following is the schema for the unit ID `acres`, a non-standard unit of area commonly used in agriculture:
 
 ```{r base-schema, class.output="json", comment=NA, echo=FALSE}
-acre <- jsonlite::read_json(system.file("units", "base", "area", "acre.json", 
-                                        package = "unicon"), 
-                            simplifyVector = FALSE)
+acre <- jsonlite::read_json(
+  system.file("units", "base", "area", "acre.json",
+    package = "unicon"
+  ),
+  simplifyVector = FALSE
+)
 jsonlite::toJSON(acre, auto_unbox = TRUE, pretty = TRUE)
 ```
 
@@ -299,9 +302,12 @@ For example, if we know how to convert kilograms to pounds and from hectares to 
 In `unicon`, a separate JSON schema exists to define derived units. Since the heavy lifting is done by the base unit schemas, this schema can be extremely minimal, as with the below example for the derived unit with ID `rate` (mass per unit area):
 
 ```{r derived-schema, class.output="json", comment=NA, echo=FALSE}
-rate <- jsonlite::read_json(system.file("units", "derived", "rate.json", 
-                                        package = "unicon"), 
-                            simplifyVector = FALSE)
+rate <- jsonlite::read_json(
+  system.file("units", "derived", "rate.json",
+    package = "unicon"
+  ),
+  simplifyVector = FALSE
+)
 jsonlite::toJSON(rate, auto_unbox = TRUE, pretty = TRUE)
 ```
 In this schema, `x` and `y` define the two base unit categories which make up the derived category, and `operator` defines the relationship between them. 
@@ -317,9 +323,12 @@ Secondly, these base unit models, together with the derived unit schemas, are us
 Each `operator` as defined in the derived unit schemas requires its own definition and alias list, as per this one, for division:
 
 ```{r operator-schema, class.output="json", comment=NA, echo=FALSE}
-divide <- jsonlite::read_json(system.file("units", "operators", "divide.json", 
-                                          package = "unicon"), 
-                              simplifyVector = FALSE)
+divide <- jsonlite::read_json(
+  system.file("units", "operators", "divide.json",
+    package = "unicon"
+  ),
+  simplifyVector = FALSE
+)
 jsonlite::toJSON(divide, auto_unbox = TRUE, pretty = TRUE)
 ```
 
