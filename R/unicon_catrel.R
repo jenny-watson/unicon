@@ -24,6 +24,7 @@
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
 #' @import dplyr
+#' @importFrom stringr str_replace
 #' @export
 
 unicon_catrel <- function(parent_1_unit_in,
@@ -96,10 +97,10 @@ unicon_catrel <- function(parent_1_unit_in,
     ) |>
     # find relationship between parent 1 and 2
     left_join(category_relationships,
-      by = c(
-        "parent_1_category" = "parent_1",
-        "parent_2_category" = "parent_2"
-      )
+              by = c(
+                "parent_1_category" = "parent_1",
+                "parent_2_category" = "parent_2"
+              )
     )
 
   ## if no relationship, check if parents should be swapped
@@ -115,21 +116,16 @@ unicon_catrel <- function(parent_1_unit_in,
       )) |>
       # find relationship between parent 1 and 2
       left_join(category_relationships,
-        by = c(
-          "parent_1_category" = "parent_1",
-          "parent_2_category" = "parent_2"
-        )
+                by = c(
+                  "parent_1_category" = "parent_1",
+                  "parent_2_category" = "parent_2"
+                )
       )
   }
 
   ## if still no parent relationship, stop
   if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
     stop("There is no recorded relationship between parent units")
-  }
-
-  if (pull(distinct(relationship_check, category)) == "acceleration") {
-    warning("Please ensure you have read the vignettes and calculated change in
-            speed before using this function")
   }
 
   ## filter duplicate join
@@ -158,7 +154,7 @@ unicon_catrel <- function(parent_1_unit_in,
             by = "id"
           ) |>
           select(alias,
-            unit_category = category
+                 unit_category = category
           ),
         by = c("unit_out" = "alias")
       )
@@ -169,56 +165,59 @@ unicon_catrel <- function(parent_1_unit_in,
   }
 
   workings <- relationship_check |>
-    # find spr for relationship between parent 1 and 2
+    # find srp for relationship between parent 1 and 2
     left_join(
-      unit_spr |>
+      unit_srp |>
         distinct(category,
-          spr_unit_out = spr
+                 srp_unit_out = srp
         ),
       by = "category"
     ) |>
     mutate(
-      # calculate value in spr
-      spr_value_out = case_when(
-        operator == "divide" ~ parent_1_spr_value / parent_2_spr_value,
-        operator == "multiply" ~ parent_1_spr_value * parent_2_spr_value
+      # calculate value in srp
+      srp_value_out = case_when(
+        operator == "divide" ~ parent_1_srp_value / parent_2_srp_value,
+        operator == "multiply" ~ parent_1_srp_value * parent_2_srp_value
       ),
-      # assign a unit_out to spr if not already assigned in function
+      # assign a unit_out to srp if not already assigned in function
       unit_out = if_else(is.na(unit_out),
-        spr_unit_out,
-        unit_out
+                         srp_unit_out,
+                         unit_out
       )
     )
 
   # get value out in assigned units
   value_out <- unicon_full(
-    value_in = workings$spr_value_out,
-    unit_in = workings$spr_unit_out,
+    value_in = workings$srp_value_out,
+    unit_in = workings$srp_unit_out,
     unit_out = workings$unit_out,
     pull = TRUE
   )
 
+  ## get workings calcs
+  final <- workings |>
+    bind_cols(value_out = value_out) |>
+    select(parent_1_unit_in,
+           parent_1_value_in,
+           parent_1_category,
+           parent_1_srp_unit = parent_1_srp,
+           parent_1_srp_value,
+           parent_2_unit_in,
+           parent_2_value_in,
+           parent_2_category,
+           parent_2_srp_unit = parent_2_srp,
+           parent_2_srp_value,
+           operator,
+           category_out = category,
+           srp_unit_out,
+           srp_value_out,
+           unit_out,
+           value_out
+    )
+
   if (isTRUE(pull)) {
     value_out
   } else {
-    final <- workings |>
-      bind_cols(value_out = value_out) |>
-      select(parent_1_unit_in,
-        parent_1_value_in,
-        parent_1_category,
-        parent_1_spr_unit = parent_1_spr,
-        parent_1_spr_value,
-        parent_2_unit_in,
-        parent_2_value_in,
-        parent_2_category,
-        parent_2_spr_unit = parent_2_spr,
-        parent_2_spr_value,
-        operator,
-        category_out = category,
-        spr_unit_out,
-        spr_value_out,
-        unit_out,
-        value_out
-      )
+    final
   }
 }

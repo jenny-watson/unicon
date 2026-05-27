@@ -1,6 +1,6 @@
 {
   "category": "volume",
-  "si": "litre",
+  "si": "l",
   "model": {
     "slope": 1,
     "intercept": 0

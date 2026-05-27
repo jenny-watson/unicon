@@ -156,7 +156,7 @@ category_relationships <- bind_rows(
   distinct() # removes length * length = area duplicate
 
 ## join datasets together
-staging_join <- derived_data |>
+join <- derived_data |>
   ## join to x
   left_join(
     base_data |>
@@ -198,146 +198,9 @@ staging_join <- derived_data |>
   ) |>
   ## doesn't work for all if metric is derived twice or derived via multiply
   filter(
-    !is.na(slope),
-    category != "acceleration", # wrong units from mass and force
-    !(category == "area" & srp == "litre__m"),
-    !(category == "length" & srp == "ha__m")
+    !(category == "area" & srp == "litre__m"), # due to being base and derived unit
+    !(category == "length" & srp == "ha__m") # due to being base and derived unit
   )
-
-# make corrections,
-join <- bind_rows(
-  staging_join,
-  ## correct acceleration
-  category_relationships |>
-    filter(
-      category == "acceleration",
-      parent_1 == "speed"
-    ) |>
-    left_join(
-      staging_join |>
-        rename_with(~ paste0(., ".x")),
-      by = c("parent_1" = "category.x"),
-      relationship = "many-to-many"
-    ) |>
-    left_join(
-      staging_join |>
-        rename_with(~ paste0(., ".y")),
-      by = c("parent_2" = "category.y"),
-      relationship = "many-to-many"
-    ) |>
-    left_join(
-      operators_data |>
-        rename_with(~ paste0(., ".o")),
-      by = c("operator" = "operator.o"),
-      relationship = "many-to-many"
-    ) |>
-    mutate(
-      category,
-      id = paste0(id.x, id.o, id.y),
-      alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-      srp = paste0(srp.x, id.o, srp.y),
-      slope = slope.x / slope.y,
-      intercept = 0,
-      type = "derived",
-      .keep = "none"
-    ),
-  ## correct mass flow rate
-  ### first get all unit combinations
-  category_relationships |>
-    filter(category == "mass_flow_rate") |>
-    left_join(
-      staging_join |>
-        rename_with(~ paste0(., ".x")),
-      by = c("parent_1" = "category.x"),
-      relationship = "many-to-many"
-    ) |>
-    left_join(
-      staging_join |>
-        rename_with(~ paste0(., ".y")),
-      by = c("parent_2" = "category.y"),
-      relationship = "many-to-many"
-    ) |>
-    select(
-      category,
-      starts_with("id"),
-      starts_with("alias"),
-      starts_with("srp"),
-    ) |>
-    mutate( # get last bit of x and first bit of y then mass/time # this is slow
-      id.xy = sub(".*__", "", id.x),
-      id.yx = sub("__.*", "", id.y),
-      alias.xy = case_when(
-        str_detect(alias.x, "per") ~ sub(".*per", "", alias.x),
-        str_detect(alias.x, "/") ~ sub(".*/", "", alias.x)
-      ),
-      alias.yx = case_when(
-        str_detect(alias.y, "per") ~ sub("per.*", "", alias.y),
-        str_detect(alias.y, "/") ~ sub("/.*", "", alias.y)
-      ),
-      srp.xy = sub(".*__", "", srp.x),
-      srp.yx = sub("__.*", "", srp.y),
-      # to get proper naming convention
-      operator = "divide"
-    ) |>
-    select(-c(
-      id.x, # reduce df size significantly
-      id.y,
-      alias.x,
-      alias.y,
-      srp.x,
-      srp.y
-    )) |>
-    distinct() |>
-    rename_with(~ sub("\\.yx$", ".x", .x), ends_with(".yx")) |> # make easier to read
-    rename_with(~ sub("\\.xy$", ".y", .x), ends_with(".xy")) |>
-    left_join(
-      operators_data |>
-        rename_with(~ paste0(., ".o")),
-      by = c("operator" = "operator.o"),
-      relationship = "many-to-many"
-    ) |>
-    mutate( # naming convention
-      category,
-      id = paste0(id.x, id.o, id.y),
-      alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-      srp = paste0(srp.x, id.o, srp.y),
-      intercept = 0,
-      type = "derived",
-    ) |>
-    ### second, calculate slope
-    left_join(
-      base_data |>
-        select(alias,
-          slope.x = slope
-        ),
-      by = c("alias.x" = "alias")
-    ) |>
-    left_join(
-      base_data |>
-        select(alias,
-          slope.y = slope
-        ),
-      by = c("alias.y" = "alias")
-    ) |>
-    mutate(
-      category,
-      id,
-      alias,
-      srp,
-      slope = slope.x / slope.y,
-      intercept,
-      type,
-      .keep = "none"
-    )
-)
-
-# check = anti_join(
-#   distinct(category_relationships,
-#            category),
-#   distinct(join,
-#            category),
-#   by = "category")
-
 
 ## final datasets
 

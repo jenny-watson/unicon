@@ -136,27 +136,23 @@ As with `unicon_full`, `unicon_lite` will return a full dataframe if required (`
 
 The relationships between metrics that are included in this package are:
 
-1.  **Length * Length = Area** where lengths can be different values. Please note *Area* is also listed as a base unit.
+1.	**Area Density = Mass / Area**
 
-2.  **Area * Length = Volume** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from first equation if unknown. 
+2.  **Area = Volume / Length** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from 4. if unknown. 
 
-3.	**Area Density = Mass / Volume**
+3.	**Concentration = Moles / Volume**
 
-4.	**Speed = Length / Time**
+4.  **Length = Area / Length** where lengths can be different values. Please note *Area* is also listed as a base unit.
 
-5.	**Acceleration = Change in Speed / Time**
+5.  **Mass fraction = Mass / Mass**
 
-6.	**Force = Acceleration * Mass** where *Mass* is assumed as 9.81 if considering gravitational force
+6.	**Pressure = Force / Area**
 
-7.	**Pressure = Force / Area**
+7.	**Volume Density = Mass / Volume**
 
-8.	**Concentration = Moles / Volume**
+8.  **Volume fraction = Volume / Volume**
 
-9.	**Volumetric Flow Rate = Area * Speed**
-
-10. **Volumetric Flow Rate = Volume / Time**
-
-11.	**Mass Flow Rate = Volume Density * Volumetric Flow Rate**
+9.  **Speed = Length / Time**
 
 ### Examples
 
@@ -176,29 +172,7 @@ unicon_catrel(
 # if unit_out unspecified, will convert to SRP (in this example m/s)
 ```
 
-### Acceleration 
-
-```{r}
-## acceleration = change in speed / time
-## i.e. (speed 1 - speed 2) / time
-
-speed_1 <- unicon_full(
-  value_in = 8,
-  unit_in = "miles"
-)
-
-speed_2 <- unicon_full(
-  value_in = 16,
-  unit_in = "km"
-)
-
-unicon_catrel(
-  parent_1_unit_in = "m/s",
-  parent_2_unit_in = "h",
-  parent_1_value_in = (speed_1 - speed_2),
-  parent_2_value_in = 2
-)
-```
+Note that two 'No output unit given. Converting all values to standard reference unit.' will appear, but ignore these when using the unicon_catrel function.
 
 ## `unicon_help`
 
@@ -366,6 +340,5 @@ Other things to note are:
 * Area and volume are considered to be base units as well as derived units
 * Speed is listed as speed not velocity
 * Length is listed as length not distance
-* If trying to calculate force or acceleration using the assumption mass is equal to gravitational force, the value **9.81** is used
 * Month is **NOT** included in the package due to the variation in the number of days and weeks per month
 * Year is recorded as **365.25 days** to account for leap years.

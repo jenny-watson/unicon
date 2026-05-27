@@ -1,5 +1,0 @@
-{
-    "x": "volumetric_flow_rate",
-    "y": "area",
-    "operator": "divide"
-}

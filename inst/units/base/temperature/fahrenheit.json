@@ -1,6 +1,6 @@
 {
   "category": "temperature",
-  "si": "celcius",
+  "si": "C",
   "model": {
     "slope": 0.5556,
     "intercept": -17.7778
