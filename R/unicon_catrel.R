@@ -1,24 +1,24 @@
 #' @title Deriving and calculating category relationship between two metrics
 #' @description Using the category_relationship package data, this function uses
 #' 'unicon_full' to calculate new metrics from parent metrics by firstly
-#' converting parent units to SI, calculating the new metric in SI units then
-#' converting to the desired units if specified.
+#' converting parent units to standard reference point (SRP), calculating the
+#' new metric in SRP units then converting to the desired units if specified.
 #' @param parent_1_value_in Numeric scalar or vector, values to convert from
 #' first parent metric and use in calculations of new metrics
 #' @param parent_2_value_in Numeric scalar or vector, values to convert from
 #' second parent metric and use in calculations of new metric
 #' @param parent_1_unit_in Character scalar or vector, input units for
-#' \code{parent_1_value_in}.#' Must be of \code{length(1L)} or
+#' \code{parent_1_value_in}. Must be of \code{length(1L)} or
 #' \code{length(parent_1_value_in)}.
 #' @param parent_2_unit_in Character scalar or vector, input units for
-#' \code{parent_2_value_in}.Must be of \code{length(1L)} or
+#' \code{parent_2_value_in}. Must be of \code{length(1L)} or
 #' \code{length(parent_2_value_in)}.
 #' @param unit_out Character scalar or vector, output units for conversion. Must
 #' be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
-#' \code{NA}; if default is passed, function will return standard index (SI)
-#' units as conversion.
-#' @param operator_in 'divide' or 'multiply' input. Only needed if parents are area
-#' & length (calculating length or volume) or speed and time (calculating
+#' \code{NA}; if default is passed, function will return standard reference
+#' point (SRP) units as conversion.
+#' @param operator_in 'divide' or 'multiply' input. Only needed if parents are
+#' area & length (calculating length or volume) or speed and time (calculating
 #' distance or acceleration)
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
@@ -55,15 +55,15 @@ unicon_catrel <- function(parent_1_unit_in,
       parent_2_value_in = parent_2_value_in,
       unit_out = unit_out
     ) |>
-    # convert both parent metrics to SI first and bind to df as vectors
+    # convert both parent metrics to srp first and bind to df as vectors
     bind_cols(
-      parent_1_si_value = unicon_full(
+      parent_1_srp_value = unicon_full(
         value_in = parent_1_value_in,
         unit_in = parent_1_unit_in,
         unit_out = NA,
         pull = TRUE
       ),
-      parent_2_si_value = unicon_full(
+      parent_2_srp_value = unicon_full(
         value_in = parent_2_value_in,
         unit_in = parent_2_unit_in,
         unit_out = NA,
@@ -74,7 +74,7 @@ unicon_catrel <- function(parent_1_unit_in,
     left_join(
       unit_alias |>
         left_join(
-          unit_si |>
+          unit_srp |>
             select(-type),
           by = "id"
         ) |>
@@ -86,7 +86,7 @@ unicon_catrel <- function(parent_1_unit_in,
     left_join(
       unit_alias |>
         left_join(
-          unit_si |>
+          unit_srp |>
             select(-type),
           by = "id"
         ) |>
@@ -153,7 +153,7 @@ unicon_catrel <- function(parent_1_unit_in,
       left_join(
         unit_alias |>
           left_join(
-            unit_si |>
+            unit_srp |>
               select(-type),
             by = "id"
           ) |>
@@ -169,31 +169,31 @@ unicon_catrel <- function(parent_1_unit_in,
   }
 
   workings <- relationship_check |>
-    # find SI for relationship between parent 1 and 2
+    # find spr for relationship between parent 1 and 2
     left_join(
-      unit_si |>
+      unit_spr |>
         distinct(category,
-          si_unit_out = si
+          spr_unit_out = spr
         ),
       by = "category"
     ) |>
     mutate(
-      # calculate value in SI
-      si_value_out = case_when(
-        operator == "divide" ~ parent_1_si_value / parent_2_si_value,
-        operator == "multiply" ~ parent_1_si_value * parent_2_si_value
+      # calculate value in spr
+      spr_value_out = case_when(
+        operator == "divide" ~ parent_1_spr_value / parent_2_spr_value,
+        operator == "multiply" ~ parent_1_spr_value * parent_2_spr_value
       ),
-      # assign a unit_out to SI if not already assigned in function
+      # assign a unit_out to spr if not already assigned in function
       unit_out = if_else(is.na(unit_out),
-        si_unit_out,
+        spr_unit_out,
         unit_out
       )
     )
 
   # get value out in assigned units
   value_out <- unicon_full(
-    value_in = workings$si_value_out,
-    unit_in = workings$si_unit_out,
+    value_in = workings$spr_value_out,
+    unit_in = workings$spr_unit_out,
     unit_out = workings$unit_out,
     pull = TRUE
   )
@@ -206,17 +206,17 @@ unicon_catrel <- function(parent_1_unit_in,
       select(parent_1_unit_in,
         parent_1_value_in,
         parent_1_category,
-        parent_1_si_unit = parent_1_si,
-        parent_1_si_value,
+        parent_1_spr_unit = parent_1_spr,
+        parent_1_spr_value,
         parent_2_unit_in,
         parent_2_value_in,
         parent_2_category,
-        parent_2_si_unit = parent_2_si,
-        parent_2_si_value,
+        parent_2_spr_unit = parent_2_spr,
+        parent_2_spr_value,
         operator,
         category_out = category,
-        si_unit_out,
-        si_value_out,
+        spr_unit_out,
+        spr_value_out,
         unit_out,
         value_out
       )

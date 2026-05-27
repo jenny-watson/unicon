@@ -38,7 +38,7 @@ base_data <- imap_dfr(
     id = .y, ## get into df rather than list
     alias = .x$alias,
     category = .x$category,
-    si = .x$si,
+    srp = .x$si,
     model = list(.x$model)
   )
 ) |>
@@ -185,7 +185,7 @@ staging_join <- derived_data |>
     category = id,
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-    si = paste0(si.x, id.o, si.y),
+    srp = paste0(srp.x, id.o, srp.y),
     slope = slope.x / slope.y,
     intercept = 0,
     type = "derived",
@@ -200,8 +200,8 @@ staging_join <- derived_data |>
   filter(
     !is.na(slope),
     category != "acceleration", # wrong units from mass and force
-    !(category == 'area' & si == 'litre__m'),
-    !(category == 'length' & si == 'ha__m')
+    !(category == "area" & srp == "litre__m"),
+    !(category == "length" & srp == "ha__m")
   )
 
 # make corrections,
@@ -235,7 +235,7 @@ join <- bind_rows(
       category,
       id = paste0(id.x, id.o, id.y),
       alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-      si = paste0(si.x, id.o, si.y),
+      srp = paste0(srp.x, id.o, srp.y),
       slope = slope.x / slope.y,
       intercept = 0,
       type = "derived",
@@ -261,7 +261,7 @@ join <- bind_rows(
       category,
       starts_with("id"),
       starts_with("alias"),
-      starts_with("si"),
+      starts_with("srp"),
     ) |>
     mutate( # get last bit of x and first bit of y then mass/time # this is slow
       id.xy = sub(".*__", "", id.x),
@@ -274,8 +274,8 @@ join <- bind_rows(
         str_detect(alias.y, "per") ~ sub("per.*", "", alias.y),
         str_detect(alias.y, "/") ~ sub("/.*", "", alias.y)
       ),
-      si.xy = sub(".*__", "", si.x),
-      si.yx = sub("__.*", "", si.y),
+      srp.xy = sub(".*__", "", srp.x),
+      srp.yx = sub("__.*", "", srp.y),
       # to get proper naming convention
       operator = "divide"
     ) |>
@@ -284,8 +284,8 @@ join <- bind_rows(
       id.y,
       alias.x,
       alias.y,
-      si.x,
-      si.y
+      srp.x,
+      srp.y
     )) |>
     distinct() |>
     rename_with(~ sub("\\.yx$", ".x", .x), ends_with(".yx")) |> # make easier to read
@@ -300,7 +300,7 @@ join <- bind_rows(
       category,
       id = paste0(id.x, id.o, id.y),
       alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-      si = paste0(si.x, id.o, si.y),
+      srp = paste0(srp.x, id.o, srp.y),
       intercept = 0,
       type = "derived",
     ) |>
@@ -323,7 +323,7 @@ join <- bind_rows(
       category,
       id,
       alias,
-      si,
+      srp,
       slope = slope.x / slope.y,
       intercept,
       type,
@@ -357,12 +357,12 @@ unit_alias <- join |>
   mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", ""))
 
 # standard units
-unit_si <- join |>
+unit_srp <- join |>
   distinct(
     id,
     type,
     category,
-    si
+    srp
   )
 
 # models
@@ -386,7 +386,7 @@ unit_models <- join |>
 usethis::use_data(
   unit_alias,
   unit_models,
-  unit_si,
+  unit_srp,
   category_relationships,
   overwrite = TRUE,
   internal = TRUE

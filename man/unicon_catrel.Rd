@@ -10,16 +10,17 @@ unicon_catrel(
   parent_1_value_in,
   parent_2_value_in,
   unit_out = NA,
+  operator_in = NA,
   pull = TRUE
 )
 }
 \arguments{
 \item{parent_1_unit_in}{Character scalar or vector, input units for
-\code{parent_1_value_in}.#' Must be of \code{length(1L)} or
+\code{parent_1_value_in}. Must be of \code{length(1L)} or
 \code{length(parent_1_value_in)}.}
 
 \item{parent_2_unit_in}{Character scalar or vector, input units for
-\code{parent_2_value_in}.Must be of \code{length(1L)} or
+\code{parent_2_value_in}. Must be of \code{length(1L)} or
 \code{length(parent_2_value_in)}.}
 
 \item{parent_1_value_in}{Numeric scalar or vector, values to convert from
@@ -30,8 +31,12 @@ second parent metric and use in calculations of new metric}
 
 \item{unit_out}{Character scalar or vector, output units for conversion. Must
 be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
-\code{NA}; if default is passed, function will return standard index (SI)
-units as conversion.}
+\code{NA}; if default is passed, function will return standard reference
+point (SRP) units as conversion.}
+
+\item{operator_in}{'divide' or 'multiply' input. Only needed if parents are
+area & length (calculating length or volume) or speed and time (calculating
+distance or acceleration)}
 
 \item{pull}{Logical; should the function pull out and return the converted
 values (TRUE) or should a full table with conversion record be returned?
@@ -40,6 +45,6 @@ Defaults to TRUE.}
 \description{
 Using the category_relationship package data, this function uses
 'unicon_full' to calculate new metrics from parent metrics by firstly
-converting parent units to SI, calculating the new metric in SI units then
-converting to the desired units if specified.
+converting parent units to standard reference point (SRP), calculating the
+new metric in SRP units then converting to the desired units if specified.
 }

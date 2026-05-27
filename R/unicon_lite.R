@@ -7,7 +7,8 @@
 #' \code{value_in}. Must be of \code{length(1L)} or \code{length(value_in)}.
 #' @param id_out Character scalar or vector, output unit ID(s) for conversion.
 #' Must be of \code{length(1L)} or \code{length(value_in)}. Defaults to
-#' \code{NA}; if default is passed, function will return standard index (SI)
+#' \code{NA}; if default is passed, function will return standard reference
+#' point (SRP) which is a standard index (SI) unit measure.
 #' units as conversion.
 #' @import dplyr purrr
 #' @importFrom tidyr replace_na
@@ -38,37 +39,37 @@ unicon_lite <- function(value_in,
     id_in = id_in,
     id_out = id_out
   ) |>
-    # si unit for input id
+    # srp unit for input id
     left_join(
       select(
-        unit_si,
+        unit_srp,
         id_in = .data$id,
-        si_in = .data$si
+        srp_in = .data$srp
       ),
       by = "id_in",
       multiple = "any"
     ) |>
-    # si unit for output id, needed for checks only
+    # srp unit for output id, needed for checks only
     left_join(
       select(
-        unit_si,
+        unit_srp,
         id_out = .data$id,
-        si_out = .data$si
+        srp_out = .data$srp
       ),
       by = "id_out",
       multiple = "any"
     ) |>
     mutate(
       # user gave input units, but no matches
-      error_in = is.na(.data$si_in),
+      error_in = is.na(.data$srp_in),
       # user gave output units, but no matches
-      error_out = !is.na(.data$id_out) & is.na(.data$si_out),
+      error_out = !is.na(.data$id_out) & is.na(.data$srp_out),
       # user gave incompatible unit conversion
-      error_si = .data$si_in != .data$si_out,
-      # use si unit as output id if none given by user
-      id_out = ifelse(is.na(.data$id_out), .data$si_in, .data$id_out),
+      error_srp = .data$srp_in != .data$srp_out,
+      # use srp unit as output id if none given by user
+      id_out = ifelse(is.na(.data$id_out), .data$srp_in, .data$id_out),
     ) |>
-    # model for input <--> si
+    # model for input <--> srp
     left_join(
       rename(
         unit_models,
@@ -78,7 +79,7 @@ unicon_lite <- function(value_in,
       by = "id_in",
       multiple = "any"
     ) |>
-    # model for si <--> output
+    # model for srp <--> output
     left_join(
       rename(
         unit_models,
@@ -111,16 +112,16 @@ unicon_lite <- function(value_in,
   # solve conversion models
   conv_tab <- conv_tab |>
     mutate(
-      # forward model, input --> si
-      value_si = map2_dbl(
+      # forward model, input --> srp
+      value_srp = map2_dbl(
         .data$value_in, .data$model_in, ~ .x * .y$slope + .y$intercept
       ),
-      # reverse model, si --> output
+      # reverse model, srp --> output
       value_out = map2_dbl(
-        .data$value_si, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
+        .data$value_srp, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
-      value_out = ifelse(.data$error_si %in% TRUE,
+      value_out = ifelse(.data$error_srp %in% TRUE,
         NA_real_,
         .data$value_out
       )
@@ -141,7 +142,7 @@ unicon_lite <- function(value_in,
     if (any(conv_tab$error_out)) {
       warning("Some output unit IDs were invalid.")
     }
-    if (any(conv_tab$error_si, na.rm = TRUE)) {
+    if (any(conv_tab$error_srp, na.rm = TRUE)) {
       warning("Some requested conversions were not valid (unit type mismatch).")
     }
 
@@ -149,12 +150,12 @@ unicon_lite <- function(value_in,
       conv_tab,
       .data$id_in,
       .data$id_out,
-      id_si = .data$si_in, # used to drive calcs, si_out for check only
+      id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
       .data$error_in,
-      .data$error_si,
+      .data$error_srp,
       .data$error_out,
       .data$value_in,
-      .data$value_si,
+      .data$value_srp,
       .data$value_out
     )
   }
