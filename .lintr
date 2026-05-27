@@ -1,6 +1,6 @@
 linters: list(
     line_length_linter(100),
-    commented_code_linter = NULL
+    commented_code_linter()
   )
 
 exclusions: list("vignettes/my-vignette.Rmd")
