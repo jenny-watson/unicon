@@ -38,7 +38,7 @@ base_data <- imap_dfr(
     id = .y, ## get into df rather than list
     alias = .x$alias,
     category = .x$category,
-    srp = .x$si,
+    srp = .x$srp,
     model = list(.x$model)
   )
 ) |>

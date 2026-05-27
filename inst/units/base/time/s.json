@@ -1,6 +1,6 @@
 {
   "category": "time",
-  "si": "s",
+  "srp": "s",
   "model": {
     "slope": 1,
     "intercept": 0

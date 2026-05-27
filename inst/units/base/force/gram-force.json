@@ -1,6 +1,6 @@
 {
   "category": "force",
-  "si": "N",
+  "srp": "N",
   "model": {
     "slope": 0.00980665,
     "intercept": 0

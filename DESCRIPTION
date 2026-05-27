@@ -10,6 +10,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
+    DiagrammeR,
     knitr,
     jsonlite,
     rmarkdown,
@@ -18,7 +19,7 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)
 Imports: 
     dplyr,
     purrr,

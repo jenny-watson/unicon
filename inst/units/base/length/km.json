@@ -1,6 +1,6 @@
 {
   "category": "length",
-  "si": "m",
+  "srp": "m",
   "model": {
     "slope": 1000,
     "intercept": 0

@@ -7,3 +7,4 @@
 ^\.lintr$
 ^\.positai$
 ^\.claude$
+^README\.Rmd$

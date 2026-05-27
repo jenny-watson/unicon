@@ -9,11 +9,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+collapse = TRUE,
+comment = "#>"
 )
 ```
 
@@ -158,8 +158,9 @@ The relationships between metrics that are included in this package are:
 
 To calculate a new metric from existing data:
 
-```{r}
-# e.g. speed from length / time
+e.g. speed from length / time (if unit_out unspecified, will convert to SRP (in this example m/s))
+
+```{r unicorn_catrel-1}
 
 unicon_catrel(
   parent_1_unit_in = rep("miles", 6),
@@ -169,14 +170,13 @@ unicon_catrel(
   unit_out = rep("km/day", 6)
 )
 
-# if unit_out unspecified, will convert to SRP (in this example m/s)
 ```
 
 Note that two 'No output unit given. Converting all values to standard reference unit.' will appear, but ignore these when using the unicon_catrel function.
 
 ## `unicon_help`
 
-To use the `unicon` functions, it may be useful to directly see what is recognised by the package. The internal package data is maintained in an optimal format for efficent computation, but the `unicon_help` function is designed to join and return this in the simplest format for interactive analysis:
+To use the `unicon` functions, it may be useful to directly see what is recognised by the package. The internal package data is maintained in an optimal format for efficient computation, but the `unicon_help` function is designed to join and return this in the simplest format for interactive analysis:
 
 ```{r unicon_help}
 unicon_help()
@@ -201,10 +201,12 @@ If your use of `unicon` falls firmly into the "casual" category, you can probabl
 
 All unit conversions are performed with respect to a single reference unit defined per category:
 
-```{mermaid simple-process}
-graph LR
+```{r simple-process}
+DiagrammeR::mermaid("
+graph LR;
   A[/Input Unit/] --> B(Standard Reference Unit)
-  B --> C[/Output Unit/]
+  B --> C[/Output Unit/];
+")
 ```
 
 Within the package data, each base unit is provided with its own human-readable ID, and defined in terms of its relationship to that single reference unit. A JSON schema for each base unit encapsulates this information.
@@ -214,7 +216,7 @@ The following is the schema for the unit ID `acres`, a non-standard unit of area
 ```{r base-schema, class.output="json", comment=NA, echo=FALSE}
 acre <- jsonlite::read_json(
   system.file("units", "base", "area", "acre.json",
-    package = "unicon"
+              package = "unicon"
   ),
   simplifyVector = FALSE
 )
@@ -233,30 +235,31 @@ A couple of simple transforms are used to keep the alias list as focused as poss
 
 Combining all of this together with the established input --> standard reference unit --> output convention gives us the full process flow of the `unicon` function:
 
-```{mermaid full-process}
+```{r full-process}
+DiagrammeR::mermaid("
 graph LR
   A1[/Input unit/]
   B1(Input unit alias)
   C1(Input unit ID)
-  
+
   A2[/Output unit/]
   B2(Output unit alias)
   C2(Output unit ID)
-  
+
   D(Standard Reference Unit ID)
-  
+
   E[[Check for errors in unit recognition]]
   E1[/Warn of issues/]
-  
+
   F[[Convert input value to SRU]]
   G[[Convert SRU value to output]]
   H[/Return outputs/]
-  
+
   A1 --> B1 --> C1
   A2 --> B2 --> C2
   C1 --> D
   C2 --> D
-  
+
   C1 --> E
   C2 --> E
   D --> E
@@ -265,6 +268,7 @@ graph LR
   D --> F --> G --> H
   C1 --> F
   C2 --> G
+")
 ```
 
 ## Derived units
@@ -277,8 +281,8 @@ In `unicon`, a separate JSON schema exists to define derived units. Since the he
 
 ```{r derived-schema, class.output="json", comment=NA, echo=FALSE}
 rate <- jsonlite::read_json(
-  system.file("units", "derived", "rate.json",
-    package = "unicon"
+  system.file("units", "derived", "area_density.json",
+              package = "unicon"
   ),
   simplifyVector = FALSE
 )
@@ -299,7 +303,7 @@ Each `operator` as defined in the derived unit schemas requires its own definiti
 ```{r operator-schema, class.output="json", comment=NA, echo=FALSE}
 divide <- jsonlite::read_json(
   system.file("units", "operators", "divide.json",
-    package = "unicon"
+              package = "unicon"
   ),
   simplifyVector = FALSE
 )

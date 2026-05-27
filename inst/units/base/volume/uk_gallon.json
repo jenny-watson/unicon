@@ -1,6 +1,6 @@
 {
   "category": "volume",
-  "si": "l",
+  "srp": "l",
   "model": {
     "slope": 4.5461,
     "intercept": 0

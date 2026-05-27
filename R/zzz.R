@@ -7,5 +7,17 @@ utils::globalVariables(c(
   "operator",
   "category",
   "spr_unit_out",
-  "spr_value_out"
+  "spr_value_out",
+  "type",
+  "id",
+  "alias",
+  "srp",
+  "srp_unit_out",
+  "parent_1_category",
+  "parent_1_srp",
+  "parent_1_srp_value",
+  "parent_2_category",
+  "parent_2_srp",
+  "parent_2_srp_value",
+  "srp_value_out"
 ))
