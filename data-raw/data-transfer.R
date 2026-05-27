@@ -336,7 +336,7 @@ join <- bind_rows(
 #            category),
 #   distinct(join,
 #            category),
-#   by = 'category')
+#   by = "category")
 
 
 ## final datasets
