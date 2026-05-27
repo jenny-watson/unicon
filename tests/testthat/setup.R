@@ -44,13 +44,14 @@ base <- map(
 
 # read in unit standard master
 # this is similar to the SI concept but adapted for our needs
+# have deleted this as make in data build
 
-si <- jsonlite::read_json(
-  system.file("units",
-    "si.json",
-    lib.loc = .libPaths(),
-    package = pkg
-  ),
-  simplifyVector = FALSE
-)
+# si <- jsonlite::read_json(
+#   system.file("units",
+#     "si.json",
+#     lib.loc = .libPaths(),
+#     package = pkg
+#   ),
+#   simplifyVector = FALSE
+# )
 ################################################################################
