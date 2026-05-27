@@ -1,6 +1,4 @@
-linters: list(
+linters: linters_with_defaults(
     line_length_linter(100),
-    commented_code_linter()
+    commented_code_linter = NULL
   )
-
-exclusions: list("vignettes/my-vignette.Rmd")
