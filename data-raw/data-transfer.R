@@ -98,7 +98,6 @@ join <- derived_data |>
     category = id,
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-    si = paste0(si.x, id.o, si.y),
     srp = paste0(srp.x, id.o, srp.y),
     slope = slope.x / slope.y,
     intercept = 0,
@@ -109,6 +108,7 @@ join <- derived_data |>
   bind_rows(
     base_data |>
       mutate(type = "base")
+  )
 
 ## final datasets
 
