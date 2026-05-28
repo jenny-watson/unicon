@@ -68,6 +68,48 @@ operators_data <- imap_dfr(
   )
 )
 
+## join datasets together
+join <- derived_data |>
+  ## join to x
+  left_join(
+    base_data |>
+      filter(intercept == 0) |> ## is this needed?
+      rename_with(~ paste0(., ".x")),
+    by = c("x" = "category.x"),
+    relationship = "many-to-many"
+  ) |>
+  ## join to y
+  left_join(
+    base_data |>
+      filter(intercept == 0) |> ## is this needed?
+      rename_with(~ paste0(., ".y")),
+    by = c("y" = "category.y"),
+    relationship = "many-to-many"
+  ) |>
+  ## join to operators
+  left_join(
+    operators_data |>
+      rename_with(~ paste0(., ".o")),
+    by = c("operator" = "operator.o"),
+    relationship = "many-to-many"
+  ) |>
+  ## format and calculate
+  mutate(
+    category = id,
+    id = paste0(id.x, id.o, id.y),
+    alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
+    si = paste0(si.x, id.o, si.y),
+    srp = paste0(srp.x, id.o, srp.y),
+    slope = slope.x / slope.y,
+    intercept = 0,
+    type = "derived",
+    .keep = "none"
+  ) |>
+  ## bind to base data
+  bind_rows(
+    base_data |>
+      mutate(type = "base")
+
 ## final datasets
 
 # alias
