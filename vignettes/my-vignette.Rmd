@@ -9,11 +9,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-collapse = TRUE,
-comment = "#>"
+  collapse = TRUE,
+  comment = "#>"
 )
 ```
 
@@ -170,8 +170,7 @@ The following is the schema for the unit ID `acres`, a non-standard unit of area
 
 ```{r base-schema, class.output="json", comment=NA, echo=FALSE}
 acre <- jsonlite::read_json(
-  system.file("units", "base", "area", "acre.json",
-              package = "unicon"
+  system.file("units", "base", "area", "acre.json", package = "unicon"
   ),
   simplifyVector = FALSE
 )
@@ -236,8 +235,7 @@ In `unicon`, a separate JSON schema exists to define derived units. Since the he
 
 ```{r derived-schema, class.output="json", comment=NA, echo=FALSE}
 rate <- jsonlite::read_json(
-  system.file("units", "derived", "area_density.json",
-              package = "unicon"
+  system.file("units", "derived", "area_density.json", package = "unicon"
   ),
   simplifyVector = FALSE
 )
@@ -257,8 +255,7 @@ Each `operator` as defined in the derived unit schemas requires its own definiti
 
 ```{r operator-schema, class.output="json", comment=NA, echo=FALSE}
 divide <- jsonlite::read_json(
-  system.file("units", "operators", "divide.json",
-              package = "unicon"
+  system.file("units", "operators", "divide.json", package = "unicon"
   ),
   simplifyVector = FALSE
 )
