@@ -124,10 +124,10 @@ unit_alias <- join |>
       distinct(id) |>
       mutate(alias = id)
   ) |>
-  distinct() |>
-  arrange(id) |>
   # remove whitespace and upper case
-  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", ""))
+  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", "")) |>
+  distinct() |>
+  arrange(id)
 
 # standard units
 unit_srp <- join |>
