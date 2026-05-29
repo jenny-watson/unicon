@@ -99,7 +99,9 @@ join <- derived_data |>
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
     srp = paste0(srp.x, id.o, srp.y),
-    slope = slope.x / slope.y,
+    slope = case_when(operator == 'divide' ~ slope.x / slope.y,
+                      operator == 'multiply' ~ slope.x * slope.y,
+                      T ~ NA),
     intercept = 0,
     type = "derived",
     .keep = "none"
@@ -122,10 +124,10 @@ unit_alias <- join |>
       distinct(id) |>
       mutate(alias = id)
   ) |>
-  distinct() |>
-  arrange(id) |>
   # remove whitespace and upper case
-  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", ""))
+  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", "")) |>
+  distinct() |>
+  arrange(id)
 
 # standard units
 unit_srp <- join |>
