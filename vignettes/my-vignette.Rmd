@@ -161,7 +161,6 @@ To calculate a new metric from existing data:
 e.g. speed from length / time (if unit_out unspecified, will convert to SRP (in this example m/s))
 
 ```{r unicorn_catrel-1}
-
 unicon_catrel(
   parent_1_unit_in = rep("miles", 6),
   parent_2_unit_in = rep("hour", 6),
@@ -169,7 +168,6 @@ unicon_catrel(
   parent_2_value_in = c(9, 8, 7, 5, 4, 2),
   unit_out = rep("km/day", 6)
 )
-
 ```
 
 Note that two 'No output unit given. Converting all values to standard reference unit.' will appear, but ignore these when using the unicon_catrel function.
@@ -215,8 +213,7 @@ The following is the schema for the unit ID `acres`, a non-standard unit of area
 
 ```{r base-schema, class.output="json", comment=NA, echo=FALSE}
 acre <- jsonlite::read_json(
-  system.file("units", "base", "area", "acre.json", package = "unicon"
-  ),
+  system.file("units", "base", "area", "acre.json", package = "unicon"),
   simplifyVector = FALSE
 )
 jsonlite::toJSON(acre, auto_unbox = TRUE, pretty = TRUE)
@@ -280,8 +277,7 @@ In `unicon`, a separate JSON schema exists to define derived units. Since the he
 
 ```{r derived-schema, class.output="json", comment=NA, echo=FALSE}
 rate <- jsonlite::read_json(
-  system.file("units", "derived", "area_density.json", package = "unicon"
-  ),
+  system.file("units", "derived", "area_density.json", package = "unicon"),
   simplifyVector = FALSE
 )
 jsonlite::toJSON(rate, auto_unbox = TRUE, pretty = TRUE)
@@ -300,8 +296,7 @@ Each `operator` as defined in the derived unit schemas requires its own definiti
 
 ```{r operator-schema, class.output="json", comment=NA, echo=FALSE}
 divide <- jsonlite::read_json(
-  system.file("units", "operators", "divide.json", package = "unicon"
-  ),
+  system.file("units", "operators", "divide.json", package = "unicon"),
   simplifyVector = FALSE
 )
 jsonlite::toJSON(divide, auto_unbox = TRUE, pretty = TRUE)

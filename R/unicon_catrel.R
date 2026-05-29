@@ -97,10 +97,10 @@ unicon_catrel <- function(parent_1_unit_in,
     ) |>
     # find relationship between parent 1 and 2
     left_join(category_relationships,
-              by = c(
-                "parent_1_category" = "parent_1",
-                "parent_2_category" = "parent_2"
-              )
+      by = c(
+        "parent_1_category" = "parent_1",
+        "parent_2_category" = "parent_2"
+      )
     )
 
   ## if no relationship, check if parents should be swapped
@@ -116,10 +116,10 @@ unicon_catrel <- function(parent_1_unit_in,
       )) |>
       # find relationship between parent 1 and 2
       left_join(category_relationships,
-                by = c(
-                  "parent_1_category" = "parent_1",
-                  "parent_2_category" = "parent_2"
-                )
+        by = c(
+          "parent_1_category" = "parent_1",
+          "parent_2_category" = "parent_2"
+        )
       )
   }
 
@@ -154,7 +154,7 @@ unicon_catrel <- function(parent_1_unit_in,
             by = "id"
           ) |>
           select(alias,
-                 unit_category = category
+            unit_category = category
           ),
         by = c("unit_out" = "alias")
       )
@@ -169,7 +169,7 @@ unicon_catrel <- function(parent_1_unit_in,
     left_join(
       unit_srp |>
         distinct(category,
-                 srp_unit_out = srp
+          srp_unit_out = srp
         ),
       by = "category"
     ) |>
@@ -181,8 +181,8 @@ unicon_catrel <- function(parent_1_unit_in,
       ),
       # assign a unit_out to srp if not already assigned in function
       unit_out = if_else(is.na(unit_out),
-                         srp_unit_out,
-                         unit_out
+        srp_unit_out,
+        unit_out
       )
     )
 
@@ -198,21 +198,21 @@ unicon_catrel <- function(parent_1_unit_in,
   final <- workings |>
     bind_cols(value_out = value_out) |>
     select(parent_1_unit_in,
-           parent_1_value_in,
-           parent_1_category,
-           parent_1_srp_unit = parent_1_srp,
-           parent_1_srp_value,
-           parent_2_unit_in,
-           parent_2_value_in,
-           parent_2_category,
-           parent_2_srp_unit = parent_2_srp,
-           parent_2_srp_value,
-           operator,
-           category_out = category,
-           srp_unit_out,
-           srp_value_out,
-           unit_out,
-           value_out
+      parent_1_value_in,
+      parent_1_category,
+      parent_1_srp_unit = parent_1_srp,
+      parent_1_srp_value,
+      parent_2_unit_in,
+      parent_2_value_in,
+      parent_2_category,
+      parent_2_srp_unit = parent_2_srp,
+      parent_2_srp_value,
+      operator,
+      category_out = category,
+      srp_unit_out,
+      srp_value_out,
+      unit_out,
+      value_out
     )
 
   if (isTRUE(pull)) {
