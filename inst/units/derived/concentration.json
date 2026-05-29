@@ -1,0 +1,5 @@
+{
+    "x": "amount_of_substance",
+    "y": "volume",
+    "operator": "divide"
+}

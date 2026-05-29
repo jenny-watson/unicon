@@ -13,7 +13,7 @@ unicon_help <- function(...) {
 
   # full unit data
   unit_full <- unit_alias |>
-    left_join(unit_si,
+    left_join(unit_srp,
       by = "id",
       multiple = "any"
     ) |>

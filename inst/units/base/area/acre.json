@@ -1,6 +1,6 @@
 {
   "category": "area",
-  "si": "ha",
+  "srp": "ha",
   "model": {
     "slope": 0.4047,
     "intercept": 0

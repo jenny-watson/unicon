@@ -14,7 +14,8 @@ unicon_lite(value_in, id_in, id_out = NA, pull = TRUE)
 
 \item{id_out}{Character scalar or vector, output unit ID(s) for conversion.
 Must be of \code{length(1L)} or \code{length(value_in)}. Defaults to
-\code{NA}; if default is passed, function will return standard index (SI)
+\code{NA}; if default is passed, function will return standard reference
+point (SRP) which is a standard index (SI) unit measure.
 units as conversion.}
 
 \item{pull}{Logical; should the function pull out and return the converted

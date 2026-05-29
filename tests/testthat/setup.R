@@ -45,9 +45,9 @@ base <- map(
 # read in unit standard master
 # this is similar to the SI concept but adapted for our needs
 
-si <- jsonlite::read_json(
+srp <- jsonlite::read_json(
   system.file("units",
-    "si.json",
+    "srp.json",
     lib.loc = .libPaths(),
     package = pkg
   ),

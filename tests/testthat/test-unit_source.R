@@ -2,7 +2,7 @@ test_that("All base unit schemas have expected attributes", {
   # generate checks
   fields <- c(
     "category",
-    "si",
+    "srp",
     "model",
     "alias"
   )
@@ -51,16 +51,16 @@ test_that("All base unit schemas have expected attributes", {
 
 ################################################################################
 
-test_that("All SI units are present in base units for aliases and models", {
-  si_covered <- si %in% names(base)
+test_that("All srp units are present in base units for aliases and models", {
+  srp_covered <- srp %in% names(base)
 
-  missing <- stringr::str_c(si[!si_covered],
+  missing <- stringr::str_c(srp[!srp_covered],
     collapse = ", "
   )
 
-  expect_true(all(si_covered),
+  expect_true(all(srp_covered),
     info = paste0(
-      "SI units missing for ",
+      "srp units missing for ",
       missing
     )
   )
@@ -68,15 +68,15 @@ test_that("All SI units are present in base units for aliases and models", {
 
 ################################################################################
 
-test_that("SI models are as expected", {
-  si_models <- map(si, ~ base[[.x]]$model)
+test_that("srp models are as expected", {
+  srp_models <- map(srp, ~ base[[.x]]$model)
 
-  iwalk(si_models, function(model, cat) {
+  iwalk(srp_models, function(model, cat) {
     expect_true(model$slope == 1,
       info = paste0(
         "Model incorrect for ",
         cat,
-        " SI unit"
+        " SRP unit"
       )
     )
 
@@ -84,7 +84,7 @@ test_that("SI models are as expected", {
       info = paste0(
         "Model incorrect for ",
         cat,
-        " SI unit"
+        " SRP unit"
       )
     )
   })
@@ -92,19 +92,19 @@ test_that("SI models are as expected", {
 
 ################################################################################
 
-test_that("SI units are covered and expected", {
-  si_base <- map_chr(base, "si")
+test_that("SRP units are covered and expected", {
+  srp_base <- map_chr(base, "srp")
 
-  si_covered <- si_base %in% si
+  srp_covered <- srp_base %in% srp
 
-  si_missing <- stringr::str_c(unique(si_base[!si_covered]),
+  srp_missing <- stringr::str_c(unique(srp_base[!srp_covered]),
     collapse = "; "
   )
 
-  expect_true(all(si_covered),
+  expect_true(all(srp_covered),
     info = paste0(
-      "The following SI units aren't expected: ",
-      si_missing
+      "The following SRP units aren't expected: ",
+      srp_missing
     )
   )
 })

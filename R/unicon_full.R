@@ -8,8 +8,8 @@
 #' Must be of \code{length(1L)} or \code{length(value_in)}.
 #' @param unit_out Character scalar or vector, output units for conversion. Must
 #' be of \code{length(1L)} or \code{length(value_in)}. Defaults to \code{NA}; if
-#' default is passed, function will return standard index (SI) units as
-#' conversion.
+#' default is passed, function will return standard reference point (SRP) (which
+#' is a standard index (SI) unit) conversion.
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
@@ -33,7 +33,7 @@ unicon_full <- function(value_in,
   if (all(is.na(unit_out))) {
     message("No output unit given. Converting all values to standard reference unit.")
   } else if (any(is.na(unit_out))) {
-    message("Output unit missing in some cases. Converting to standard reference unit where missing.") #nolint
+    message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
   }
 
   # compose output table
@@ -64,41 +64,41 @@ unicon_full <- function(value_in,
       by = "alias_out",
       multiple = "any"
     ) |>
-    # si unit for input id
+    # srp unit for input id
     left_join(
       select(
-        unit_si,
+        unit_srp,
         id_in = .data$id,
-        si_in = .data$si
+        srp_in = .data$srp
       ),
       by = "id_in",
       multiple = "any"
     ) |>
-    # si unit for output id, needed for checks only
+    # srp unit for output id, needed for checks only
     left_join(
       select(
-        unit_si,
+        unit_srp,
         id_out = .data$id,
-        si_out = .data$si
+        srp_out = .data$srp
       ),
       by = "id_out",
       multiple = "any"
     ) |>
     mutate(
-      # user gave inputput units , but no matches
+      # user gave input units, but no matches
       error_in = is.na(.data$id_in),
-      # user gave output units , but no matches
+      # user gave output units, but no matches
       error_out = !is.na(.data$unit_out) & is.na(.data$id_out),
       # user gave incompatible unit conversion
       # (may be NA if no conversion explicitly spec'd)
-      error_si = .data$si_in != .data$si_out,
-      # use input si unit as output id if none given by user
+      error_srp = .data$srp_in != .data$srp_out,
+      # use input srp unit as output id if none given by user
       id_out = ifelse(is.na(.data$unit_out),
-        .data$si_in,
+        .data$srp_in,
         .data$id_out
       )
     ) |>
-    # model for input <--> si
+    # model for input <--> srp
     left_join(
       rename(
         unit_models,
@@ -108,7 +108,7 @@ unicon_full <- function(value_in,
       by = "id_in",
       multiple = "any"
     ) |>
-    # model for si <--> output
+    # model for srp <--> output
     left_join(
       rename(
         unit_models,
@@ -122,16 +122,16 @@ unicon_full <- function(value_in,
   # solve conversion models
   conv_tab <- conv_tab |>
     mutate(
-      # forward model, input --> si
-      value_si = map2_dbl(
+      # forward model, input --> srp
+      value_srp = map2_dbl(
         .data$value_in, .data$model_in, ~ .x * .y$slope + .y$intercept
       ),
-      # reverse model, si --> output
+      # reverse model, srp --> output
       value_out = map2_dbl(
-        .data$value_si, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
+        .data$value_srp, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
-      value_out = ifelse(.data$error_si %in% TRUE,
+      value_out = ifelse(.data$error_srp %in% TRUE,
         NA_real_,
         .data$value_out
       )
@@ -152,7 +152,7 @@ unicon_full <- function(value_in,
     if (any(conv_tab$error_out)) {
       warning("Some output units failed to find matches.")
     }
-    if (any(conv_tab$error_si, na.rm = TRUE)) {
+    if (any(conv_tab$error_srp, na.rm = TRUE)) {
       warning("Some requested conversions were not valid (unit type mismatch).")
     }
 
@@ -163,13 +163,13 @@ unicon_full <- function(value_in,
       .data$alias_in,
       .data$alias_out,
       .data$id_in,
-      id_si = .data$si_in, # used to drive calcs, si_out for check only
+      id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
       .data$id_out,
       .data$error_in,
-      .data$error_si,
+      .data$error_srp,
       .data$error_out,
       .data$value_in,
-      .data$value_si,
+      .data$value_srp,
       .data$value_out
     )
   }

@@ -1,0 +1,14 @@
+{
+  "category": "force",
+  "srp": "N",
+  "model": {
+    "slope": 0.00001,
+    "intercept": 0
+  },
+  "alias": [
+    "dyne",
+    "dyn",
+    "dynes",
+    "dyns"
+  ]
+}

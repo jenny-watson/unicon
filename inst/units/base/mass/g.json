@@ -1,6 +1,6 @@
 {
   "category": "mass",
-  "si": "g",
+  "srp": "g",
   "model": {
     "slope": 1,
     "intercept": 0
