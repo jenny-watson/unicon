@@ -1,13 +1,13 @@
 {
-  "category": "length",
-  "srp": "m",
+  "category": "force",
+  "srp": "N",
   "model": {
     "slope": 1,
     "intercept": 0
   },
   "alias": [
-    "m",
-    "metres",
-    "meters"
+    "N",
+    "newton",
+    "newtons"
   ]
 }

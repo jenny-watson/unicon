@@ -1,0 +1,12 @@
+{
+  "category": "force",
+  "srp": "N",
+  "model": {
+    "slope": 0.13825,
+    "intercept": 0
+  },
+  "alias": [
+    "poundal",
+    "pdl"
+  ]
+}

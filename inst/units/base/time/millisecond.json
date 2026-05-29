@@ -2,13 +2,12 @@
   "category": "time",
   "srp": "s",
   "model": {
-    "slope": 1,
+    "slope": 0.001,
     "intercept": 0
   },
   "alias": [
-    "sec",
-    "secs",
-    "second",
-    "seconds"
+    "millisecond",
+    "ms",
+    "milliseconds"
   ]
 }

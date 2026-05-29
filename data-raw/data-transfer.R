@@ -38,7 +38,7 @@ base_data <- imap_dfr(
     id = .y, ## get into df rather than list
     alias = .x$alias,
     category = .x$category,
-    si = .x$si,
+    srp = .x$srp,
     model = list(.x$model)
   )
 ) |>
@@ -54,7 +54,8 @@ derived_data <- imap_dfr(
     y = .x$y,
     operator = .x$operator
   )
-)
+) |>
+  mutate(id = str_remove(str_remove(id, "_1"), "_2"))
 
 ## load operators data
 operators_data <- imap_dfr(
@@ -97,8 +98,10 @@ join <- derived_data |>
     category = id,
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-    si = paste0(si.x, id.o, si.y),
-    slope = slope.x / slope.y,
+    srp = paste0(srp.x, id.o, srp.y),
+    slope = case_when(operator == 'divide' ~ slope.x / slope.y,
+                      operator == 'multiply' ~ slope.x * slope.y,
+                      T ~ NA),
     intercept = 0,
     type = "derived",
     .keep = "none"
@@ -121,19 +124,18 @@ unit_alias <- join |>
       distinct(id) |>
       mutate(alias = id)
   ) |>
-  distinct() |>
-  arrange(id) |>
   # remove whitespace and upper case
-  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", ""))
+  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", "")) |>
+  distinct() |>
+  arrange(id)
 
 # standard units
-## but have this info already so why replicating it/should delete json file?
-unit_si <- join |>
+unit_srp <- join |>
   distinct(
     id,
     type,
     category,
-    si
+    srp
   )
 
 # models
@@ -152,11 +154,12 @@ unit_models <- join |>
   # make into list rather than mini dataframes
   mutate(model = map(model, ~ as.list(.x)))
 
+
 ## write to package internal data
 usethis::use_data(
   unit_alias,
   unit_models,
-  unit_si,
+  unit_srp,
   overwrite = TRUE,
   internal = TRUE
 )

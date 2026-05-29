@@ -1,0 +1,14 @@
+{
+  "category": "amount_of_substance",
+  "srp": "mol",
+  "model": {
+    "slope": 1000,
+    "intercept": 0
+  },
+  "alias": [
+    "kilomole",
+    "kilomoles",
+    "kmol",
+    "kmols"
+  ]
+}

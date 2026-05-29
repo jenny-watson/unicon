@@ -5,3 +5,6 @@
 ^jenny_drafts$
 ^\.github$
 ^\.lintr$
+^\.positai$
+^\.claude$
+^README\.Rmd$
