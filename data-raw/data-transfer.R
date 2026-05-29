@@ -99,7 +99,9 @@ join <- derived_data |>
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
     srp = paste0(srp.x, id.o, srp.y),
-    slope = slope.x / slope.y,
+    slope = case_when(operator == 'divide' ~ slope.x / slope.y,
+                      operator == 'multiply' ~ slope.x * slope.y,
+                      T ~ NA),
     intercept = 0,
     type = "derived",
     .keep = "none"
