@@ -28,6 +28,7 @@ Different unit systems (most notably metric and imperial) are used interchangeab
 1. A database of base and derived units, including their various names, notations, and the SI equivalents chosen by authors to be most useful for their purposes, henceforth called standard reference point (SRP);
 2. Functions to convert non-SRP units to SRP units and vice versa;
 3. Functions to calculate additional units from existing data.
+4. Relationships between different metrics to allow calculation of new metrics. E.g. Area * Length = Volume.
 
 # Database of base and derived units
 
@@ -128,6 +129,50 @@ unicon_lite(
 ```
 
 As with `unicon_full`, `unicon_lite` will return a full dataframe if required (`pull = TRUE`) and will warn if conversions fail.
+
+## `unicon_catrel`
+
+### Metric relationships 
+
+The relationships between metrics that are included in this package are:
+
+1.	**Area Density = Mass / Area**
+
+2.  **Area = Volume / Length** where *Area* and *Volume* are also listed as a base units. Please calculate *Area* from 4. if unknown. 
+
+3.	**Concentration = Moles / Volume**
+
+4.  **Length = Area / Length** where lengths can be different values. Please note *Area* is also listed as a base unit.
+
+5.  **Mass fraction = Mass / Mass**
+
+6.	**Pressure = Force / Area**
+
+7.	**Volume Density = Mass / Volume**
+
+8.  **Volume fraction = Volume / Volume**
+
+9.  **Speed = Length / Time**
+
+### Examples
+
+To calculate a new metric from existing data:
+
+e.g. speed from length / time (if unit_out unspecified, will convert to SRP (in this example m/s))
+
+```{r unicorn_catrel-1}
+
+unicon_catrel(
+  parent_1_unit_in = rep("miles", 6),
+  parent_2_unit_in = rep("hour", 6),
+  parent_1_value_in = c(1, 2, 3, 4, 5, 6),
+  parent_2_value_in = c(9, 8, 7, 5, 4, 2),
+  unit_out = rep("km/day", 6)
+)
+
+```
+
+Note that two 'No output unit given. Converting all values to standard reference unit.' will appear, but ignore these when using the unicon_catrel function.
 
 ## `unicon_help`
 
@@ -294,6 +339,7 @@ Please raise an issue in the [GitHub](https://github.com/unicon/) repository and
 Other things to note are:
 
 * Area and volume are considered to be base units as well as derived units
+* Speed is listed as speed not velocity
 * Length is listed as length not distance
 * Month is **NOT** included in the package due to the variation in the number of days and weeks per month
 * Year is recorded as **365.25 days** to account for leap years.

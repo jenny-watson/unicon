@@ -1,0 +1,223 @@
+#' @title Deriving and calculating category relationship between two metrics
+#' @description Using the category_relationship package data, this function uses
+#' 'unicon_full' to calculate new metrics from parent metrics by firstly
+#' converting parent units to standard reference point (SRP), calculating the
+#' new metric in SRP units then converting to the desired units if specified.
+#' @param parent_1_value_in Numeric scalar or vector, values to convert from
+#' first parent metric and use in calculations of new metrics
+#' @param parent_2_value_in Numeric scalar or vector, values to convert from
+#' second parent metric and use in calculations of new metric
+#' @param parent_1_unit_in Character scalar or vector, input units for
+#' \code{parent_1_value_in}. Must be of \code{length(1L)} or
+#' \code{length(parent_1_value_in)}.
+#' @param parent_2_unit_in Character scalar or vector, input units for
+#' \code{parent_2_value_in}. Must be of \code{length(1L)} or
+#' \code{length(parent_2_value_in)}.
+#' @param unit_out Character scalar or vector, output units for conversion. Must
+#' be of \code{length(1L)} or \code{length(parent_1_value_in)}. Defaults to
+#' \code{NA}; if default is passed, function will return standard reference
+#' point (SRP) units as conversion.
+#' @param operator_in 'divide' or 'multiply' input. Only needed if parents are
+#' area & length (calculating length or volume) or speed and time (calculating
+#' distance or acceleration)
+#' @param pull Logical; should the function pull out and return the converted
+#' values (TRUE) or should a full table with conversion record be returned?
+#' Defaults to TRUE.
+#' @import dplyr
+#' @importFrom stringr str_replace
+#' @export
+
+unicon_catrel <- function(parent_1_unit_in,
+                          parent_2_unit_in,
+                          parent_1_value_in,
+                          parent_2_value_in,
+                          unit_out = NA,
+                          operator_in = NA,
+                          pull = TRUE) {
+  # check, all values must be either length 1 or consistent length
+  l1 <- length(parent_1_unit_in)
+  l2 <- length(parent_2_unit_in)
+  l3 <- length(parent_1_value_in)
+  l4 <- length(parent_2_value_in)
+  l5 <- length(unit_out)
+  if (l1 == 0L) stop("Length for value_in argument must be >= 1L")
+  if (l2 != l1 && l2 != 1L) stop("Length for unit_in argument incompatible")
+  if (l3 != l1 && l3 != 1L) stop("Length for unit_out argument incompatible")
+  if (l4 != l1 && l4 != 1L) stop("Length for unit_out argument incompatible")
+  if (l5 != l1 && l5 != 1L) stop("Length for unit_out argument incompatible")
+
+  # confirm relationship between parent 1 and 2 units
+  relationship_check <-
+    ## make into df for easier calculations
+    tibble(
+      parent_1_unit_in = parent_1_unit_in,
+      parent_2_unit_in = parent_2_unit_in,
+      parent_1_value_in = parent_1_value_in,
+      parent_2_value_in = parent_2_value_in,
+      unit_out = unit_out
+    ) |>
+    # convert both parent metrics to srp first and bind to df as vectors
+    bind_cols(
+      parent_1_srp_value = unicon_full(
+        value_in = parent_1_value_in,
+        unit_in = parent_1_unit_in,
+        unit_out = NA,
+        pull = TRUE
+      ),
+      parent_2_srp_value = unicon_full(
+        value_in = parent_2_value_in,
+        unit_in = parent_2_unit_in,
+        unit_out = NA,
+        pull = TRUE
+      )
+    ) |>
+    # get category type of parent 1
+    left_join(
+      unit_alias |>
+        left_join(
+          unit_srp |>
+            select(-type),
+          by = "id"
+        ) |>
+        select(-id) |>
+        rename_with(~ paste0("parent_1_", .)),
+      by = c("parent_1_unit_in" = "parent_1_alias")
+    ) |>
+    # get category type of parent 2
+    left_join(
+      unit_alias |>
+        left_join(
+          unit_srp |>
+            select(-type),
+          by = "id"
+        ) |>
+        select(-id) |>
+        rename_with(~ paste0("parent_2_", .)),
+      by = c("parent_2_unit_in" = "parent_2_alias")
+    ) |>
+    # find relationship between parent 1 and 2
+    left_join(category_relationships,
+              by = c(
+                "parent_1_category" = "parent_1",
+                "parent_2_category" = "parent_2"
+              )
+    )
+
+  ## if no relationship, check if parents should be swapped
+  if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
+    relationship_check <- relationship_check |>
+      # change parent 1 to parent 2 and parent 2 to parent 1
+      rename_with(~ str_replace(., "1", "9")) |>
+      rename_with(~ str_replace(., "2", "1")) |>
+      rename_with(~ str_replace(., "9", "2")) |>
+      select(-c(
+        category,
+        operator
+      )) |>
+      # find relationship between parent 1 and 2
+      left_join(category_relationships,
+                by = c(
+                  "parent_1_category" = "parent_1",
+                  "parent_2_category" = "parent_2"
+                )
+      )
+  }
+
+  ## if still no parent relationship, stop
+  if (is.na(pull(distinct(relationship_check, category))) == TRUE) {
+    stop("There is no recorded relationship between parent units")
+  }
+
+  ## filter duplicate join
+  if (length(parent_1_value_in) != nrow(relationship_check) && !is.na(operator_in)) {
+    relationship_check <- relationship_check |>
+      filter(operator == operator_in)
+  }
+
+  ## duplicate operators and categories so need to specify
+  if (length(parent_1_value_in) != nrow(relationship_check) && is.na(operator_in)) {
+    stop("Please specify operator_in")
+  }
+
+  # check that the unit_out specified is valid
+  if (is.na(pull(distinct(relationship_check, unit_out))) == FALSE) {
+    unit_out_check <- relationship_check |>
+      distinct(
+        assigned_category = category,
+        unit_out
+      ) |>
+      left_join(
+        unit_alias |>
+          left_join(
+            unit_srp |>
+              select(-type),
+            by = "id"
+          ) |>
+          select(alias,
+                 unit_category = category
+          ),
+        by = c("unit_out" = "alias")
+      )
+
+    if (unit_out_check$assigned_category != unit_out_check$unit_category) {
+      stop("unit_out does not exist for the relationship derived between parent units")
+    }
+  }
+
+  workings <- relationship_check |>
+    # find srp for relationship between parent 1 and 2
+    left_join(
+      unit_srp |>
+        distinct(category,
+                 srp_unit_out = srp
+        ),
+      by = "category"
+    ) |>
+    mutate(
+      # calculate value in srp
+      srp_value_out = case_when(
+        operator == "divide" ~ parent_1_srp_value / parent_2_srp_value,
+        operator == "multiply" ~ parent_1_srp_value * parent_2_srp_value
+      ),
+      # assign a unit_out to srp if not already assigned in function
+      unit_out = if_else(is.na(unit_out),
+                         srp_unit_out,
+                         unit_out
+      )
+    )
+
+  # get value out in assigned units
+  value_out <- unicon_full(
+    value_in = workings$srp_value_out,
+    unit_in = workings$srp_unit_out,
+    unit_out = workings$unit_out,
+    pull = TRUE
+  )
+
+  ## get workings calcs
+  final <- workings |>
+    bind_cols(value_out = value_out) |>
+    select(parent_1_unit_in,
+           parent_1_value_in,
+           parent_1_category,
+           parent_1_srp_unit = parent_1_srp,
+           parent_1_srp_value,
+           parent_2_unit_in,
+           parent_2_value_in,
+           parent_2_category,
+           parent_2_srp_unit = parent_2_srp,
+           parent_2_srp_value,
+           operator,
+           category_out = category,
+           srp_unit_out,
+           srp_value_out,
+           unit_out,
+           value_out
+    )
+
+  if (isTRUE(pull)) {
+    value_out
+  } else {
+    final
+  }
+}

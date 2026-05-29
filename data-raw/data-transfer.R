@@ -68,6 +68,93 @@ operators_data <- imap_dfr(
   )
 )
 
+# category relationships
+## unique categories
+u_cat <- base_data |>
+  distinct(category) |>
+  bind_rows(
+    derived_data |>
+      pivot_longer(
+        cols = -operator,
+        names_to = "type",
+        values_to = "category"
+      )
+  ) |>
+  distinct(category)
+
+## one copy of each relationship
+cat_rel <- derived_data |>
+  select(
+    den_1 = id,
+    num = x,
+    den_2 = y
+  )
+
+## all copies of relationships with operators
+category_relationships <- bind_rows(
+  left_join(
+    u_cat,
+    cat_rel,
+    by = c("category" = "num")
+  ),
+  left_join(
+    u_cat,
+    cat_rel,
+    by = c("category" = "den_1")
+  ),
+  left_join(
+    u_cat,
+    cat_rel,
+    by = c("category" = "den_2")
+  )
+) |>
+  # get rid of blank joins
+  filter(!(is.na(num) & is.na(den_1) & is.na(den_1))) |>
+  mutate(
+    operator = if_else(is.na(num),
+                       "multiply",
+                       "divide"
+    ),
+    uid = row_number()
+  ) |>
+  # remove blank parent cells
+  pivot_longer(
+    cols = c(
+      num,
+      den_1,
+      den_2
+    ),
+    names_to = "type",
+    values_to = "parent_metric"
+  ) |>
+  filter(!is.na(parent_metric)) |>
+  # assign so correct order (matters for divide relationships)
+  mutate(
+    parent_type = case_when(
+      operator == "multiply" & type == "den_1" ~ "parent_1",
+      operator == "multiply" & type == "den_2" ~ "parent_2",
+      operator == "divide" & type == "num" ~ "parent_1",
+      operator == "divide" & type == "den_1" ~ "parent_2",
+      operator == "divide" & type == "den_2" ~ "parent_2"
+    )
+  ) |>
+  pivot_wider(
+    id_cols = c(
+      uid,
+      category,
+      operator
+    ),
+    names_from = parent_type,
+    values_from = parent_metric
+  ) |>
+  select(
+    category,
+    parent_1,
+    operator,
+    parent_2
+  ) |>
+  distinct() # removes length * length = area duplicate
+
 ## join datasets together
 join <- derived_data |>
   ## join to x
@@ -110,6 +197,11 @@ join <- derived_data |>
   bind_rows(
     base_data |>
       mutate(type = "base")
+  ) |>
+  ## doesn't work for all if metric is derived twice or derived via multiply
+  filter(
+    !(category == "area" & srp == "litre__m"), # due to being base and derived unit
+    !(category == "length" & srp == "ha__m") # due to being base and derived unit
   )
 
 ## final datasets
@@ -160,6 +252,7 @@ usethis::use_data(
   unit_alias,
   unit_models,
   unit_srp,
+  category_relationships,
   overwrite = TRUE,
   internal = TRUE
 )
