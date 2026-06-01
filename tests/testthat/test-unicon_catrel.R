@@ -28,7 +28,7 @@ test_that("basic functionality works for scalar and vectorized speed calculation
   expect_length(scalar, 1L)
   expect_equal(scalar, 50, tolerance = 1e-8)
 
-  vectorised <- unicon_catrel(
+  vectorized <- unicon_catrel(
     parent_1_unit_in = c("miles", "km", "m"),
     parent_2_unit_in = c("hour", "hour", "sec"),
     parent_1_value_in = c(100, 10, 5),
@@ -36,9 +36,9 @@ test_that("basic functionality works for scalar and vectorized speed calculation
     unit_out = c("km/hour", "km/hour", "m/sec")
   )
 
-  expect_type(vectorised, "double")
+  expect_type(vectorized, "double")
   expect_equal(
-    vectorised,
+    vectorized,
     c(
       suppressWarnings(suppressMessages(unicon_full(50, "mile/hour", "km/hour"))),
       20,
