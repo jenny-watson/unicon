@@ -110,9 +110,9 @@ unicon_catrel <- function(parent_1_unit_in,
     left_join(
       select(
         unit_srp,
-        id = .data$id,
-        category = .data$category,
-        srp = .data$srp
+        id,
+        category,
+        srp
       ),
       by = "id",
       multiple = "any"
@@ -163,18 +163,18 @@ unicon_catrel <- function(parent_1_unit_in,
 
   base <- base |>
     mutate(
-      parent_1_srp_value = suppressMessages(unicon_full(
+      parent_1_srp_value = suppressWarnings(suppressMessages(unicon_full(
         value_in = .data$parent_1_value_in,
         unit_in = .data$parent_1_unit_in,
         unit_out = NA,
         pull = TRUE
-      )),
-      parent_2_srp_value = suppressMessages(unicon_full(
+      ))),
+      parent_2_srp_value = suppressWarnings(suppressMessages(unicon_full(
         value_in = .data$parent_2_value_in,
         unit_in = .data$parent_2_unit_in,
         unit_out = NA,
         pull = TRUE
-      ))
+      )))
     )
 
   category_relationships <- .unicon_category_relationships()
@@ -196,28 +196,29 @@ unicon_catrel <- function(parent_1_unit_in,
   missing_rows <- setdiff(base$row_id, relationship_check$row_id)
 
   if (length(missing_rows) > 0L) {
-    swapped <- base |>
-      filter(.data$row_id %in% missing_rows) |>
-      transmute(
-        row_id = .data$row_id,
-        parent_1_unit_in = .data$parent_2_unit_in,
-        parent_2_unit_in = .data$parent_1_unit_in,
-        parent_1_value_in = .data$parent_2_value_in,
-        parent_2_value_in = .data$parent_1_value_in,
-        unit_out = .data$unit_out,
-        operator_in = .data$operator_in,
-        parent_1_alias = .data$parent_2_alias,
-        parent_2_alias = .data$parent_1_alias,
-        unit_out_alias = .data$unit_out_alias,
-        parent_1_id = .data$parent_2_id,
-        parent_2_id = .data$parent_1_id,
-        parent_1_category = .data$parent_2_category,
-        parent_2_category = .data$parent_1_category,
-        parent_1_srp = .data$parent_2_srp,
-        parent_2_srp = .data$parent_1_srp,
-        parent_1_srp_value = .data$parent_2_srp_value,
-        parent_2_srp_value = .data$parent_1_srp_value
-      ) |>
+    swapped_base <- base |>
+      filter(.data$row_id %in% missing_rows)
+
+    swapped <- tibble(
+      row_id = swapped_base$row_id,
+      parent_1_unit_in = swapped_base$parent_2_unit_in,
+      parent_2_unit_in = swapped_base$parent_1_unit_in,
+      parent_1_value_in = swapped_base$parent_2_value_in,
+      parent_2_value_in = swapped_base$parent_1_value_in,
+      unit_out = swapped_base$unit_out,
+      operator_in = swapped_base$operator_in,
+      parent_1_alias = swapped_base$parent_2_alias,
+      parent_2_alias = swapped_base$parent_1_alias,
+      unit_out_alias = swapped_base$unit_out_alias,
+      parent_1_id = swapped_base$parent_2_id,
+      parent_2_id = swapped_base$parent_1_id,
+      parent_1_category = swapped_base$parent_2_category,
+      parent_2_category = swapped_base$parent_1_category,
+      parent_1_srp = swapped_base$parent_2_srp,
+      parent_2_srp = swapped_base$parent_1_srp,
+      parent_1_srp_value = swapped_base$parent_2_srp_value,
+      parent_2_srp_value = swapped_base$parent_1_srp_value
+    ) |>
       resolve_relationships() |>
       filter(!is.na(.data$category))
 
@@ -295,12 +296,12 @@ unicon_catrel <- function(parent_1_unit_in,
       )
     )
 
-  value_out <- suppressMessages(unicon_full(
+  value_out <- suppressWarnings(suppressMessages(unicon_full(
     value_in = workings$srp_value_out,
     unit_in = workings$srp_unit_out,
     unit_out = workings$unit_out,
     pull = TRUE
-  ))
+  )))
 
   final <- workings |>
     mutate(value_out = value_out) |>

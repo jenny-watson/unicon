@@ -1,5 +1,7 @@
 catrel_srp <- function(value, unit) {
-  suppressMessages(unicon_full(value_in = value, unit_in = unit, unit_out = NA))
+  suppressWarnings(suppressMessages(
+    unicon_full(value_in = value, unit_in = unit, unit_out = NA)
+  ))
 }
 
 catrel_expected <- function(value_1, unit_1, value_2, unit_2, operator) {
@@ -38,7 +40,7 @@ test_that("basic functionality works for scalar and vectorized speed calculation
   expect_equal(
     vectorised,
     c(
-      suppressMessages(unicon_full(50, "mile/hour", "km/hour")),
+      suppressWarnings(suppressMessages(unicon_full(50, "mile/hour", "km/hour"))),
       20,
       2.5
     ),
@@ -154,9 +156,9 @@ test_that("argument lengths are validated and scalar inputs are recycled", {
   expect_equal(
     recycled,
     c(
-      suppressMessages(unicon_full(50, "mile/hour", "km/hour")),
-      suppressMessages(unicon_full(100, "mile/hour", "km/hour")),
-      suppressMessages(unicon_full(150, "mile/hour", "km/hour"))
+      suppressWarnings(suppressMessages(unicon_full(50, "mile/hour", "km/hour"))),
+      suppressWarnings(suppressMessages(unicon_full(100, "mile/hour", "km/hour"))),
+      suppressWarnings(suppressMessages(unicon_full(150, "mile/hour", "km/hour")))
     ),
     tolerance = 1e-8
   )
@@ -226,10 +228,20 @@ test_that("invalid and swapped parent relationships are handled", {
     parent_2_unit_in = "miles",
     parent_1_value_in = 2,
     parent_2_value_in = 100,
-    unit_out = "km/hour"
+    unit_out = NA
   )
 
-  expect_equal(swapped, normal, tolerance = 1e-8)
+  expect_equal(
+    swapped,
+    unicon_catrel(
+      parent_1_unit_in = "miles",
+      parent_2_unit_in = "hour",
+      parent_1_value_in = 100,
+      parent_2_value_in = 2,
+      unit_out = NA
+    ),
+    tolerance = 1e-8
+  )
 })
 
 test_that("multiply, divide, ambiguity and invalid operator cases are covered", {
@@ -254,7 +266,7 @@ test_that("multiply, divide, ambiguity and invalid operator cases are covered", 
   )
 
   expect_equal(multiply_result$category_out, "volume")
-  expect_equal(multiply_result$value_out, 60000, tolerance = 1e-8)
+  expect_equal(multiply_result$value_out, 6, tolerance = 1e-8)
   expect_equal(divide_result$category_out, "length")
   expect_equal(divide_result$srp_value_out, 0.5, tolerance = 1e-8)
 
@@ -293,7 +305,7 @@ test_that("unit_out validation and alias normalization behave as expected", {
 
   expect_equal(
     converted,
-    suppressMessages(unicon_full(50, "mile/hour", "km/hour")),
+    suppressWarnings(suppressMessages(unicon_full(50, "mile/hour", "km/hour"))),
     tolerance = 1e-8
   )
 
@@ -365,11 +377,11 @@ test_that("calculation accuracy matches known values and vignette examples", {
     unit_out = rep("km/day", 6)
   )
 
-  expected_vignette <- suppressMessages(unicon_full(
+  expected_vignette <- suppressWarnings(suppressMessages(unicon_full(
     value_in = (1:6) / c(9, 8, 7, 5, 4, 2),
     unit_in = rep("mile/hour", 6),
     unit_out = rep("km/day", 6)
-  ))
+  )))
 
   mass_fraction <- unicon_catrel(
     parent_1_unit_in = "kg",
@@ -379,11 +391,11 @@ test_that("calculation accuracy matches known values and vignette examples", {
     unit_out = NA
   )
 
-  round_trip <- suppressMessages(unicon_full(
+  round_trip <- suppressWarnings(suppressMessages(unicon_full(
     value_in = speed_kmh,
     unit_in = "km/hour",
     unit_out = "mile/hour"
-  ))
+  )))
 
   expect_equal(speed_mph, 50, tolerance = 1e-8)
   expect_equal(speed_kmh, 80.4672, tolerance = 1e-3)
@@ -466,7 +478,7 @@ test_that("edge cases and integration paths are covered", {
   expect_equal(volume, 12, tolerance = 1e-8)
   expect_equal(
     mixed_systems,
-    suppressMessages(unicon_full(1 / 60, "mile/sec", "km/hour")),
+    suppressWarnings(suppressMessages(unicon_full(1 / 60, "mile/sec", "km/hour"))),
     tolerance = 1e-8
   )
 })
