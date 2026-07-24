@@ -176,3 +176,37 @@ test_that("Unit aliases do not contain spaces or uppercase characters", {
 })
 
 ################################################################################
+
+test_that("Package data has expected null/NA structure", {
+  # unit_srp should have no NAs
+  expect_true(
+    !anyNA(unit_srp),
+    info = "unit_srp contains NA values"
+  )
+
+  # unit_alias should have no NAs
+  expect_true(
+    !anyNA(unit_alias),
+    info = "unit_alias contains NA values"
+  )
+
+  # unit_models should have exactly 1 row of all NAs
+  na_rows <- unit_models |>
+    mutate(
+      all_na = is.na(id) &
+        map_lgl(model, ~ is.na(.x$slope)) &
+        map_lgl(model, ~ is.na(.x$intercept))
+    ) |>
+    filter(all_na) |>
+    nrow()
+
+  expect_true(
+    na_rows == 1L,
+    info = paste0(
+      "unit_models should have exactly 1 row of all NAs, found ",
+      na_rows
+    )
+  )
+})
+
+################################################################################
