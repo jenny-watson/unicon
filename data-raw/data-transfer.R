@@ -54,8 +54,7 @@ derived_data <- imap_dfr(
     y = .x$y,
     operator = .x$operator
   )
-) |>
-  mutate(id = str_remove(str_remove(id, "_1"), "_2"))
+)
 
 ## load operators data
 operators_data <- imap_dfr(
@@ -73,7 +72,6 @@ join <- derived_data |>
   ## join to x
   left_join(
     base_data |>
-      filter(intercept == 0) |> ## is this needed?
       rename_with(~ paste0(., ".x")),
     by = c("x" = "category.x"),
     relationship = "many-to-many"
@@ -81,7 +79,6 @@ join <- derived_data |>
   ## join to y
   left_join(
     base_data |>
-      filter(intercept == 0) |> ## is this needed?
       rename_with(~ paste0(., ".y")),
     by = c("y" = "category.y"),
     relationship = "many-to-many"
@@ -99,9 +96,11 @@ join <- derived_data |>
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
     srp = paste0(srp.x, id.o, srp.y),
-    slope = case_when(operator == 'divide' ~ slope.x / slope.y,
-                      operator == 'multiply' ~ slope.x * slope.y,
-                      T ~ NA),
+    slope = pmap_dbl(list(fun.o,
+                          slope.x,
+                          slope.y),
+                     function(op, x, y)
+                     do.call(op, list(x, y))),
     intercept = 0,
     type = "derived",
     .keep = "none"
