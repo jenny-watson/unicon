@@ -23,6 +23,9 @@ unicon_full <- function(value_in,
                         pull = TRUE) {
   if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
   if (!is.character(unit_in)) stop("Argument `unit_in` must be a character vector.")
+  if (!(is.character(unit_out) || (is.logical(unit_out) && all(is.na(unit_out))))) {
+    stop("Argument `unit_out` must be a character vector or `NA`.")
+  }
 
   # check, all values must be either length 1 or consistent length
   l1 <- length(value_in)
