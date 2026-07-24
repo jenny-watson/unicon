@@ -3,6 +3,7 @@
 #' input values with associated unit aliases and receive conversions to any
 #' required output alias. Designed to handle the widest possible range of naming
 #' conventions, permutations and plain mis-spellings of commonly used units.
+#' This is a wrapper for unicon_lite where just looks up the alias.
 #' @param value_in Numeric scalar or vector, values to convert.
 #' @param unit_in Character scalar or vector, input units for \code{value_in}.
 #' Must be of \code{length(1L)} or \code{length(value_in)}.
@@ -21,162 +22,86 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
-  if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
-  if (!is.character(unit_in)) stop("Argument `unit_in` must be a character vector.")
-  if (!(is.character(unit_out) || (is.logical(unit_out) && all(is.na(unit_out))))) {
-    stop("Argument `unit_out` must be a character vector or `NA`.")
-  }
 
-  # check, all values must be either length 1 or consistent length
-  l1 <- length(value_in)
-  l2 <- length(unit_in)
-  l3 <- length(unit_out)
-  if (l1 == 0L) stop("Argument `value_in` must have length >= 1.")
-  if (l2 != l1 && l2 != 1L) stop("Argument `unit_in` must have length 1 or length(value_in).")
-  if (l3 != l1 && l3 != 1L) stop("Argument `unit_out` must have length 1 or length(value_in).")
+  ## check if aliases are used
 
-  # message to confirm conversion output if no unit_out given
-  if (all(is.na(unit_out))) {
-    message("No output unit given. Converting all values to standard reference unit.")
-  } else if (any(is.na(unit_out))) {
-    message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
-  }
+  if(any(unit_in %in% unit_alias$alias) | any(unit_out %in% unit_alias$alias)){
 
-  # compose output table
-  conv_tab <- tibble(
-    value_in = value_in,
-    unit_in = unit_in,
-    unit_out = unit_out,
-    alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
-    alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
-  ) |>
-    # input id
-    left_join(
-      select(
-        unit_alias,
-        alias_in = .data$alias,
-        id_in = .data$id
-      ),
-      by = "alias_in",
-      multiple = "any"
+    # compose output table
+    conv_tab_pre <- tibble(
+      value_in = value_in,
+      unit_in = unit_in,
+      unit_out = unit_out,
+      alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
+      alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
     ) |>
-    # output id if given
-    left_join(
-      select(
-        unit_alias,
-        alias_out = .data$alias,
-        id_out = .data$id
-      ),
-      by = "alias_out",
-      multiple = "any"
-    ) |>
-    # srp unit for input id
-    left_join(
-      select(
-        unit_srp,
-        id_in = .data$id,
-        srp_in = .data$srp
-      ),
-      by = "id_in",
-      multiple = "any"
-    ) |>
-    # srp unit for output id, needed for checks only
-    left_join(
-      select(
-        unit_srp,
-        id_out = .data$id,
-        srp_out = .data$srp
-      ),
-      by = "id_out",
-      multiple = "any"
-    ) |>
-    mutate(
-      # user gave input units, but no matches
-      error_in = is.na(.data$id_in),
-      # user gave output units, but no matches
-      error_out = !is.na(.data$unit_out) & is.na(.data$id_out),
-      # user gave incompatible unit conversion
-      # (may be NA if no conversion explicitly spec'd)
-      error_srp = .data$srp_in != .data$srp_out,
-      # use input srp unit as output id if none given by user
-      id_out = ifelse(is.na(.data$unit_out),
-        .data$srp_in,
-        .data$id_out
+      # input id
+      left_join(
+        select(
+          unit_alias,
+          alias_in = .data$alias,
+          id_in = .data$id
+        ),
+        by = "alias_in",
+        multiple = "any"
+      ) |>
+      # output id if given
+      left_join(
+        select(
+          unit_alias,
+          alias_out = .data$alias,
+          id_out = .data$id
+        ),
+        by = "alias_out",
+        multiple = "any"
       )
-    ) |>
-    # model for input <--> srp
-    left_join(
-      rename(
-        unit_models,
-        id_in = .data$id,
-        model_in = .data$model
-      ),
-      by = "id_in",
-      multiple = "any"
-    ) |>
-    # model for srp <--> output
-    left_join(
-      rename(
-        unit_models,
-        id_out = .data$id,
-        model_out = .data$model
-      ),
-      by = "id_out",
-      multiple = "any"
-    )
 
-  # solve conversion models
-  conv_tab <- conv_tab |>
-    mutate(
-      # forward model, input --> srp
-      value_srp = map2_dbl(
-        .data$value_in, .data$model_in, ~ .x * .y$slope + .y$intercept
-      ),
-      # reverse model, srp --> output
-      value_out = map2_dbl(
-        .data$value_srp, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
-      ),
-      # ensure no misleading results produced if unit type mismatches
-      value_out = ifelse(.data$error_srp %in% TRUE,
-        NA_real_,
+    ## apply the unicon_lite function
+
+    conv_tab_lite = unicon_lite(value_in = conv_tab_pre$value_in,
+                                id_in = conv_tab_pre$id_in,
+                                id_out = conv_tab_pre$id_out,
+                                pull = FALSE)
+
+    ## add in extra columns inc aliases
+
+    conv_tab = select(
+        conv_tab_lite,
+        conv_tab_pre$unit_in,
+        conv_tab_pre$unit_out,
+        conv_tab_pre$alias_in,
+        conv_tab_pre$alias_out,
+        .data$id_in,
+        id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+        .data$id_out,
+        .data$error_in,
+        .data$error_srp,
+        .data$error_out,
+        .data$value_in,
+        .data$value_srp,
         .data$value_out
       )
-    )
 
-  if (isTRUE(pull)) {
-    out <- conv_tab$value_out
-    if (any(is.na(out))) {
-      warning("Some units failed to convert.
-              Set `pull = FALSE` for detailed output.")
-    }
-    conv_tab$value_out
   } else {
-    # full warn on failure
-    if (any(conv_tab$error_in)) {
-      warning("Some input units failed to find matches.")
-    }
-    if (any(conv_tab$error_out)) {
-      warning("Some output units failed to find matches.")
-    }
-    if (any(conv_tab$error_srp, na.rm = TRUE)) {
-      warning("Some requested conversions were not valid (unit type mismatch).")
-    }
 
-    select(
-      conv_tab,
-      .data$unit_in,
-      .data$unit_out,
-      .data$alias_in,
-      .data$alias_out,
-      .data$id_in,
-      id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
-      .data$id_out,
-      .data$error_in,
-      .data$error_srp,
-      .data$error_out,
-      .data$value_in,
-      .data$value_srp,
-      .data$value_out
-    )
+    conv_tab = unicon_lite(value_in = value_in,
+                           id_in = unit_in,
+                           id_out = unit_out,
+                           pull = FALSE)
+
   }
+
+  if(pull == TRUE){
+
+    return(conv_tab$value_out)
+
+  } else {
+
+    return(conv_tab)
+
+  }
+
+
 }
+
+

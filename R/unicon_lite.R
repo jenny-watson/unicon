@@ -17,6 +17,8 @@ unicon_lite <- function(value_in,
                         id_in,
                         id_out = NA,
                         pull = TRUE) {
+
+  # check data types
   if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
   if (!is.character(id_in)) stop("Argument `id_in` must be a character vector.")
   if (!(is.character(id_out) || (is.logical(id_out) && all(is.na(id_out))))) {
@@ -95,24 +97,26 @@ unicon_lite <- function(value_in,
       multiple = "any"
     )
 
-  # replace mis-joined models, needed in case user has provided incorrect ids
-  conv_tab <- conv_tab |>
-    replace_na(
-      list(
-        model_in = list(
-          list(
-            slope = NA,
-            intercept = NA
-          )
-        ),
-        model_out = list(
-          list(
-            slope = NA,
-            intercept = NA
-          )
-        )
-      )
-    )
+  #####~~~~~#####~~~~ check if this is needed if using unicon_full as a wrapper #####~~~~~#####~~~~
+
+  # # replace mis-joined models, needed in case user has provided incorrect ids
+  # conv_tab <- conv_tab |>
+  #   replace_na(
+  #     list(
+  #       model_in = list(
+  #         list(
+  #           slope = NA,
+  #           intercept = NA
+  #         )
+  #       ),
+  #       model_out = list(
+  #         list(
+  #           slope = NA,
+  #           intercept = NA
+  #         )
+  #       )
+  #     )
+  #   )
 
   # solve conversion models
   conv_tab <- conv_tab |>
