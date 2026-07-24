@@ -51,8 +51,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_in = alias,
-        id_in = id
+        alias_in = .data$alias,
+        id_in = .data$id
       ),
       by = "alias_in",
       multiple = "any"
@@ -61,8 +61,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_out = alias,
-        id_out = id
+        alias_out = .data$alias,
+        id_out = .data$id
       ),
       by = "alias_out",
       multiple = "any"
@@ -71,8 +71,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = id,
-        srp_in = srp
+        id_in = .data$id,
+        srp_in = .data$srp
       ),
       by = "id_in",
       multiple = "any"
@@ -81,8 +81,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = id,
-        srp_out = srp
+        id_out = .data$id,
+        srp_out = .data$srp
       ),
       by = "id_out",
       multiple = "any"
@@ -105,8 +105,8 @@ unicon_full <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_in = id,
-        model_in = model
+        id_in = .data$id,
+        model_in = .data$model
       ),
       by = "id_in",
       multiple = "any"
@@ -115,8 +115,8 @@ unicon_full <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = id,
-        model_out = model
+        id_out = .data$id,
+        model_out = .data$model
       ),
       by = "id_out",
       multiple = "any"
