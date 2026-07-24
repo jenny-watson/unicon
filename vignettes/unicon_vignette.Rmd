@@ -127,7 +127,7 @@ unicon_lite(
 )
 ```
 
-As with `unicon_full`, `unicon_lite` will return full details if required (`pull = FALSE`) and will warn if conversions fail.
+As with `unicon_full`, setting `pull = FALSE` returns the full conversion table and conversion failures still trigger warnings.
 
 ## `unicon_help`
 
