@@ -12,11 +12,11 @@ test_that("unicon_full validates argument types and lengths", {
     "Argument `unit_in` must have length 1 or length\\(value_in\\)\\."
   )
   expect_error(
-    unicon_full(1, "m", 2),
+    unicon_full(1, "m", TRUE),
     "Argument `unit_out` must be a character vector or `NA`\\."
   )
   expect_error(
-    unicon_full(1:2, "m", c("cm", "mm", "km")),
+    unicon_full(1:3, "m", c("cm", "mm")),
     "Argument `unit_out` must have length 1 or length\\(value_in\\)\\."
   )
   expect_error(
@@ -59,7 +59,7 @@ test_that("unicon_lite validates argument types and lengths", {
     "Argument `id_in` must have length 1 or length\\(value_in\\)\\."
   )
   expect_error(
-    unicon_lite(1:2, "m", c("cm", "mm", "km")),
+    unicon_lite(1:3, "m", c("cm", "mm")),
     "Argument `id_out` must have length 1 or length\\(value_in\\)\\."
   )
   expect_error(
