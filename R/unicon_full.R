@@ -21,13 +21,19 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
+  if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
+  if (!is.character(unit_in)) stop("Argument `unit_in` must be a character vector.")
+  if (!(is.character(unit_out) || (is.logical(unit_out) && all(is.na(unit_out))))) {
+    stop("Argument `unit_out` must be a character vector or `NA`.")
+  }
+
   # check, all values must be either length 1 or consistent length
   l1 <- length(value_in)
   l2 <- length(unit_in)
   l3 <- length(unit_out)
-  if (l1 == 0L) stop("Length for value_in argument must be >= 1L")
-  if (l2 != l1 && l2 != 1L) stop("Length for unit_in argument incompatible")
-  if (l3 != l1 && l3 != 1L) stop("Length for unit_out argument incompatible")
+  if (l1 == 0L) stop("Argument `value_in` must have length >= 1.")
+  if (l2 != l1 && l2 != 1L) stop("Argument `unit_in` must have length 1 or length(value_in).")
+  if (l3 != l1 && l3 != 1L) stop("Argument `unit_out` must have length 1 or length(value_in).")
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
