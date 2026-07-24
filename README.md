@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 *Reliable, transparent unit conversions in a `tidyverse` environment*
@@ -34,7 +34,7 @@ The package is designed to provide:
 
 1.  A set of commonly used units, codified by their relation to one
     another and their many human-readable aliases.
-2.  A mimimal set of functions for easily and transparently converting
+2.  A minimal set of functions for easily and transparently converting
     one unit to another.
 3.  A simple, safe system for adding to and testing the conversion
     library to maximise maintainability and usefulness.
@@ -52,9 +52,7 @@ work, please cite it as:
 
 Watson, J. & Sykes, A. J. (2026) `unicon`: Reliable, transparent unit
 conversions in a tidyverse environment. Version 0.0.0.9000. Available at
-<https://github.com/jenny-watson/unicon/>.
-
-> Zenodo DOI badge here following release
+<https://github.com/Agxiata/unicon/>.
 
 ## Installation
 
@@ -63,7 +61,7 @@ This package is hosted on GitHub and can be installed using the
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("jenny-watson/unicon@*release")
+remotes::install_github("Agxiata/unicon@*release")
 ```
 
 ## Acknowledgements

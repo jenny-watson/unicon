@@ -1,11 +1,11 @@
 Package: unicon
-Title: Conversion Of Units Using International System Of Units (SI)
+Title: Convert units using the International System of Units (SI)
 Version: 0.0.0.9000
 Authors@R: c(
     person("Jenny", "Watson", , "jennyblue@hotmail.co.uk", role = c("aut", "cre")),
     person("Alasdair", "Sykes", , "alasdairsykes@gmail.com", role = "aut")
     )
-Description: Converting units from one unit to another using International System Of Units (SI). Users can chose which units are outputted.
+Description: Convert units from one unit to another using the International System of Units (SI). Users can choose which units are output.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

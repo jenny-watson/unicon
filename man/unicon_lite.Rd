@@ -14,9 +14,8 @@ unicon_lite(value_in, id_in, id_out = NA, pull = TRUE)
 
 \item{id_out}{Character scalar or vector, output unit ID(s) for conversion.
 Must be of \code{length(1L)} or \code{length(value_in)}. Defaults to
-\code{NA}; if default is passed, function will return standard reference
-point (SRP) which is a standard index (SI) unit measure.
-units as conversion.}
+\code{NA}; if default is passed, function will return the standard
+reference point (SRP), which is a standard index (SI) unit measure.}
 
 \item{pull}{Logical; should the function pull out and return the converted
 values (TRUE) or should a full table with conversion record be returned?

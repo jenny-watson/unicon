@@ -7,9 +7,8 @@
 #' \code{value_in}. Must be of \code{length(1L)} or \code{length(value_in)}.
 #' @param id_out Character scalar or vector, output unit ID(s) for conversion.
 #' Must be of \code{length(1L)} or \code{length(value_in)}. Defaults to
-#' \code{NA}; if default is passed, function will return standard reference
-#' point (SRP) which is a standard index (SI) unit measure.
-#' units as conversion.
+#' \code{NA}; if default is passed, function will return the standard
+#' reference point (SRP), which is a standard index (SI) unit measure.
 #' @import dplyr purrr
 #' @importFrom tidyr replace_na
 #' @export
@@ -18,13 +17,19 @@ unicon_lite <- function(value_in,
                         id_in,
                         id_out = NA,
                         pull = TRUE) {
+  if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
+  if (!is.character(id_in)) stop("Argument `id_in` must be a character vector.")
+  if (!(is.character(id_out) || (is.logical(id_out) && all(is.na(id_out))))) {
+    stop("Argument `id_out` must be a character vector or `NA`.")
+  }
+
   # check, all values must be either length 1 or consistent length
   l1 <- length(value_in)
   l2 <- length(id_in)
   l3 <- length(id_out)
-  if (l1 == 0L) stop("Length for value_in argument must be >= 1L")
-  if (l2 != l1 && l2 != 1L) stop("Length for id_in argument incompatible")
-  if (l3 != l1 && l3 != 1L) stop("Length for id_out argument incompatible")
+  if (l1 == 0L) stop("Argument `value_in` must have length >= 1.")
+  if (l2 != l1 && l2 != 1L) stop("Argument `id_in` must have length 1 or length(value_in).")
+  if (l3 != l1 && l3 != 1L) stop("Argument `id_out` must have length 1 or length(value_in).")
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(id_out))) {
@@ -43,8 +48,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = .data$id,
-        srp_in = .data$srp
+        id_in = id,
+        srp_in = srp
       ),
       by = "id_in",
       multiple = "any"
@@ -53,8 +58,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = .data$id,
-        srp_out = .data$srp
+        id_out = id,
+        srp_out = srp
       ),
       by = "id_out",
       multiple = "any"
@@ -73,8 +78,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_in = .data$id,
-        model_in = .data$model
+        id_in = id,
+        model_in = model
       ),
       by = "id_in",
       multiple = "any"
@@ -83,8 +88,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = .data$id,
-        model_out = .data$model
+        id_out = id,
+        model_out = model
       ),
       by = "id_out",
       multiple = "any"

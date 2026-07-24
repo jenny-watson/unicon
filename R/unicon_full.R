@@ -21,13 +21,16 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
+  if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
+  if (!is.character(unit_in)) stop("Argument `unit_in` must be a character vector.")
+
   # check, all values must be either length 1 or consistent length
   l1 <- length(value_in)
   l2 <- length(unit_in)
   l3 <- length(unit_out)
-  if (l1 == 0L) stop("Length for value_in argument must be >= 1L")
-  if (l2 != l1 && l2 != 1L) stop("Length for unit_in argument incompatible")
-  if (l3 != l1 && l3 != 1L) stop("Length for unit_out argument incompatible")
+  if (l1 == 0L) stop("Argument `value_in` must have length >= 1.")
+  if (l2 != l1 && l2 != 1L) stop("Argument `unit_in` must have length 1 or length(value_in).")
+  if (l3 != l1 && l3 != 1L) stop("Argument `unit_out` must have length 1 or length(value_in).")
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
@@ -48,8 +51,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_in = .data$alias,
-        id_in = .data$id
+        alias_in = alias,
+        id_in = id
       ),
       by = "alias_in",
       multiple = "any"
@@ -58,8 +61,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_out = .data$alias,
-        id_out = .data$id
+        alias_out = alias,
+        id_out = id
       ),
       by = "alias_out",
       multiple = "any"
@@ -68,8 +71,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = .data$id,
-        srp_in = .data$srp
+        id_in = id,
+        srp_in = srp
       ),
       by = "id_in",
       multiple = "any"
@@ -78,8 +81,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = .data$id,
-        srp_out = .data$srp
+        id_out = id,
+        srp_out = srp
       ),
       by = "id_out",
       multiple = "any"
@@ -102,8 +105,8 @@ unicon_full <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_in = .data$id,
-        model_in = .data$model
+        id_in = id,
+        model_in = model
       ),
       by = "id_in",
       multiple = "any"
@@ -112,8 +115,8 @@ unicon_full <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = .data$id,
-        model_out = .data$model
+        id_out = id,
+        model_out = model
       ),
       by = "id_out",
       multiple = "any"
