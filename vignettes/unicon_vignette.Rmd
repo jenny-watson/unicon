@@ -127,7 +127,7 @@ unicon_lite(
 )
 ```
 
-As with `unicon_full`, setting `pull = FALSE` returns the full conversion table and conversion failures still trigger warnings.
+As with `unicon_full`, `pull = TRUE` returns only the converted values, whereas `pull = FALSE` returns the full conversion table; conversion failures still trigger warnings.
 
 ## `unicon_help`
 
