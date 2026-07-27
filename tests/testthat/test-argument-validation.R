@@ -95,14 +95,17 @@ test_that("unicon_lite returns the full conversion table with pull = FALSE", {
 })
 
 test_that("missing output targets fall back to the SRP where needed", {
-  expect_message(
+  full_msgs <- capture.output(
     full_tbl <- unicon_full(c(100, 1), c("cm", "kg"), c(NA, "g"), pull = FALSE),
-    "Output unit missing in some cases"
+    type = "message"
   )
-  expect_message(
+  lite_msgs <- capture.output(
     lite_tbl <- unicon_lite(c(100, 1), c("cm", "kg"), c(NA, "g"), pull = FALSE),
-    "Output ID missing in some cases"
+    type = "message"
   )
+
+  expect_identical(full_msgs, "Output unit missing in some cases. Converting to standard reference unit where missing.")
+  expect_identical(lite_msgs, "Output ID missing in some cases. Converting to standard reference unit where missing.")
 
   expect_equal(full_tbl$id_out, c("m", "g"))
   expect_equal(full_tbl$value_out, c(1, 1000))

@@ -73,18 +73,10 @@ unicon_full <- function(value_in,
       multiple = "any"
     )
 
-  lite_messages <- c(
-    "No output ID given. Converting all values to standard reference unit.",
-    "Output ID missing in some cases. Converting to standard reference unit where missing."
-  )
-  lite_warnings <- c(
-    "Some input unit IDs were invalid.",
-    "Some output unit IDs were invalid.",
-    "Some requested conversions were not valid (unit type mismatch)."
-  )
-
   # unicon_lite() preserves row order for vectorized inputs, so row_id can be
-  # used to re-attach the original alias metadata after conversion.
+  # used to re-attach the original alias metadata after conversion. Silence the
+  # wrapped call's ID-based diagnostics so unicon_full() remains the single
+  # place that emits user-facing alias-based messages and warnings.
   conv_tab_lite <- withCallingHandlers(
     unicon_lite(
       value_in = conv_tab_pre$value_in,
@@ -93,14 +85,10 @@ unicon_full <- function(value_in,
       pull = FALSE
     ),
     message = function(cnd) {
-      if (conditionMessage(cnd) %in% lite_messages) {
-        invokeRestart("muffleMessage")
-      }
+      invokeRestart("muffleMessage")
     },
     warning = function(cnd) {
-      if (conditionMessage(cnd) %in% lite_warnings) {
-        invokeRestart("muffleWarning")
-      }
+      invokeRestart("muffleWarning")
     }
   )
 
