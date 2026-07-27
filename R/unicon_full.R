@@ -55,8 +55,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_in = alias,
-        id_in = id
+        alias_in = all_of("alias"),
+        id_in = all_of("id")
       ),
       by = "alias_in",
       multiple = "any"
@@ -65,8 +65,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_out = alias,
-        id_out = id
+        alias_out = all_of("alias"),
+        id_out = all_of("id")
       ),
       by = "alias_out",
       multiple = "any"

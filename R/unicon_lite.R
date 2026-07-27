@@ -50,8 +50,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = id,
-        srp_in = srp
+        id_in = all_of("id"),
+        srp_in = all_of("srp")
       ),
       by = "id_in",
       multiple = "any"
@@ -60,8 +60,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = id,
-        srp_out = srp
+        id_out = all_of("id"),
+        srp_out = all_of("srp")
       ),
       by = "id_out",
       multiple = "any"
@@ -80,8 +80,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_in = id,
-        model_in = model
+        id_in = all_of("id"),
+        model_in = all_of("model")
       ),
       by = "id_in",
       multiple = "any"
@@ -90,8 +90,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = id,
-        model_out = model
+        id_out = all_of("id"),
+        model_out = all_of("model")
       ),
       by = "id_out",
       multiple = "any"
