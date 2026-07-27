@@ -72,15 +72,32 @@ unicon_full <- function(value_in,
       multiple = "any"
     )
 
-  conv_tab_lite <- suppressWarnings(
-    suppressMessages(
+  conv_tab_lite <- withCallingHandlers(
+    withCallingHandlers(
       unicon_lite(
         value_in = conv_tab_pre$value_in,
         id_in = conv_tab_pre$id_in,
         id_out = conv_tab_pre$id_out,
         pull = FALSE
-      )
-    )
+      ),
+      message = function(cnd) {
+        if (conditionMessage(cnd) %in% c(
+          "No output ID given. Converting all values to standard reference unit.",
+          "Output ID missing in some cases. Converting to standard reference unit where missing."
+        )) {
+          invokeRestart("muffleMessage")
+        }
+      }
+    ),
+    warning = function(cnd) {
+      if (conditionMessage(cnd) %in% c(
+        "Some input unit IDs were invalid.",
+        "Some output unit IDs were invalid.",
+        "Some requested conversions were not valid (unit type mismatch)."
+      )) {
+        invokeRestart("muffleWarning")
+      }
+    }
   )
 
   conv_tab <- bind_cols(
