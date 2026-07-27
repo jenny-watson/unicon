@@ -40,7 +40,7 @@ unicon_full <- function(value_in,
   if (all(is.na(unit_out))) {
     message("No output unit given. Converting all values to standard reference unit.")
   } else if (any(is.na(unit_out))) {
-    message("Output unit missing in some cases. Converting to standard reference unit where missing.")
+    message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
   }
 
   # compose output table
@@ -49,15 +49,15 @@ unicon_full <- function(value_in,
     value_in = value_in,
     unit_in = unit_in,
     unit_out = unit_out,
-    alias_in = str_replace_all(str_to_lower(unit_in), "\\s+", ""),
-    alias_out = str_replace_all(str_to_lower(unit_out), "\\s+", "")
+    alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
+    alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
   ) |>
     # input id
     left_join(
       select(
         unit_alias,
-        alias_in = all_of("alias"),
-        id_in = all_of("id")
+        alias_in = .data$alias,
+        id_in = .data$id
       ),
       by = "alias_in",
       multiple = "any"
@@ -66,8 +66,8 @@ unicon_full <- function(value_in,
     left_join(
       select(
         unit_alias,
-        alias_out = all_of("alias"),
-        id_out = all_of("id")
+        alias_out = .data$alias,
+        id_out = .data$id
       ),
       by = "alias_out",
       multiple = "any"
@@ -115,24 +115,24 @@ unicon_full <- function(value_in,
   conv_tab <- left_join(
     select(
       conv_tab_pre,
-      row_id,
-      unit_in,
-      unit_out,
-      alias_in,
-      alias_out
+      .data$row_id,
+      .data$unit_in,
+      .data$unit_out,
+      .data$alias_in,
+      .data$alias_out
     ),
     mutate(
       select(
         conv_tab_lite,
-        id_in,
-        id_srp,
-        id_out,
-        error_in,
-        error_srp,
-        error_out,
-        value_in,
-        value_srp,
-        value_out
+        .data$id_in,
+        .data$id_srp,
+        .data$id_out,
+        .data$error_in,
+        .data$error_srp,
+        .data$error_out,
+        .data$value_in,
+        .data$value_srp,
+        .data$value_out
       ),
       row_id = row_number()
     ),
