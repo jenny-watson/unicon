@@ -73,6 +73,16 @@ unicon_full <- function(value_in,
       multiple = "any"
     )
 
+  lite_messages <- c(
+    "No output ID given. Converting all values to standard reference unit.",
+    "Output ID missing in some cases. Converting to standard reference unit where missing."
+  )
+  lite_warnings <- c(
+    "Some input unit IDs were invalid.",
+    "Some output unit IDs were invalid.",
+    "Some requested conversions were not valid (unit type mismatch)."
+  )
+
   conv_tab_lite <- withCallingHandlers(
     unicon_lite(
       value_in = conv_tab_pre$value_in,
@@ -81,19 +91,12 @@ unicon_full <- function(value_in,
       pull = FALSE
     ),
     message = function(cnd) {
-      if (conditionMessage(cnd) %in% c(
-        "No output ID given. Converting all values to standard reference unit.",
-        "Output ID missing in some cases. Converting to standard reference unit where missing."
-      )) {
+      if (conditionMessage(cnd) %in% lite_messages) {
         invokeRestart("muffleMessage")
       }
     },
     warning = function(cnd) {
-      if (conditionMessage(cnd) %in% c(
-        "Some input unit IDs were invalid.",
-        "Some output unit IDs were invalid.",
-        "Some requested conversions were not valid (unit type mismatch)."
-      )) {
+      if (conditionMessage(cnd) %in% lite_warnings) {
         invokeRestart("muffleWarning")
       }
     }
