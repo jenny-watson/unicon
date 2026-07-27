@@ -104,10 +104,11 @@ unicon_full <- function(value_in,
     ## join so can present alias in output if needed
 
     conv_tab <- conv_tab_pre  |>
-      left_join(conv_tab_lite,
-                by = c("value_in",
-                       "id_in",
-                       "id_out"))
+      left_join(
+        conv_tab_lite,
+        by = c("value_in",
+               "id_in",
+               "id_out"))
 
 
   } else {
@@ -134,7 +135,7 @@ unicon_full <- function(value_in,
 
     # provide only value_out
 
-    conv_tab$value_out
+    return(conv_tab$value_out)
 
   } else {
 
@@ -152,20 +153,23 @@ unicon_full <- function(value_in,
 
     # provide row level info
 
-    select(conv_tab,
-           .data$unit_in,
-           .data$unit_out,
-           .data$alias_in,
-           .data$alias_out,
-           .data$id_in,
-           id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
-           .data$id_out,
-           .data$error_in,
-           .data$error_srp,
-           .data$error_out,
-           .data$value_in,
-           .data$value_srp,
-           .data$value_out)
+    return(
+      conv_tab |>
+        select(
+          .data$unit_in,
+          .data$unit_out,
+          .data$alias_in,
+          .data$alias_out,
+          .data$id_in,
+          id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+          .data$id_out,
+          .data$error_in,
+          .data$error_srp,
+          .data$error_out,
+          .data$value_in,
+          .data$value_srp,
+          .data$value_out)
+    )
 
   }
 }

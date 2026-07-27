@@ -102,7 +102,7 @@ While `unicon_full` serves as core user-facing function, this is merely a wrappe
 - Allows users to choose to only receive `value_out` only, rather than including all internal workings columns;
 - Does not require users to know the unit ID for each alias used by the package in correct format needed for the package, although these can be provided if known. If they are provided, the function will skip the alias search, and performance may be improved.
 
-Users can still use `unicon_lite` directly, but is discouraged for the reasons outlined above:
+Direct usage is discouraged for the reasons outlined above, but users can still implement `unicon_lite`:
 
 ```{r unicon_lite-1}
 unicon_lite(

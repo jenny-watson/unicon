@@ -100,11 +100,15 @@ unicon_lite <- function(value_in,
     mutate(
       # forward model, input --> srp
       value_srp = map2_dbl(
-        .data$value_in, .data$model_in, ~ .x * .y$slope + .y$intercept
+        .data$value_in,
+        .data$model_in,
+        ~ .x * .y$slope + .y$intercept
       ),
       # reverse model, srp --> output
       value_out = map2_dbl(
-        .data$value_srp, .data$model_out, ~ (.x - .y$intercept) * 1 / .y$slope
+        .data$value_srp,
+        .data$model_out,
+        ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
       value_out = ifelse(.data$error_srp %in% TRUE,
@@ -113,17 +117,19 @@ unicon_lite <- function(value_in,
       )
     )
 
-  select(
-    conv_tab,
-    .data$id_in,
-    .data$id_out,
-    id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
-    .data$error_in,
-    .data$error_srp,
-    .data$error_out,
-    .data$value_in,
-    .data$value_srp,
-    .data$value_out
+  return(
+    conv_tab |>
+      select(
+        .data$id_in,
+        .data$id_out,
+        id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+        .data$error_in,
+        .data$error_srp,
+        .data$error_out,
+        .data$value_in,
+        .data$value_srp,
+        .data$value_out
+      )
   )
 
 }
