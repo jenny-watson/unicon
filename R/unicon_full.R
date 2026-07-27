@@ -83,7 +83,7 @@ unicon_full <- function(value_in,
     "Some requested conversions were not valid (unit type mismatch)."
   )
 
-  # unicon_lite() preserves row order for vectorised inputs, so row_id can be
+  # unicon_lite() preserves row order for vectorized inputs, so row_id can be
   # used to re-attach the original alias metadata after conversion.
   conv_tab_lite <- withCallingHandlers(
     unicon_lite(
@@ -134,7 +134,7 @@ unicon_full <- function(value_in,
         value_srp,
         value_out
       ),
-      row_id = conv_tab_pre$row_id
+      row_id = row_number()
     ),
     by = "row_id"
   ) |>
@@ -143,7 +143,7 @@ unicon_full <- function(value_in,
   if (isTRUE(pull)) {
     out <- conv_tab$value_out
     if (any(is.na(out))) {
-      warning("Some units failed to convert or match. Set `pull = FALSE` for detailed output.")
+      warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.")
     }
     out
   } else {
