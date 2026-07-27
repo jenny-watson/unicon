@@ -45,6 +45,7 @@ unicon_full <- function(value_in,
 
   # compose output table
   conv_tab_pre <- tibble(
+    row_id = seq_along(value_in),
     value_in = value_in,
     unit_in = unit_in,
     unit_out = unit_out,
@@ -98,27 +99,37 @@ unicon_full <- function(value_in,
     }
   )
 
-  conv_tab <- bind_cols(
+  if (nrow(conv_tab_lite) != nrow(conv_tab_pre)) {
+    stop("Internal error: conversion results were misaligned.")
+  }
+
+  conv_tab <- left_join(
     select(
       conv_tab_pre,
+      row_id,
       unit_in,
       unit_out,
       alias_in,
       alias_out
     ),
-    select(
-      conv_tab_lite,
-      id_in,
-      id_srp,
-      id_out,
-      error_in,
-      error_srp,
-      error_out,
-      value_in,
-      value_srp,
-      value_out
-    )
-  )
+    mutate(
+      select(
+        conv_tab_lite,
+        id_in,
+        id_srp,
+        id_out,
+        error_in,
+        error_srp,
+        error_out,
+        value_in,
+        value_srp,
+        value_out
+      ),
+      row_id = conv_tab_pre$row_id
+    ),
+    by = "row_id"
+  ) |>
+    select(-row_id)
 
   if (isTRUE(pull)) {
     out <- conv_tab$value_out
