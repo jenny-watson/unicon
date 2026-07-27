@@ -137,7 +137,7 @@ unicon_lite <- function(value_in,
   if (isTRUE(pull)) {
     out <- conv_tab$value_out
     if (any(is.na(out))) {
-      warning("Some units failed to convert. Set `pull = FALSE` for detailed output.")
+      warning("Some units failed to convert or match. Set `pull = FALSE` for detailed output.")
     }
     out
   } else {
