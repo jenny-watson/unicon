@@ -14,7 +14,7 @@
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
-#' @import dplyr purrr
+#' @import dplyr
 #' @importFrom stringr str_replace_all str_to_lower
 #' @export
 
@@ -22,9 +22,19 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
-  if (!is.numeric(value_in)) stop("Argument `value_in` must be numeric.")
-  if (!is.character(unit_in)) stop("Argument `unit_in` must be a character vector.")
-  if (!(is.character(unit_out) || (is.logical(unit_out) && all(is.na(unit_out))))) {
+
+  # checks inputted data
+
+  # check data type
+  if (!is.numeric(value_in)){
+    stop("Argument `value_in` must be numeric.")
+  }
+
+  if (!is.character(unit_in)){
+    stop("Argument `unit_in` must be a character vector.")
+  }
+
+  if (!(is.character(unit_out) | is.na(unit_out))) {
     stop("Argument `unit_out` must be a character vector or `NA`.")
   }
 
@@ -32,109 +42,104 @@ unicon_full <- function(value_in,
   l1 <- length(value_in)
   l2 <- length(unit_in)
   l3 <- length(unit_out)
-  if (l1 == 0L) stop("Argument `value_in` must have length >= 1.")
-  if (l2 != l1 && l2 != 1L) stop("Argument `unit_in` must have length 1 or length(value_in).")
-  if (l3 != l1 && l3 != 1L) stop("Argument `unit_out` must have length 1 or length(value_in).")
+
+  if (l1 == 0L){
+    stop("Argument `value_in` must have length >= 1.")
+  }
+
+  if (l2 != l1 && l2 != 1L){
+    stop("Argument `unit_in` must have length 1 or length(value_in).")
+  }
+
+  if (l3 != l1 && l3 != 1L){
+    stop("Argument `unit_out` must have length 1 or length(value_in).")
+  }
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
-    message("No output unit given. Converting all values to standard reference unit.")
+    message("No output unit given. Converting all values to standard reference unit.") # nolint
   } else if (any(is.na(unit_out))) {
     message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
   }
 
-  # compose output table
-  conv_tab_pre <- tibble(
-    row_id = seq_along(value_in),
-    value_in = value_in,
-    unit_in = unit_in,
-    unit_out = unit_out,
-    alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
-    alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
-  ) |>
-    # input id
-    left_join(
-      select(
-        unit_alias,
-        alias_in = .data$alias,
-        id_in = .data$id
-      ),
-      by = "alias_in",
-      multiple = "any"
-    ) |>
-    # output id if given
-    left_join(
-      select(
-        unit_alias,
-        alias_out = .data$alias,
-        id_out = .data$id
-      ),
-      by = "alias_out",
-      multiple = "any"
-    )
+  if(any(unit_in %in% unit_alias$alias) | any(unit_out %in% unit_alias$alias)){
 
-  # unicon_lite() preserves row order for vectorized inputs, so row_id can be
-  # used to re-attach the original alias metadata after conversion. Silence the
-  # wrapped call's ID-based diagnostics so unicon_full() remains the single
-  # place that emits user-facing alias-based messages and warnings.
-  conv_tab_lite <- withCallingHandlers(
-    unicon_lite(
+    # compose output table
+    conv_tab_pre <- tibble(
+      value_in = value_in,
+      unit_in = unit_in,
+      unit_out = unit_out,
+      alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
+      alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
+    ) |>
+      # input id
+      left_join(
+        select(
+          unit_alias,
+          alias_in = .data$alias,
+          id_in = .data$id
+        ),
+        by = "alias_in",
+        multiple = "any"
+      ) |>
+      # output id if given
+      left_join(
+        select(
+          unit_alias,
+          alias_out = .data$alias,
+          id_out = .data$id
+        ),
+        by = "alias_out",
+        multiple = "any"
+      )
+
+    ## apply the unicon_lite function
+
+    conv_tab_lite <- unicon_lite(
       value_in = conv_tab_pre$value_in,
       id_in = conv_tab_pre$id_in,
-      id_out = conv_tab_pre$id_out,
-      pull = FALSE
-    ),
-    message = function(cnd) {
-      invokeRestart("muffleMessage")
-    },
-    warning = function(cnd) {
-      invokeRestart("muffleWarning")
-    }
-  )
+      id_out = conv_tab_pre$id_out
+    )
 
-  if (nrow(conv_tab_lite) != nrow(conv_tab_pre)) {
-    stop(sprintf(
-      "Internal error: conversion results were misaligned (expected %d rows, got %d).",
-      nrow(conv_tab_pre),
-      nrow(conv_tab_lite)
-    ))
+    ## join so can present alias in output if needed
+
+    conv_tab <- conv_tab_pre  |>
+      left_join(conv_tab_lite,
+                by = c("value_in",
+                       "id_in",
+                       "id_out"))
+
+
+  } else {
+
+    conv_tab <- unicon_lite(
+      value_in = value_in,
+      id_in = unit_in,
+      id_out = unit_out
+    ) |>
+      mutate(
+        alias_in = unit_in,
+        alias_out = unit_out
+      )
+
   }
 
-  conv_tab <- left_join(
-    select(
-      conv_tab_pre,
-      .data$row_id,
-      .data$unit_in,
-      .data$unit_out,
-      .data$alias_in,
-      .data$alias_out
-    ),
-    mutate(
-      select(
-        conv_tab_lite,
-        .data$id_in,
-        .data$id_srp,
-        .data$id_out,
-        .data$error_in,
-        .data$error_srp,
-        .data$error_out,
-        .data$value_in,
-        .data$value_srp,
-        .data$value_out
-      ),
-      row_id = row_number()
-    ),
-    by = "row_id"
-  ) |>
-    select(-row_id)
-
   if (isTRUE(pull)) {
-    out <- conv_tab$value_out
+
+    # provide brief warnings
+
     if (any(is.na(out))) {
-      warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.")
+      warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.") # nolint
     }
-    out
+
+    # provide only value_out
+
+    conv_tab$value_out
+
   } else {
+
+    # provide detailed warnings
+
     if (any(conv_tab$error_in)) {
       warning("Some input units failed to find matches.")
     }
@@ -144,6 +149,23 @@ unicon_full <- function(value_in,
     if (any(conv_tab$error_srp, na.rm = TRUE)) {
       warning("Some requested conversions were not valid (unit type mismatch).")
     }
-    conv_tab
+
+    # provide row level info
+
+    select(conv_tab,
+           .data$unit_in,
+           .data$unit_out,
+           .data$alias_in,
+           .data$alias_out,
+           .data$id_in,
+           id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+           .data$id_out,
+           .data$error_in,
+           .data$error_srp,
+           .data$error_out,
+           .data$value_in,
+           .data$value_srp,
+           .data$value_out)
+
   }
 }
