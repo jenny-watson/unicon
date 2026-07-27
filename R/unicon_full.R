@@ -48,8 +48,8 @@ unicon_full <- function(value_in,
     value_in = value_in,
     unit_in = unit_in,
     unit_out = unit_out,
-    alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
-    alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
+    alias_in = str_replace_all(str_to_lower(unit_in), "\\s+", ""),
+    alias_out = str_replace_all(str_to_lower(unit_out), "\\s+", "")
   ) |>
     # input id
     left_join(
