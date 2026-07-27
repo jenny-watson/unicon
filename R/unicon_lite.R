@@ -50,8 +50,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = .data$id,
-        srp_in = .data$srp
+        id_in = id,
+        srp_in = srp
       ),
       by = "id_in",
       multiple = "any"
@@ -60,8 +60,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = .data$id,
-        srp_out = .data$srp
+        id_out = id,
+        srp_out = srp
       ),
       by = "id_out",
       multiple = "any"
@@ -80,8 +80,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_in = .data$id,
-        model_in = .data$model
+        id_in = id,
+        model_in = model
       ),
       by = "id_in",
       multiple = "any"
@@ -90,33 +90,31 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = .data$id,
-        model_out = .data$model
+        id_out = id,
+        model_out = model
       ),
       by = "id_out",
       multiple = "any"
     )
 
-  #####~~~~~#####~~~~ check if this is needed if using unicon_full as a wrapper #####~~~~~#####~~~~
-
-  # # replace mis-joined models, needed in case user has provided incorrect ids
-  # conv_tab <- conv_tab |>
-  #   replace_na(
-  #     list(
-  #       model_in = list(
-  #         list(
-  #           slope = NA,
-  #           intercept = NA
-  #         )
-  #       ),
-  #       model_out = list(
-  #         list(
-  #           slope = NA,
-  #           intercept = NA
-  #         )
-  #       )
-  #     )
-  #   )
+  # replace mis-joined models, needed in case user has provided incorrect ids
+  conv_tab <- conv_tab |>
+    replace_na(
+      list(
+        model_in = list(
+          list(
+            slope = NA,
+            intercept = NA
+          )
+        ),
+        model_out = list(
+          list(
+            slope = NA,
+            intercept = NA
+          )
+        )
+      )
+    )
 
   # solve conversion models
   conv_tab <- conv_tab |>
@@ -157,15 +155,15 @@ unicon_lite <- function(value_in,
 
     select(
       conv_tab,
-      .data$id_in,
-      .data$id_out,
-      id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
-      .data$error_in,
-      .data$error_srp,
-      .data$error_out,
-      .data$value_in,
-      .data$value_srp,
-      .data$value_out
+      id_in,
+      id_out,
+      id_srp = srp_in, # used to drive calcs, srp_out for check only
+      error_in,
+      error_srp,
+      error_out,
+      value_in,
+      value_srp,
+      value_out
     )
   }
 }

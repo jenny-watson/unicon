@@ -129,3 +129,20 @@ test_that("incompatible unit types warn and return NA output", {
   expect_true(lite_tbl$error_srp)
   expect_true(is.na(lite_tbl$value_out))
 })
+
+test_that("unknown units warn and return NA instead of erroring", {
+  expect_warning(
+    full_tbl <- unicon_full(1, "not-a-unit", "cm", pull = FALSE),
+    "Some input units failed to find matches\\."
+  )
+  expect_warning(
+    lite_tbl <- unicon_lite(1, "not-a-unit", "cm", pull = FALSE),
+    "Some input unit IDs were invalid\\."
+  )
+
+  expect_true(full_tbl$error_in)
+  expect_true(is.na(full_tbl$value_out))
+
+  expect_true(lite_tbl$error_in)
+  expect_true(is.na(lite_tbl$value_out))
+})
