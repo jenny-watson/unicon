@@ -104,8 +104,16 @@ test_that("missing output targets fall back to the SRP where needed", {
     type = "message"
   )
 
-  expect_identical(full_msgs, "Output unit missing in some cases. Converting to standard reference unit where missing.")
-  expect_identical(lite_msgs, "Output ID missing in some cases. Converting to standard reference unit where missing.")
+  expect_length(full_msgs, 1L)
+  expect_length(lite_msgs, 1L)
+  expect_identical(
+    paste(full_msgs, collapse = "\n"),
+    "Output unit missing in some cases. Converting to standard reference unit where missing."
+  )
+  expect_identical(
+    paste(lite_msgs, collapse = "\n"),
+    "Output ID missing in some cases. Converting to standard reference unit where missing."
+  )
 
   expect_equal(full_tbl$id_out, c("m", "g"))
   expect_equal(full_tbl$value_out, c(1, 1000))
