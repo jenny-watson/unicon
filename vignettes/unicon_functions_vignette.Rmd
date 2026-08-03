@@ -68,7 +68,7 @@ This returns the following information, representing the calculation process in 
 * `value_srp` The values as converted to their SRP (standard reference point) unit.
 * `value_out` The values converted to the `unit_out` argument, if supplied. If not supplied, the standard reference point unit will be returned and the values will be identical to `value_srp`.
 
-To understand more about the significance of the `srp` unit, read **A brief note on design and methodology**, below.
+To understand more about the significance of the `srp` unit, read **A brief note on design and methodology**, in the `unicon_vignette`.
 
 All the core input arguments are vectorised and will attempt to replicate if supplied as scalar values. This is helpful, as above, in specifying a single unit of output, or in converting vectors of consistent unit type (`unicon_full(my_values, "tonnes/ha", "g/m2")`). It's also possible to omit the `unit_out` argument altogether; if omitted, the function will return values in the associated standard reference unit and will message the user to indicate that this has been done.
 
