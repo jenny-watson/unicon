@@ -129,7 +129,7 @@ unicon_full <- function(value_in,
 
     # provide brief warnings
 
-    if (any(is.na(out))) {
+    if (any(is.na(conv_tab$value_out))) {
       warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.") # nolint
     }
 

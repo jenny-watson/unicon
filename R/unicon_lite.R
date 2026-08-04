@@ -122,7 +122,7 @@ unicon_lite <- function(value_in,
       select(
         .data$id_in,
         .data$id_out,
-        id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+        .data$srp_in, # used to drive calcs, srp_out for check only
         .data$error_in,
         .data$error_srp,
         .data$error_out,
