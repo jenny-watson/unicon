@@ -96,11 +96,12 @@ join <- derived_data |>
     id = paste0(id.x, id.o, id.y),
     alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
     srp = paste0(srp.x, id.o, srp.y),
-    slope = pmap_dbl(list(fun.o,
-                          slope.x,
-                          slope.y),
-                     function(op, x, y)
-                     do.call(op, list(x, y))),
+    slope = pmap_dbl(
+      list(fun.o, slope.x, slope.y),
+      function(op, x, y) {
+        do.call(op, list(x, y))
+      }
+    ),
     intercept = 0,
     type = "derived",
     .keep = "none"

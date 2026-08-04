@@ -26,11 +26,11 @@ unicon_full <- function(value_in,
   # checks inputted data
 
   # check data type
-  if (!is.numeric(value_in)){
+  if (!is.numeric(value_in)) {
     stop("Argument `value_in` must be numeric.")
   }
 
-  if (!is.character(unit_in)){
+  if (!is.character(unit_in)) {
     stop("Argument `unit_in` must be a character vector.")
   }
 
@@ -43,15 +43,15 @@ unicon_full <- function(value_in,
   l2 <- length(unit_in)
   l3 <- length(unit_out)
 
-  if (l1 == 0L){
+  if (l1 == 0L) {
     stop("Argument `value_in` must have length >= 1.")
   }
 
-  if (l2 != l1 && l2 != 1L){
+  if (l2 != l1 && l2 != 1L) {
     stop("Argument `unit_in` must have length 1 or length(value_in).")
   }
 
-  if (l3 != l1 && l3 != 1L){
+  if (l3 != l1 && l3 != 1L) {
     stop("Argument `unit_out` must have length 1 or length(value_in).")
   }
 
@@ -68,11 +68,11 @@ unicon_full <- function(value_in,
 
   ## get aliases in right format before testing
 
-  alias_in = str_replace_all(str_to_lower(unit_in), "\\s+", "")
-  alias_out = str_replace_all(str_to_lower(unit_out), "\\s+", "")
+  alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
+  alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
 
-  if(any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)){
+  if (any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)) {
 
     # compose output table
     conv_tab_pre <- tibble(
@@ -154,7 +154,7 @@ unicon_full <- function(value_in,
 
     # provide only value_out
 
-    return(conv_tab$value_out)
+    conv_tab$value_out
 
   } else {
 
@@ -172,23 +172,22 @@ unicon_full <- function(value_in,
 
     # provide row level info
 
-    return(
-      conv_tab |>
-        select(
-          unit_in,
-          unit_out,
-          alias_in,
-          alias_out,
-          id_in,
-          srp_in, # used to drive calcs, srp_out for check only
-          id_out,
-          error_in,
-          error_srp,
-          error_out,
-          value_in,
-          value_srp,
-          value_out)
-    )
+    conv_tab |>
+      select(
+        unit_in,
+        unit_out,
+        alias_in,
+        alias_out,
+        id_in,
+        srp_in, # used to drive calcs, srp_out for check only
+        id_out,
+        error_in,
+        error_srp,
+        error_out,
+        value_in,
+        value_srp,
+        value_out
+      )
 
   }
 }

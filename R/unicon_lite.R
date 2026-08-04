@@ -111,25 +111,22 @@ unicon_lite <- function(value_in,
       ),
       # ensure no misleading results produced if unit type mismatches
       value_out = ifelse(error_srp %in% TRUE,
-                         NA_real_,
-                         value_out
+        NA_real_,
+        value_out
       )
     )
 
-  return(
-    conv_tab |>
-      select(
-        id_in,
-        id_out,
-        srp_in, # used to drive calcs, srp_out for check only
-        error_in,
-        error_srp,
-        error_out,
-        value_in,
-        value_srp,
-        value_out
-      )
-  )
+  conv_tab |>
+    select(
+      id_in,
+      id_out,
+      srp_in, # used to drive calcs, srp_out for check only
+      error_in,
+      error_srp,
+      error_out,
+      value_in,
+      value_srp,
+      value_out
+    )
 
 }
-
