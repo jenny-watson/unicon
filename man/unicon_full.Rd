@@ -26,4 +26,5 @@ Full-service/user-exposable unit conversion. Supply a vector of
 input values with associated unit aliases and receive conversions to any
 required output alias. Designed to handle the widest possible range of naming
 conventions, permutations and plain mis-spellings of commonly used units.
+This is a wrapper for unicon_lite where just looks up the alias.
 }

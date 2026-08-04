@@ -34,7 +34,7 @@ unicon_full <- function(value_in,
     stop("Argument `unit_in` must be a character vector.")
   }
 
-  if (!(is.character(unit_out) | is.na(unit_out))) {
+  if (!(is.character(unit_out) || all(is.na(unit_out)))) {
     stop("Argument `unit_out` must be a character vector or `NA`.")
   }
 
@@ -141,10 +141,10 @@ unicon_full <- function(value_in,
 
     # provide detailed warnings
 
-    if (any(conv_tab$error_in)) {
+    if (any(conv_tab$error_in, na.rm = TRUE)) {
       warning("Some input units failed to find matches.")
     }
-    if (any(conv_tab$error_out)) {
+    if (any(conv_tab$error_out, na.rm = TRUE)) {
       warning("Some output units failed to find matches.")
     }
     if (any(conv_tab$error_srp, na.rm = TRUE)) {
@@ -161,7 +161,7 @@ unicon_full <- function(value_in,
           .data$alias_in,
           .data$alias_out,
           .data$id_in,
-          id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
+          .data$srp_in, # used to drive calcs, srp_out for check only
           .data$id_out,
           .data$error_in,
           .data$error_srp,

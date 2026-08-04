@@ -2,7 +2,6 @@
 #' @description The function that does the actual unit conversion and heavy
 #' lifting. To only be used as part of unicon_full to ensure data checks
 #' completed.
-#' @inheritParams unicon_full
 #' @param value_in Numeric scalar or vector, values to convert.
 #' @param id_in Character scalar or vector, input unit ID(s) for
 #' \code{value_in}. Must be of \code{length(1L)} or \code{length(value_in)}.
