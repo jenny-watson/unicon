@@ -86,8 +86,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           unit_alias,
-          alias_in = .data$alias,
-          id_in = .data$id
+          alias_in = alias,
+          id_in = id
         ),
         by = "alias_in",
         multiple = "any"
@@ -96,8 +96,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           unit_alias,
-          alias_out = .data$alias,
-          id_out = .data$id
+          alias_out = alias,
+          id_out = id
         ),
         by = "alias_out",
         multiple = "any"
@@ -166,19 +166,19 @@ unicon_full <- function(value_in,
     return(
       conv_tab |>
         select(
-          .data$unit_in,
-          .data$unit_out,
-          .data$alias_in,
-          .data$alias_out,
-          .data$id_in,
-          .data$srp_in, # used to drive calcs, srp_out for check only
-          .data$id_out,
-          .data$error_in,
-          .data$error_srp,
-          .data$error_out,
-          .data$value_in,
-          .data$value_srp,
-          .data$value_out)
+          unit_in,
+          unit_out,
+          alias_in,
+          alias_out,
+          id_in,
+          srp_in, # used to drive calcs, srp_out for check only
+          id_out,
+          error_in,
+          error_srp,
+          error_out,
+          value_in,
+          value_srp,
+          value_out)
     )
 
   }

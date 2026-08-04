@@ -28,8 +28,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_in = .data$id,
-        srp_in = .data$srp
+        id_in = id,
+        srp_in = srp
       ),
       by = "id_in",
       multiple = "any"
@@ -38,28 +38,28 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         unit_srp,
-        id_out = .data$id,
-        srp_out = .data$srp
+        id_out = id,
+        srp_out = srp
       ),
       by = "id_out",
       multiple = "any"
     ) |>
     mutate(
       # user gave input units, but no matches
-      error_in = is.na(.data$srp_in),
+      error_in = is.na(srp_in),
       # user gave output units, but no matches
-      error_out = !is.na(.data$id_out) & is.na(.data$srp_out),
+      error_out = !is.na(id_out) & is.na(srp_out),
       # user gave incompatible unit conversion
-      error_srp = .data$srp_in != .data$srp_out,
+      error_srp = srp_in != srp_out,
       # use srp unit as output id if none given by user
-      id_out = ifelse(is.na(.data$id_out), .data$srp_in, .data$id_out),
+      id_out = ifelse(is.na(id_out), srp_in, id_out),
     ) |>
     # model for input <--> srp
     left_join(
       rename(
         unit_models,
-        id_in = .data$id,
-        model_in = .data$model
+        id_in = id,
+        model_in = model
       ),
       by = "id_in",
       multiple = "any"
@@ -68,8 +68,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         unit_models,
-        id_out = .data$id,
-        model_out = .data$model
+        id_out = id,
+        model_out = model
       ),
       by = "id_out",
       multiple = "any"
@@ -99,35 +99,35 @@ unicon_lite <- function(value_in,
     mutate(
       # forward model, input --> srp
       value_srp = map2_dbl(
-        .data$value_in,
-        .data$model_in,
+        value_in,
+        model_in,
         ~ .x * .y$slope + .y$intercept
       ),
       # reverse model, srp --> output
       value_out = map2_dbl(
-        .data$value_srp,
-        .data$model_out,
+        value_srp,
+        model_out,
         ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
-      value_out = ifelse(.data$error_srp %in% TRUE,
+      value_out = ifelse(error_srp %in% TRUE,
                          NA_real_,
-                         .data$value_out
+                         value_out
       )
     )
 
   return(
     conv_tab |>
       select(
-        .data$id_in,
-        .data$id_out,
-        .data$srp_in, # used to drive calcs, srp_out for check only
-        .data$error_in,
-        .data$error_srp,
-        .data$error_out,
-        .data$value_in,
-        .data$value_srp,
-        .data$value_out
+        id_in,
+        id_out,
+        srp_in, # used to drive calcs, srp_out for check only
+        error_in,
+        error_srp,
+        error_out,
+        value_in,
+        value_srp,
+        value_out
       )
   )
 
