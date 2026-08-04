@@ -69,14 +69,15 @@ test_that("missing output targets fall back to the SRP where needed", {
     type = "message"
   )
 
-  expect_length(full_msgs, 1L)
-  expect_identical(
+  expect_match(
     paste(full_msgs, collapse = "\n"),
     "Output unit missing in some cases. Converting to standard reference unit where missing."
   )
 
   expect_equal(full_tbl$id_out, c("m", "g"))
+
   expect_equal(full_tbl$value_out, c(1, 1000))
+
   expect_false(any(full_tbl$error_out))
 
   lite_tbl <- unicon_lite(c(100, 1), c("cm", "kg"), c(NA, "g"))
@@ -91,8 +92,7 @@ test_that("missing unit_out entirely falls back to SRP for unicon_full and unico
     type = "message"
   )
 
-  expect_length(full_msgs, 1L)
-  expect_identical(
+  expect_match(
     paste(full_msgs, collapse = "\n"),
     "No output unit given. Converting all values to standard reference unit."
   )

@@ -112,13 +112,22 @@ unicon_full <- function(value_in,
     )
 
     ## join so can present alias in output if needed
+    ## binding as row order preserved and if id_out is NA, cant join
+    ## no row_order as upsets else{} branch
 
-    conv_tab <- conv_tab_pre  |>
-      left_join(
+    conv_tab <- bind_cols(
+      select(conv_tab_pre, -id_out),
+      select(
         conv_tab_lite,
-        by = c("value_in",
-               "id_in",
-               "id_out"))
+        id_out,
+        srp_in,
+        error_in,
+        error_srp,
+        error_out,
+        value_srp,
+        value_out
+      )
+    )
 
 
   } else {
