@@ -57,20 +57,30 @@ unicon_full <- function(value_in,
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
+
     message("No output unit given. Converting all values to standard reference unit.") # nolint
+
   } else if (any(is.na(unit_out))) {
+
     message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
+
   }
 
-  if(any(unit_in %in% unit_alias$alias) | any(unit_out %in% unit_alias$alias)){
+  ## get aliases in right format before testing
+
+  alias_in = str_replace_all(str_to_lower(unit_in), "\\s+", "")
+  alias_out = str_replace_all(str_to_lower(unit_out), "\\s+", "")
+
+
+  if(any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)){
 
     # compose output table
     conv_tab_pre <- tibble(
       value_in = value_in,
       unit_in = unit_in,
       unit_out = unit_out,
-      alias_in = str_replace_all(str_to_lower(.data$unit_in), "\\s+", ""),
-      alias_out = str_replace_all(str_to_lower(.data$unit_out), "\\s+", "")
+      alias_in = alias_in,
+      alias_out = alias_out
     ) |>
       # input id
       left_join(

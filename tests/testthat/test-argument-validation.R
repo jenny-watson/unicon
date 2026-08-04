@@ -46,7 +46,7 @@ test_that("unicon_full returns the full conversion table with pull = FALSE", {
   expect_s3_class(out, "data.frame")
   expect_equal(nrow(out), 2L)
   expect_named(out, c(
-    "unit_in", "unit_out", "alias_in", "alias_out", "id_in", "id_srp",
+    "unit_in", "unit_out", "alias_in", "alias_out", "id_in", "srp_in",
     "id_out", "error_in", "error_srp", "error_out", "value_in",
     "value_srp", "value_out"
   ))
@@ -58,7 +58,7 @@ test_that("unicon_lite returns the conversion table columns", {
   expect_s3_class(out, "data.frame")
   expect_equal(nrow(out), 2L)
   expect_named(out, c(
-    "id_in", "id_out", "id_srp", "error_in", "error_srp", "error_out",
+    "id_in", "id_out", "srp_in", "error_in", "error_srp", "error_out",
     "value_in", "value_srp", "value_out"
   ))
 })
@@ -138,7 +138,7 @@ test_that("unicon_full and unicon_lite align when IDs are provided directly", {
 
   expect_equal(full_tbl$id_in, lite_tbl$id_in)
   expect_equal(full_tbl$id_out, lite_tbl$id_out)
-  expect_equal(full_tbl$id_srp, lite_tbl$id_srp)
+  expect_equal(full_tbl$srp_in, lite_tbl$srp_in)
   expect_equal(full_tbl$error_in, lite_tbl$error_in)
   expect_equal(full_tbl$error_srp, lite_tbl$error_srp)
   expect_equal(full_tbl$error_out, lite_tbl$error_out)
