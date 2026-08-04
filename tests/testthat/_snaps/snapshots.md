@@ -71,25 +71,10 @@
       # i 4 more variables: error_out <lgl>, value_in <dbl>, value_srp <dbl>,
       #   value_out <dbl>
 
-# unicon_lite pull = TRUE snapshots
+# unicon_lite conversion table snapshot
 
     Code
-      unicon_lite(1, "km", "mile", pull = TRUE)
-    Output
-      [1] 0.6213727
-    Code
-      unicon_lite(c(0, 100, -40), "C", "fahrenheit", pull = TRUE)
-    Output
-      [1]  31.99748 211.98308 -39.99676
-    Code
-      unicon_lite(c(1, 2.5), "kg", "g", pull = TRUE)
-    Output
-      [1] 1000 2500
-
-# unicon_lite pull = FALSE snapshot
-
-    Code
-      unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"), pull = FALSE)
+      unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"))
     Output
       # A tibble: 2 x 9
         id_in id_out id_srp error_in error_srp error_out value_in value_srp value_out
@@ -97,12 +82,10 @@
       1 m     cm     m      FALSE    FALSE     FALSE            1         1       100
       2 kg    g      g      FALSE    FALSE     FALSE            2      2000      2000
 
-# unicon_lite missing id_out snapshots
+# unicon_lite missing id_out snapshot
 
     Code
-      unicon_lite(c(100, 1), c("cm", "kg"), pull = FALSE)
-    Message
-      No output ID given. Converting all values to standard reference unit.
+      unicon_lite(c(100, 1), c("cm", "kg"))
     Output
       # A tibble: 2 x 9
         id_in id_out id_srp error_in error_srp error_out value_in value_srp value_out
@@ -110,13 +93,10 @@
       1 cm    m      m      FALSE    NA        FALSE          100         1         1
       2 kg    g      g      FALSE    NA        FALSE            1      1000      1000
 
-# unicon_lite unrecognised id snapshots
+# unicon_lite unrecognised id snapshot
 
     Code
-      suppressMessages(unicon_lite(1, "not_a_unit", "km", pull = FALSE))
-    Condition
-      Warning in `unicon_lite()`:
-      Some input unit IDs were invalid.
+      unicon_lite(1, "not_a_unit", "km")
     Output
       # A tibble: 1 x 9
         id_in  id_out id_srp error_in error_srp error_out value_in value_srp value_out
@@ -126,13 +106,9 @@
 # unicon_lite mismatched unit types snapshot
 
     Code
-      suppressMessages(unicon_lite(1, "m", "g", pull = FALSE))
-    Condition
-      Warning in `unicon_lite()`:
-      Some requested conversions were not valid (unit type mismatch).
+      unicon_lite(1, "m", "g")
     Output
       # A tibble: 1 x 9
         id_in id_out id_srp error_in error_srp error_out value_in value_srp value_out
         <chr> <chr>  <chr>  <lgl>    <lgl>     <lgl>        <dbl>     <dbl>     <dbl>
       1 m     g      m      FALSE    TRUE      FALSE            1         1        NA
-

@@ -40,37 +40,27 @@ test_that("unicon_full mismatched unit types snapshot", {
   )
 })
 
-test_that("unicon_lite pull = TRUE snapshots", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-
-  expect_snapshot({
-    unicon_lite(1, "km", "mile", pull = TRUE)
-    unicon_lite(c(0, 100, -40), "C", "fahrenheit", pull = TRUE)
-    unicon_lite(c(1, 2.5), "kg", "g", pull = TRUE)
-  })
-})
-
-test_that("unicon_lite pull = FALSE snapshot", {
+test_that("unicon_lite conversion table snapshot", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
-    unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"), pull = FALSE)
+    unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"))
   )
 })
 
-test_that("unicon_lite missing id_out snapshots", {
+test_that("unicon_lite missing id_out snapshot", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
-    unicon_lite(c(100, 1), c("cm", "kg"), pull = FALSE)
+    unicon_lite(c(100, 1), c("cm", "kg"))
   )
 })
 
-test_that("unicon_lite unrecognised id snapshots", {
+test_that("unicon_lite unrecognised id snapshot", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
-    suppressMessages(unicon_lite(1, "not_a_unit", "km", pull = FALSE))
+    unicon_lite(1, "not_a_unit", "km")
   )
 })
 
@@ -78,6 +68,6 @@ test_that("unicon_lite mismatched unit types snapshot", {
   withr::local_options(list(lifecycle_verbosity = "quiet"))
 
   expect_snapshot(
-    suppressMessages(unicon_lite(1, "m", "g", pull = FALSE))
+    unicon_lite(1, "m", "g")
   )
 })
