@@ -43,8 +43,12 @@ unicon_own = function(base_id = NA,
 
   ## make data that is available
 
+  own_base_data <- NULL
+  own_derived_data <- NULL
+  own_operators_data <- NULL
+
   if(!is.na(base_id) &&
-     !is.na(alias) &&
+     !is.na(base_alias) &&
      !is.na(category) &&
      !is.na(srp) &&
      !is.na(slope) &&
@@ -61,36 +65,52 @@ unicon_own = function(base_id = NA,
       intercept = intercept
     )
 
-  }
+    if(!is.na(derived_id) &&
+       !is.na(x) &&
+       !is.na(y) &&
+       !is.na(operator)) {
 
-  if(!is.na(derived_id) &&
-     !is.na(x) &&
-     !is.na(y) &&
-     !is.na(operator)) {
+      message("Creating derived data")
 
-    message("Creating derived data")
+      own_derived_data <- unicon_make_own_derived_data(
+        id = derived_id,
+        x = x,
+        y = y,
+        operator = operator
+      )
 
-    own_derived_data < - unicon_make_own_derived_data(
-      id = derived_id,
-      x = x,
-      y = y,
-      operator = operator
-    )
+      if(!is.na(operator_id) &&
+         !is.na(fun) &&
+         !is.na(operator_alias)) {
 
-  }
+        message("Creating operator data")
 
-  if(!is.na(operator) &&
-     !is.na(operator_id) &&
-     !is.na(fun) &&
-     !is.na(alias)) {
+        own_operators_data <- unicon_make_own_operators_data(
+          operator = operator,
+          id = operator_id,
+          fun = fun,
+          alias = operator_alias
+        )
 
-    message("Creating operator data")
+      } else {
 
-    own_operators_data <- unicon_make_own_operators_data(
-      operator = operator,
-      id = operator_id,
-      fun = fun,
-      alias = operator_alias
+        warning(
+          "Derived data includes an operator but no operator dataset has been ",
+          "provided. Please also supply `operator_id`, `fun`, and ",
+          "`operator_alias` to add an operator dataset, or ensure the operator ",
+          "is already present in the package data."
+        )
+
+      }
+
+    }
+
+  } else {
+
+    stop(
+      "Not enough data provided to create a dataset. At minimum, `base_id`, ",
+      "`base_alias`, `category`, `srp`, `slope`, and `intercept` must all be ",
+      "supplied."
     )
 
   }
@@ -108,7 +128,7 @@ unicon_own = function(base_id = NA,
 
   ## load data and join to user's data
 
-  if(!is.na(own_base_data)) {
+  if(!is.null(own_base_data)) {
 
     base_data <- unicon_make_base_data_from_jsons(base_dir) |>
       bind_rows(own_base_data)
@@ -119,7 +139,7 @@ unicon_own = function(base_id = NA,
 
   }
 
-  if(!is.na(own_derived_data)) {
+  if(!is.null(own_derived_data)) {
 
     derived_data <- unicon_make_derived_data_from_jsons(derived_dir) |>
       bind_rows(own_derived_data)
@@ -130,7 +150,7 @@ unicon_own = function(base_id = NA,
 
   }
 
-  if(!is.na(own_operators_data)) {
+  if(!is.null(own_operators_data)) {
 
     operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
       bind_rows(own_operators_data)
