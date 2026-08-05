@@ -163,6 +163,4 @@ unicon_own = function(base_id = NA,
     )
   )
 
-  ## access like own_data <- unicon_make_own_package_data(), own_data$unit_alias
-
 }
