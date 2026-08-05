@@ -65,12 +65,18 @@ unicon_full <- function(value_in,
 
     ## add in extra columns inc aliases
 
-    conv_tab = select(
-        conv_tab_lite,
-        conv_tab_pre$unit_in,
-        conv_tab_pre$unit_out,
-        conv_tab_pre$alias_in,
-        conv_tab_pre$alias_out,
+    conv_tab = conv_tab_lite |>
+      mutate(
+        unit_in = conv_tab_pre$unit_in,
+        unit_out = conv_tab_pre$unit_out,
+        alias_in = conv_tab_pre$alias_in,
+        alias_out = conv_tab_pre$alias_out
+      ) |>
+      select(
+        .data$unit_in,
+        .data$unit_out,
+        .data$alias_in,
+        .data$alias_out,
         .data$id_in,
         id_srp = .data$srp_in, # used to drive calcs, srp_out for check only
         .data$id_out,
