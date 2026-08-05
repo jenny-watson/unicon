@@ -5,156 +5,41 @@ library(tidyr)
 library(stringr)
 
 ## record environment state
+
 env_in <- ls()
 
 ## folders
+
 base_dir <- file.path("inst", "units", "base")
+
 derived_dir <- file.path("inst", "units", "derived")
+
 operators_dir <- file.path("inst", "units", "operators")
 
-## generic function for loading json files
-load_json_files <- function(file_pathway) {
-  paths <- list.files(
-    path = file_pathway, ## folder pathway
-    pattern = "\\.json$", # file type
-    recursive = TRUE, ## files inside sub folders
-    full.names = TRUE
-  )
+## load data
 
-  # read in all json files in folder
-  json <- map(paths, ~ read_json(.x, simplifyVector = FALSE)) |>
-    set_names(str_remove(
-      basename(paths), ## use file name as list names (rather than numbers)
-      ".json" ## remove ext
-    ))
+base_data <- unicon_make_base_data_from_jsons(base_dir)
 
-  json
-}
+derived_data <- unicon_make_derived_data_from_jsons(derived_dir)
 
-## load base data
-base_data <- imap_dfr(
-  load_json_files(base_dir), ## use function to load relevant files
-  ~ tibble(
-    id = .y, ## get into df rather than list
-    alias = .x$alias,
-    category = .x$category,
-    srp = .x$srp,
-    model = list(.x$model)
-  )
-) |>
-  unnest_wider(model) |> # further unlist model
-  mutate(alias = as.character(alias)) # was list before
-
-## load derived data
-derived_data <- imap_dfr(
-  load_json_files(derived_dir),
-  ~ tibble(
-    id = .y,
-    x = .x$x,
-    y = .x$y,
-    operator = .x$operator
-  )
-)
-
-## load operators data
-operators_data <- imap_dfr(
-  load_json_files(operators_dir),
-  ~ tibble(
-    operator = .y,
-    id = .x$id,
-    fun = .x$fun,
-    alias = .x$alias
-  )
-)
+operators_data <- unicon_make_operators_data_from_jsons(operators_dir)
 
 ## join datasets together
-join <- derived_data |>
-  ## join to x
-  left_join(
-    base_data |>
-      rename_with(~ paste0(., ".x")),
-    by = c("x" = "category.x"),
-    relationship = "many-to-many"
-  ) |>
-  ## join to y
-  left_join(
-    base_data |>
-      rename_with(~ paste0(., ".y")),
-    by = c("y" = "category.y"),
-    relationship = "many-to-many"
-  ) |>
-  ## join to operators
-  left_join(
-    operators_data |>
-      rename_with(~ paste0(., ".o")),
-    by = c("operator" = "operator.o"),
-    relationship = "many-to-many"
-  ) |>
-  ## format and calculate
-  mutate(
-    category = id,
-    id = paste0(id.x, id.o, id.y),
-    alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-    srp = paste0(srp.x, id.o, srp.y),
-    slope = pmap_dbl(list(fun.o,
-                          slope.x,
-                          slope.y),
-                     function(op, x, y)
-                     do.call(op, list(x, y))),
-    intercept = 0,
-    type = "derived",
-    .keep = "none"
-  ) |>
-  ## bind to base data
-  bind_rows(
-    base_data |>
-      mutate(type = "base")
-  )
+
+join <- unicon_join_datasets(base_data,
+                             derived_data,
+                             operators_data)
 
 ## final datasets
 
-# alias
-## make sure complete and clean
-unit_alias <- join |>
-  distinct(id, alias) |> ## ensure all unique
-  ## add in folder name as alias to ensure all combinations captured
-  bind_rows(
-    join |>
-      distinct(id) |>
-      mutate(alias = id)
-  ) |>
-  # remove whitespace and upper case
-  mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", "")) |>
-  distinct() |>
-  arrange(id)
+unit_alias <- unicon_make_unit_alias(join)
 
-# standard units
-unit_srp <- join |>
-  distinct(
-    id,
-    type,
-    category,
-    srp
-  )
+unit_srp <- unicon_make_unit_srp(join)
 
-# models
-## add in blanks
-unit_models <- join |>
-  distinct(
-    id,
-    slope,
-    intercept
-  ) |>
-  bind_rows(
-    tibble(id = NA, slope = NA, intercept = NA)
-  ) |>
-  ## to get list back
-  nest(model = c(slope, intercept)) |>
-  # make into list rather than mini dataframes
-  mutate(model = map(model, ~ as.list(.x)))
-
+unit_models <- unicon_make_unit_models(join)
 
 ## write to package internal data
+
 usethis::use_data(
   unit_alias,
   unit_models,
@@ -164,6 +49,7 @@ usethis::use_data(
 )
 
 ## clean env
+
 rm(list = setdiff(
   ls(),
   env_in
