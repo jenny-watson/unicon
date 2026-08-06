@@ -15,7 +15,8 @@ Suggests:
     jsonlite,
     rmarkdown,
     testthat,
-    usethis
+    usethis,
+    withr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: 
