@@ -144,15 +144,7 @@ The authors recognise that every unit conversion that users may want to use this
 - Joins base, derived, and operator datasets together using `unicon_join_datasets`
 - Creates required mappings for use in `unicon_full` (and `unicon_lite`) using `unicon_make_unit_*` functions
 
-The three datasets are returned as a list; to access this:
-
-```{r}
-
-own_data <- unicon_make_own_package_data(...)
-
-own_unit_alias <- own_data$unit_alias
-
-```
+The three datasets are built and stored internally; the active state can be checked with `unicon_own_status()` and the package data can be queried via `unicon_help()` after calling `unicon_own()`.
 
 Users can add to base, derived, and operator data at the same time, or just one dataset, as all arguments in `unicon_own` default to `NA`. It is hypothesised that users will mostly add their own base data, with derived data being rarely needed to be added. The author's don't envisage a use for other operators apart from multiply and divide, but please get in touch if you disagree with us!
 
@@ -160,16 +152,22 @@ An example of use is as follows: Users could have a defined 'package' size of 12
 
 ```{r}
 
-unicon_own(base_id = c(rep(lp, 2), rep(sp, 2)),
-                       base_alias = c("lp", "large package", "sp", "small package"),
-                       category = c(rep("mass", 4)),
-                       srp = c(rep("g", 4)),
-                       slope = c(rep(12500, 2), rep(6250, 2))) # notice don't need intercept as default to 0
+lp <- "lp"
+sp <- "sp"
+
+unicon_own(
+  base_id    = c(rep(lp, 2), rep(sp, 2)),
+  base_alias = c("lp", "large package", "sp", "small package"),
+  category   = c(rep("mass", 4)),
+  srp        = c(rep("g", 4)),
+  slope      = c(rep(12500, 2), rep(6250, 2)),
+  intercept  = 0  # default; shown for clarity
+)
 
 unicon_own_status()
 
 unicon_help() |>
-  filter(id %in% c("lp", "sp"))
+  dplyr::filter(id %in% c("lp", "sp"))
 
 ```
 

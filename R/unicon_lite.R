@@ -19,6 +19,9 @@ unicon_lite <- function(value_in,
 
 
   # compose output table
+  us <- get_unit_srp()
+  um <- get_unit_models()
+
   conv_tab_tib <- tibble(
     value_in = value_in,
     id_in = id_in,
@@ -27,7 +30,7 @@ unicon_lite <- function(value_in,
     # srp unit for input id
     left_join(
       select(
-        unit_srp,
+        us,
         id_in = id,
         srp_in = srp
       ),
@@ -37,7 +40,7 @@ unicon_lite <- function(value_in,
     # srp unit for output id, needed for checks only
     left_join(
       select(
-        unit_srp,
+        us,
         id_out = id,
         srp_out = srp
       ),
@@ -57,7 +60,7 @@ unicon_lite <- function(value_in,
     # model for input <--> srp
     left_join(
       rename(
-        unit_models,
+        um,
         id_in = id,
         model_in = model
       ),
@@ -67,7 +70,7 @@ unicon_lite <- function(value_in,
     # model for srp <--> output
     left_join(
       rename(
-        unit_models,
+        um,
         id_out = id,
         model_out = model
       ),

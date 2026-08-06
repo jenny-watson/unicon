@@ -71,8 +71,9 @@ unicon_full <- function(value_in,
   alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
   alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
+  ua <- get_unit_alias()
 
-  if (any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)) {
+  if (any(alias_in %in% ua$alias) || any(alias_out %in% ua$alias)) {
 
     # compose output table
     conv_tab_pre <- tibble(
@@ -85,7 +86,7 @@ unicon_full <- function(value_in,
       # input id
       left_join(
         select(
-          unit_alias,
+          ua,
           alias_in = alias,
           id_in = id
         ),
@@ -95,7 +96,7 @@ unicon_full <- function(value_in,
       # output id if given
       left_join(
         select(
-          unit_alias,
+          ua,
           alias_out = alias,
           id_out = id
         ),
