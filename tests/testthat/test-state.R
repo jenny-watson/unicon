@@ -190,3 +190,47 @@ test_that("unicon_full reverts to package data after reset", {
   result <- unicon_full(1, "largepackage", "g", pull = TRUE)
   expect_true(is.na(result))
 })
+
+## ---- unicon_help reflects active state --------------------------------------
+
+test_that("unicon_help returns package data by default", {
+  unicon_reset_units()
+  h <- unicon_help()
+  expect_true(is.data.frame(h))
+  expect_true(all(c("id", "alias") %in% names(h)))
+  expect_false("lp" %in% h$id)
+})
+
+test_that("unicon_help shows custom units after unicon_own", {
+  on.exit(unicon_reset_units(), add = TRUE)
+
+  unicon_own(
+    base_id    = c("lp", "lp"),
+    base_alias = c("lp", "largepackage"),
+    category   = c("mass", "mass"),
+    srp        = c("g", "g"),
+    slope      = c(12500, 12500),
+    intercept  = c(0, 0)
+  )
+
+  h <- unicon_help()
+  expect_true("lp" %in% h$id)
+  expect_true("largepackage" %in% h$alias)
+})
+
+test_that("unicon_help reverts to package data after reset", {
+  on.exit(unicon_reset_units(), add = TRUE)
+
+  unicon_own(
+    base_id    = c("lp", "lp"),
+    base_alias = c("lp", "largepackage"),
+    category   = c("mass", "mass"),
+    srp        = c("g", "g"),
+    slope      = c(12500, 12500),
+    intercept  = c(0, 0)
+  )
+  unicon_reset_units()
+
+  h <- unicon_help()
+  expect_false("lp" %in% h$id)
+})

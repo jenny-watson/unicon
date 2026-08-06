@@ -11,13 +11,13 @@ unicon_help <- function(...) {
   # list up args
   args <- list(...)
 
-  # full unit data
-  unit_full <- unit_alias |>
-    left_join(unit_srp,
+  # full unit data — always reads from the active state so custom data is shown
+  unit_full <- get_unit_alias() |>
+    left_join(get_unit_srp(),
       by = "id",
       multiple = "any"
     ) |>
-    left_join(unit_models,
+    left_join(get_unit_models(),
       by = "id",
       multiple = "any"
     )
