@@ -10,7 +10,7 @@
 #' @import dplyr purrr
 #' @export
 
-unicon_join_datasets = function(base,
+unicon_join_datasets <- function(base,
                                 derived,
                                 operators) {
 
