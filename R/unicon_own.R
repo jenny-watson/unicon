@@ -23,8 +23,7 @@
 #' @param operator_alias alternative operator names, many of these can map to
 #' operator_id
 #'
-#' @returns A list of three dataframes to use as own data in `unicon_full` and
-#' `unicon_lite`.
+#' @returns Updated package data.
 #' @export
 
 unicon_own = function(base_id = NA,
@@ -201,18 +200,18 @@ unicon_own = function(base_id = NA,
 
   ## final datasets
 
-  unit_alias <- unicon_make_unit_alias(join)
+  alias <- unicon_make_unit_alias(join)
 
-  unit_srp <- unicon_make_unit_srp(join)
+  srp <- unicon_make_unit_srp(join)
 
-  unit_models <- unicon_make_unit_models(join)
+  models <- unicon_make_unit_models(join)
 
-  return(
-    list(
-      unit_alias,
-      unit_srp,
-      unit_models
-    )
-  )
+  ## replace package data
+
+  .unicon_state$unit_alias <- alias
+  .unicon_state$unit_srp <- srp
+  .unicon_state$unit_models <- models
+
+  .unicon_state$using_custom <- TRUE
 
 }
