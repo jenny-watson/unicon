@@ -1,6 +1,6 @@
 #' @Title Make own unicon package data
 #' @description If data is missing from unicon, users can add there own in. They
-#' could even make a request to the authours on Github to request this data be
+#' could even make a request to the authors on Github to request this data be
 #' included directly if a use case is large enough.
 #'
 #' @param base_id the default name of the base metric, needs to be consistent
@@ -19,7 +19,7 @@
 #' @param operator the default operator name used to calculate the metric using
 #' x and y
 #' @param operator_id either __ or .
-#' @param fun the perserved R function e.g. /, *, +, -
+#' @param fun the preserved R function e.g. /, *, +, -
 #' @param operator_alias alternative operator names, many of these can map to
 #' operator_id
 #'
