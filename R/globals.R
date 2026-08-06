@@ -1,4 +1,3 @@
-# R/globals.R
 # instead of .data$ - tidy version
 
 utils::globalVariables(
