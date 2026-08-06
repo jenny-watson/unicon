@@ -134,8 +134,26 @@ test_that("unicon_own stops when base data fields are missing", {
   )
 })
 
-test_that("unicon_own warns when derived data is provided without operator data", {
-  expect_warning(
+test_that("unicon_own stops when derived data x/y categories are not in base data", {
+  expect_error(
+    unicon_own(
+      base_id    = "density",
+      base_alias = "density",
+      category   = "density",
+      srp        = "density",
+      slope      = 1,
+      intercept  = 0,
+      derived_id = "myvol",
+      x          = "not_a_real_category",
+      y          = "length",
+      operator   = "per"
+    ),
+    "do not exist in the base data"
+  )
+})
+
+test_that("unicon_own stops when derived data operator is not in operator data", {
+  expect_error(
     unicon_own(
       base_id    = "density",
       base_alias = "density",
@@ -146,8 +164,9 @@ test_that("unicon_own warns when derived data is provided without operator data"
       derived_id = "myvol",
       x          = "mass",
       y          = "length",
-      operator   = "per"
+      operator   = "not_a_real_operator"
     ),
-    "no operator dataset has been provided"
+    "do not exist in the operator data"
   )
 })
+

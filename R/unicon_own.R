@@ -92,15 +92,6 @@ unicon_own = function(base_id = NA,
           alias = operator_alias
         )
 
-      } else {
-
-        warning(
-          "Derived data includes an operator but no operator dataset has been ",
-          "provided. Please also supply `operator_id`, `fun`, and ",
-          "`operator_alias` to add an operator dataset, or ensure the operator ",
-          "is already present in the package data."
-        )
-
       }
 
     }
@@ -162,6 +153,47 @@ unicon_own = function(base_id = NA,
   }
 
   ## join datasets together
+
+  ## check derived data categories and operators exist in combined data
+
+  if(!is.null(own_derived_data)) {
+
+    missing_x <- unique(own_derived_data$x[
+      !own_derived_data$x %in% base_data$category
+    ])
+
+    missing_y <- unique(own_derived_data$y[
+      !own_derived_data$y %in% base_data$category
+    ])
+
+    if(length(missing_x) > 0 || length(missing_y) > 0) {
+
+      stop(
+        "The following categories used in derived data do not exist in the ",
+        "base data. Please add base data for these categories first.\n",
+        if(length(missing_x) > 0)
+          paste0("  x: ", paste(missing_x, collapse = ", ")),
+        if(length(missing_y) > 0)
+          paste0("\n  y: ", paste(missing_y, collapse = ", "))
+      )
+
+    }
+
+    missing_operators <- unique(own_derived_data$operator[
+      !own_derived_data$operator %in% operators_data$operator
+    ])
+
+    if(length(missing_operators) > 0) {
+
+      stop(
+        "The following operators used in derived data do not exist in the ",
+        "operator data. Please add operator data for these operators first: ",
+        paste(missing_operators, collapse = ", ")
+      )
+
+    }
+
+  }
 
   join <- unicon_join_datasets(base_data,
                                derived_data,
