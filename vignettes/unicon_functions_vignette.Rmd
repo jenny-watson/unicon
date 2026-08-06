@@ -160,15 +160,16 @@ An example of use is as follows: Users could have a defined 'package' size of 12
 
 ```{r}
 
-own_data <- unicon_own(base_id = c(rep(lp, 2), rep(sp, 2)),
+unicon_own(base_id = c(rep(lp, 2), rep(sp, 2)),
                        base_alias = c("lp", "large package", "sp", "small package"),
                        category = c(rep("mass", 4)),
                        srp = c(rep("g", 4)),
                        slope = c(rep(12500, 2), rep(6250, 2))) # notice don't need intercept as default to 0
 
-own_unit_alias <- own_data$unit_alias |>
-  filter(id %in% c(lp, sp)) |>
-  glimpse()
+unicon_own_status()
+
+unicon_help() |>
+  filter(id %in% c("lp", "sp"))
 
 ```
 
@@ -185,4 +186,12 @@ unicon_full(
 ```
 
 Authors also suggest that users could use this functionality for money exchange rates between different currencies, where the exchange rate can easily be updated.
+
+if users want to revert back to the package data, all they need to do it:
+
+```{r}
+
+unicon_reset_units()
+
+```
 
