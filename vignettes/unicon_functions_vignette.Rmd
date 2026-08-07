@@ -143,6 +143,7 @@ The authors recognise that every unit conversion that users may want to use this
 - Binds data to the existing package data, stored as `.json` files in the `inst` folder using `unicon_make_*_data_from_jsons` functions
 - Joins base, derived, and operator datasets together using `unicon_join_datasets`
 - Creates required mappings for use in `unicon_full` (and `unicon_lite`) using `unicon_make_unit_*` functions
+- Updates the package data automatically by altering `.unicon_state`
 
 The three datasets are built and stored internally; the active state can be checked with `unicon_own_status()` and the package data can be queried via `unicon_help()` after calling `unicon_own()`.
 
@@ -158,8 +159,8 @@ sp <- "sp"
 unicon_own(
   base_id    = c(rep(lp, 2), rep(sp, 2)),
   base_alias = c("lp", "large package", "sp", "small package"),
-  category   = c(rep("mass", 4)),
-  srp        = c(rep("g", 4)),
+  category   = "mass",
+  srp        = "g",
   slope      = c(rep(12500, 2), rep(6250, 2)),
   intercept  = 0  # default; shown for clarity
 )
@@ -171,7 +172,7 @@ unicon_help() |>
 
 ```
 
-The use `unicon_full` as usual:
+Then use `unicon_full` as usual:
 
 ```{r}
 
@@ -185,7 +186,7 @@ unicon_full(
 
 Authors also suggest that users could use this functionality for money exchange rates between different currencies, where the exchange rate can easily be updated.
 
-if users want to revert back to the package data, all they need to do it:
+if users want to revert back to the package data, all they need to do is:
 
 ```{r}
 

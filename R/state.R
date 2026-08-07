@@ -26,7 +26,8 @@ unicon_reset_units <- function() {
 
 }
 
-#' @title Tells user if using their own data or package data
+#' @title Tells user if using their own data or package data. `TRUE` is using
+#' user's own data.
 #' @export
 
 unicon_own_status <- function() {
