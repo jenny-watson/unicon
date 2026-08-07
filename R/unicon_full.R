@@ -71,7 +71,7 @@ unicon_full <- function(value_in,
   alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
   alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
-  ua <- get_unit_alias()
+  ua <- .unicon_state$unit_alias
 
   if (any(alias_in %in% ua$alias) || any(alias_out %in% ua$alias)) {
 

@@ -2,25 +2,25 @@
 
 ## ---- default behaviour unchanged --------------------------------------------
 
-test_that("get_unit_alias returns package data by default", {
+test_that(".unicon_state$unit_alias contains package data by default", {
   unicon_reset_units()
-  ua <- unicon:::get_unit_alias()
+  ua <- unicon:::.unicon_state$unit_alias
   expect_true(is.data.frame(ua))
   expect_true(all(c("id", "alias") %in% names(ua)))
   expect_gt(nrow(ua), 0L)
 })
 
-test_that("get_unit_srp returns package data by default", {
+test_that(".unicon_state$unit_srp contains package data by default", {
   unicon_reset_units()
-  us <- unicon:::get_unit_srp()
+  us <- unicon:::.unicon_state$unit_srp
   expect_true(is.data.frame(us))
   expect_true(all(c("id", "srp") %in% names(us)))
   expect_gt(nrow(us), 0L)
 })
 
-test_that("get_unit_models returns package data by default", {
+test_that(".unicon_state$unit_models contains package data by default", {
   unicon_reset_units()
-  um <- unicon:::get_unit_models()
+  um <- unicon:::.unicon_state$unit_models
   expect_true(is.data.frame(um))
   expect_true(all(c("id", "model") %in% names(um)))
   expect_gt(nrow(um), 0L)

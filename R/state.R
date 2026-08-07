@@ -26,14 +26,6 @@ unicon_reset_units <- function() {
 
 }
 
-## Internal getters — used by conversion functions for zero-overhead lookup
-
-get_unit_alias <- function() .unicon_state$unit_alias
-
-get_unit_srp <- function() .unicon_state$unit_srp
-
-get_unit_models <- function() .unicon_state$unit_models
-
 #' @title Tells user if using their own data or package data
 #' @export
 

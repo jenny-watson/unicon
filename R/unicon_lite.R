@@ -19,8 +19,8 @@ unicon_lite <- function(value_in,
 
 
   # compose output table
-  us <- get_unit_srp()
-  um <- get_unit_models()
+  us <- .unicon_state$unit_srp
+  um <- .unicon_state$unit_models
 
   conv_tab_tib <- tibble(
     value_in = value_in,

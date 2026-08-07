@@ -12,12 +12,12 @@ unicon_help <- function(...) {
   args <- list(...)
 
   # full unit data — always reads from the active state so custom data is shown
-  unit_full <- get_unit_alias() |>
-    left_join(get_unit_srp(),
+  unit_full <- .unicon_state$unit_alias |>
+    left_join(.unicon_state$unit_srp,
       by = "id",
       multiple = "any"
     ) |>
-    left_join(get_unit_models(),
+    left_join(.unicon_state$unit_models,
       by = "id",
       multiple = "any"
     )
