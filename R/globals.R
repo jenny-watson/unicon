@@ -8,6 +8,7 @@ utils::globalVariables(
     "error_srp",
     "id_in",
     "id_out",
+    "id_out_not_na",
     "model",
     "model_in",
     "model_out",
