@@ -74,6 +74,21 @@ unicon_full <- function(value_in,
 
   if (any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)) {
 
+    ## if id_out is NA, replace with srp (default functionality in unicon_lite)
+
+    check_id_out = unit_alias |>
+      filter(
+        alias %in% alias_in
+      ) |>
+      left_join(
+        unit_srp,
+        by = "id"
+      ) |>
+      distinct(
+        id_in = id,
+        id_out_not_na = srp
+      )
+
     # compose output table
     conv_tab_pre <- tibble(
       value_in = value_in,
@@ -101,6 +116,21 @@ unicon_full <- function(value_in,
         ),
         by = "alias_out",
         multiple = "any"
+      ) |>
+      # if id_out NA, replace
+      left_join(
+        check_id_out,
+        by = "id_in"
+      ) |>
+      mutate(
+        id_out = if_else(
+          is.na(id_out),
+          id_out_not_na,
+          id_out
+        )
+      ) |>
+      select(
+        -id_out_not_na
       )
 
     ## apply the unicon_lite function
@@ -115,20 +145,15 @@ unicon_full <- function(value_in,
     ## binding as row order preserved and if id_out is NA, cant join
     ## no row_order as upsets else{} branch
 
-    conv_tab <- bind_cols(
-      select(conv_tab_pre, -id_out),
-      select(
-        conv_tab_lite,
-        id_out,
-        srp_in,
-        error_in,
-        error_srp,
-        error_out,
-        value_srp,
-        value_out
+    conv_tab = full_join(
+      conv_tab_pre,
+      conv_tab_lite,
+      by = c(
+        "value_in",
+        "id_in",
+        "id_out"
       )
     )
-
 
   } else {
 
