@@ -186,7 +186,7 @@ unicon_full(
 
 Authors also suggest that users could use this functionality for money exchange rates between different currencies, where the exchange rate can easily be updated.
 
-if users want to revert back to the package data, all they need to do is:
+If users want to revert back to the package data, all they need to do is:
 
 ```{r}
 
@@ -194,3 +194,37 @@ unicon_reset_units()
 
 ```
 
+# `unicon_advance`
+
+The `unicon_advance` function is for the hard-core unit converters out there - those that have two metrics and want to create a third metric in the desired unit.
+
+The metric relationships that are stored in the `relationships` package dataset are:
+
+```{r}
+
+relationships
+
+```
+
+The beady eyed user will see that the same relationship is repeated four times, so that every combination of `id`, `x`, `y`, and `operator` is included.
+
+Additionally, if users add their own derived data, this will automatically populate the above dataset for use in their workflows.
+
+This functionality works by:
+- Identifying the metric category type for the supplied x and y `unit_in` e.g. kg for weight
+- Identifying the relationship between x and y
+- Calculating the desired metric first in the package's defined SRP for that metric, before using the package's unit conversion functionality to calculate the desired unit for that metric
+
+As an example to how calculate a new metric from existing data is speed from length / time. If `unit_out` is unspecified, the function will convert to the package's SRP, in this example m/s.
+
+```{r unicorn_catrel}
+unicon_catrel(
+  x_unit_in = rep("miles", 6),
+  y_unit_in = rep("hour", 6),
+  x_value_in = c(1, 2, 3, 4, 5, 6),
+  y_value_in = c(9, 8, 7, 5, 4, 2),
+  unit_out = rep("km/day", 6)
+)
+```
+
+Like `unicon_full`, `unicon_advance` has a `pull` argument, and it works in the same way; if set to `TRUE` (default), only the `value_out` is returned with a reduced warning. If set to `FALSE` a tibble is returned which shows all the `unicon_full` functionality for x, y, and the desired unit (we did warn you). This is useful in trouble shooting should an error in data input occur. 
