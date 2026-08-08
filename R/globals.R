@@ -17,6 +17,7 @@ utils::globalVariables(
     "id.y",
     "id_in",
     "id_out",
+    "id_out_not_na",
     "intercept",
     "model",
     "model_in",

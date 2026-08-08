@@ -36,8 +36,8 @@
       # A tibble: 2 x 13
         unit_in unit_out alias_in alias_out id_in srp_in id_out error_in error_srp
         <chr>   <lgl>    <chr>    <chr>     <chr> <chr>  <chr>  <lgl>    <lgl>    
-      1 cm      NA       cm       <NA>      cm    m      m      FALSE    NA       
-      2 kg      NA       kg       <NA>      kg    g      g      FALSE    NA       
+      1 cm      NA       cm       <NA>      cm    m      m      FALSE    FALSE    
+      2 kg      NA       kg       <NA>      kg    g      g      FALSE    FALSE    
       # i 4 more variables: error_out <lgl>, value_in <dbl>, value_srp <dbl>,
       #   value_out <dbl>
 
