@@ -26,7 +26,7 @@ operators_data <- unicon_make_operators_data_from_jsons(operators_dir)
 
 ## make every combination of unit category calculations
 
-relationships <- unicon_make_relationships_data(derived_dir)
+relationships <- unicon_make_relationships_data(derived_data)
 
 ## join datasets together
 
