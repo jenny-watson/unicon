@@ -35,5 +35,7 @@ unicon_make_relationships_data <- function(derived) {
   ) |>
     distinct()
 
+  relationships
+
 }
 
