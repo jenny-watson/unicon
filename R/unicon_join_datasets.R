@@ -58,7 +58,7 @@ unicon_join_datasets <- function(base,
     ) |>
     ## duplicate & wrong units if both base and derived unit
     filter(
-      !(category == "area" & srp == "litre__m"),
+      !(category == "area" & srp == "l__m"),
       !(category == "length" & srp == "ha__m")
     )
 
