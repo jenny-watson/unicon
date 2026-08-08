@@ -132,3 +132,65 @@ Here, the core data presents:
 * `model`, a list column providing the unit's conversion model for converting to the associated `srp` unit
 
 Together, these variables form the core operating dataset for the `unicon` functionality.
+
+# unicon_own
+
+The authors recognise that every unit conversion that users may want to use this package for may not exist within the package data. As such, `unicon_own` allows users to add their own base, derived, and operator data (please refer to `unicon_vignette.Rmd` for more information on how these data differ) and take advantage of the same functionality that builds the out of the box package data. Before users engage, it is recommended that the tibble produced by `unicon_help` be studied, as well as the `.json` files in the `inst` folder, to understand the data structure required to ensure correct functionality. 
+
+`unicon_own` is actually a wrapper function (with many arguments!) which does several things:
+
+- Formats the user's own data in the same format as existing package data using `unicon_make_own_*_data` functions
+- Binds data to the existing package data, stored as `.json` files in the `inst` folder using `unicon_make_*_data_from_jsons` functions
+- Joins base, derived, and operator datasets together using `unicon_join_datasets`
+- Creates required mappings for use in `unicon_full` (and `unicon_lite`) using `unicon_make_unit_*` functions
+- Updates the package data automatically by altering `.unicon_state`
+
+The three datasets are built and stored internally; the active state can be checked with `unicon_own_status()` and the package data can be queried via `unicon_help()` after calling `unicon_own()`.
+
+Users can add to base, derived, and operator data at the same time, or just one dataset, as all arguments in `unicon_own` default to `NA`. It is hypothesised that users will mostly add their own base data, with derived data being rarely needed to be added. The author's don't envisage a use for other operators apart from multiply and divide, but please get in touch if you disagree with us!
+
+An example of use is as follows: Users could have a defined 'package' size of 12.5 kg or 6.25 kg. Users may have information about the number of packages of certain size or the weight in kg of the packages, but not an easy way to convert from one to the other.
+
+```{r}
+
+lp <- "lp"
+sp <- "sp"
+
+unicon_own(
+  base_id    = c(rep(lp, 2), rep(sp, 2)),
+  base_alias = c("lp", "large package", "sp", "small package"),
+  category   = "mass",
+  srp        = "g",
+  slope      = c(rep(12500, 2), rep(6250, 2)),
+  intercept  = 0  # default; shown for clarity
+)
+
+unicon_own_status()
+
+unicon_help() |>
+  dplyr::filter(id %in% c("lp", "sp"))
+
+```
+
+Then use `unicon_full` as usual:
+
+```{r}
+
+unicon_full(
+  value_in = c(3, 5),
+  unit_in = c("large package", "small package"),
+  unit_out = "kg"
+)
+
+```
+
+Authors also suggest that users could use this functionality for money exchange rates between different currencies, where the exchange rate can easily be updated.
+
+if users want to revert back to the package data, all they need to do is:
+
+```{r}
+
+unicon_reset_units()
+
+```
+

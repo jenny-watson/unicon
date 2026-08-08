@@ -71,8 +71,7 @@ unicon_full <- function(value_in,
   alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
   alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
-
-  if (any(alias_in %in% unit_alias$alias) || any(alias_out %in% unit_alias$alias)) {
+  if (any(alias_in %in% .unicon_state$unit_alias$alias) || any(alias_out %in% .unicon_state$unit_alias$alias)) {
 
     ## if id_out is NA, replace with srp (default functionality in unicon_lite)
 
@@ -100,7 +99,7 @@ unicon_full <- function(value_in,
       # input id
       left_join(
         select(
-          unit_alias,
+          .unicon_state$unit_alias,
           alias_in = alias,
           id_in = id
         ),
@@ -110,7 +109,7 @@ unicon_full <- function(value_in,
       # output id if given
       left_join(
         select(
-          unit_alias,
+          .unicon_state$unit_alias,
           alias_out = alias,
           id_out = id
         ),
