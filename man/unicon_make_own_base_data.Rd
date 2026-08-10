@@ -2,7 +2,7 @@
 % Please edit documentation in R/unicon_make_own_data.R
 \name{unicon_make_own_base_data}
 \alias{unicon_make_own_base_data}
-\title{make your own base data for use with unicon's functionaility}
+\title{make your own base data for use with unicon's functionality}
 \usage{
 unicon_make_own_base_data(id, alias, category, srp, slope, intercept = 0)
 }

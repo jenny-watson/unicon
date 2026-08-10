@@ -8,6 +8,5 @@ Used when package loads or to revert after using custom data.}
 unicon_reset_units()
 }
 \description{
-Reset the \verb{unit_*} datasets to the package stored ones.
-Used when package loads or to revert after using custom data.
+Restores \code{.unicon_state} to the built-in package datasets.
 }
