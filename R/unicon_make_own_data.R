@@ -84,14 +84,16 @@ unicon_make_own_base_data = function(id,
 #' When designing your own data please reference the data available using
 #' `unicon_help`. This is used at the users own discretion and they will need to
 #' conduct their own checks for data quality.
-#' @param id the new derived metric
-#' @param x the base (numerator) metric that is used to calculate the current
-#' metric
-#' @param y the base (denominator) metric that is used to calculate the current
-#' metric
-#' @param operator the operator used to calculate the metric using x and y
+#' @param id Character scalar or vector; the new derived metric
+#' @param x Character scalar or vector; the base (numerator) metric that is
+#' used to calculate the current metric
+#' @param y Character scalar or vector; the base (denominator) metric that is
+#' used to calculate the current metric
+#' @param operator Character scalar or vector; the operator used to calculate
+#' the metric using x and y
 #'
-#' @returns A tibble with columns "id", "x", "y", and "operator"
+#' @returns A tibble with columns \code{id}, \code{x}, \code{y}, and
+#' \code{operator}.
 #' @export
 
 unicon_make_own_derived_data = function(id,
@@ -141,12 +143,14 @@ unicon_make_own_derived_data = function(id,
 #' data please reference the data available using `unicon_help`. This is used at
 #' the users own discretion and they will need to conduct their own checks for
 #' data quality. This is not likely to be required.
-#' @param operator the name of the operator
-#' @param id either __ or .
-#' @param fun the preserved R function e.g. /, *, +, -
-#' @param alias alternative names, many of these can map to id
+#' @param operator Character scalar or vector; the name of the operator
+#' @param id Character scalar or vector; either __ or .
+#' @param fun Character scalar or vector; the preserved R function e.g. /, *, +, -
+#' @param alias Character scalar or vector; alternative names, many of these
+#' can map to id
 #'
-#' @returns A tibble with columns "operator", "id", "fun", and "alias"
+#' @returns A tibble with columns \code{operator}, \code{id}, \code{fun}, and
+#' \code{alias}.
 #' @export
 
 unicon_make_own_operators_data = function(operator,
