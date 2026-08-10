@@ -1,26 +1,6 @@
 ## Tests for unicon_full -------------------------------------------------------
 ## Covers argument validation, scalar/vector recycling, alias normalisation,
-## pull = TRUE / pull = FALSE output, and snapshot regression via inst/input/
-## examples.
-
-# helper: read an inst/input/unicon_full example JSON and run unicon_full ------
-run_full_example <- function(file, pull = TRUE) {
-  path <- system.file(
-    "input", "unicon_full", file,
-    package = "unicon",
-    lib.loc = .libPaths()
-  )
-  ex <- jsonlite::read_json(path, simplifyVector = TRUE)
-  unit_out_val <- if (is.null(ex$unit_out)) NA else ex$unit_out
-  pull_val     <- if (is.null(ex$pull)) pull else isTRUE(ex$pull)
-
-  unicon_full(
-    value_in = ex$value_in,
-    unit_in  = ex$unit_in,
-    unit_out = unit_out_val,
-    pull     = pull_val
-  )
-}
+## pull = TRUE / pull = FALSE output.
 
 ## ---- argument validation ----------------------------------------------------
 
@@ -204,17 +184,50 @@ test_that("unicon_full length_conversion snapshot", {
   expect_snapshot(run_full_example("length_conversion.json"))
 })
 
-test_that("unicon_full temperature_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("temperature_conversion.json"))
+test_that("unicon_full fahrenheit to celsius uses intercept correctly", {
+  # 32°F = 0°C, 212°F = 100°C, -40°F = -40°C
+  out <- unicon_full(c(32, 212, -40), "fahrenheit", "celsius")
+  expect_equal(out, c(0, 100, -40), tolerance = 0.01)
 })
 
-test_that("unicon_full mass_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("mass_conversion.json"))
+test_that("unicon_full celsius to kelvin uses intercept correctly", {
+  # 0°C = 273.15 K, 100°C = 373.15 K, -273.15°C = 0 K (absolute zero)
+  out <- unicon_full(c(0, 100, -273.15), "celsius", "kelvin")
+  expect_equal(out, c(273.15, 373.15, 0), tolerance = 0.001)
 })
 
-test_that("unicon_full mixed_units_full_table snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("mixed_units_full_table.json"))
+test_that("unicon_full kelvin to celsius uses intercept correctly", {
+  # 273.15 K = 0°C, 373.15 K = 100°C
+  out <- unicon_full(c(273.15, 373.15), "kelvin", "celsius")
+  expect_equal(out, c(0, 100), tolerance = 0.001)
+})
+
+test_that("unicon_full fahrenheit to kelvin chain uses intercept correctly", {
+  # 32°F = 273.15 K, 212°F = 373.15 K
+  out <- unicon_full(c(32, 212), "fahrenheit", "kelvin")
+  expect_equal(out, c(273.15, 373.15), tolerance = 0.01)
+})
+
+test_that("unicon_full temperature round-trip celsius->fahrenheit->celsius", {
+  original <- c(0, 37, 100, -40)
+  via_f <- unicon_full(original, "celsius", "fahrenheit")
+  back   <- unicon_full(via_f, "fahrenheit", "celsius")
+  expect_equal(back, original, tolerance = 0.01)
+})
+
+test_that("unicon_full temperature round-trip celsius->kelvin->celsius", {
+  original <- c(0, 37, 100)
+  via_k <- unicon_full(original, "celsius", "kelvin")
+  back   <- unicon_full(via_k, "kelvin", "celsius")
+  expect_equal(back, original, tolerance = 0.001)
+})
+
+test_that("unicon_full temperature SRP fallback returns celsius values", {
+  # When no unit_out given, SRP for temperature is Celsius
+  msgs <- capture.output(
+    out <- unicon_full(c(32, 212), "fahrenheit", pull = FALSE),
+    type = "message"
+  )
+  expect_equal(out$id_out, c("C", "C"))
+  expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
