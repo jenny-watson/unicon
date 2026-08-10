@@ -117,11 +117,11 @@ unicon_own = function(base_id = NA,
 
   ## folders with package .json files
 
-  base_dir <- file.path("inst", "units", "base")
+  base_dir <- system.file("units", "base", package = "unicon")
 
-  derived_dir <- file.path("inst", "units", "derived")
+  derived_dir <- system.file("units", "derived", package = "unicon")
 
-  operators_dir <- file.path("inst", "units", "operators")
+  operators_dir <- system.file("units", "operators", package = "unicon")
 
 
   ## load data and join to user's data
