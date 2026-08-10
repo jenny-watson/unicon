@@ -1,6 +1,0 @@
-{
-  "value_in": [1, 2],
-  "unit_in": ["m", "kg"],
-  "unit_out": ["cm", "g"],
-  "pull": false
-}

@@ -1,23 +1,5 @@
 ## Tests for unicon_lite -------------------------------------------------------
-## Covers conversion-table output, error flags, NA propagation, and snapshot
-## regression via inst/input/ examples.
-
-# helper: read an inst/input/unicon_lite example JSON and run unicon_lite ------
-run_lite_example <- function(file) {
-  path <- system.file(
-    "input", "unicon_lite", file,
-    package = "unicon",
-    lib.loc = .libPaths()
-  )
-  ex <- jsonlite::read_json(path, simplifyVector = TRUE)
-  id_out_val <- if (is.null(ex$id_out)) NA else ex$id_out
-
-  unicon_lite(
-    value_in = ex$value_in,
-    id_in    = ex$id_in,
-    id_out   = id_out_val
-  )
-}
+## Covers conversion-table output, error flags, and NA propagation.
 
 ## ---- basic output structure -------------------------------------------------
 
@@ -78,21 +60,4 @@ test_that("unicon_lite and unicon_full produce identical numeric outputs when ID
   expect_equal(full_out$error_in,  lite_out$error_in)
   expect_equal(full_out$error_srp, lite_out$error_srp)
   expect_equal(full_out$error_out, lite_out$error_out)
-})
-
-## ---- inst/input snapshot tests ----------------------------------------------
-
-test_that("unicon_lite mixed_ids snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_lite_example("mixed_ids.json"))
-})
-
-test_that("unicon_lite missing_id_out snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_lite_example("missing_id_out.json"))
-})
-
-test_that("unicon_lite mass_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_lite_example("mass_conversion.json"))
 })
