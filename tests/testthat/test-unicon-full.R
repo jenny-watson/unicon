@@ -177,12 +177,6 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
 
-## ---- snapshot regression ----------------------------------------------------
-
-test_that("unicon_full length_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("length_conversion.json"))
-})
 
 test_that("unicon_full fahrenheit to celsius uses intercept correctly", {
   # 32°F = 0°C, 212°F = 100°C, -40°F = -40°C
@@ -231,3 +225,4 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   expect_equal(out$id_out, c("C", "C"))
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
+

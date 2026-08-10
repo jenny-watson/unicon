@@ -36,7 +36,7 @@ test_that("unicon_own_status is FALSE by default", {
 test_that("unicon_full default behaviour unchanged after reset", {
   unicon_reset_units()
   result <- unicon_full(c(1, 2), c("kg", "g"), "kg", pull = TRUE)
-  expect_equal(result, c(1, 0.001))
+  expect_equal(result, c(1, 0.002))
 })
 
 test_that("unicon_full uses custom alias data when set", {
