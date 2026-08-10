@@ -20,6 +20,10 @@ aliases}
 
 \item{intercept}{defaults to 0. Only use if relationship is not linear}
 }
+\value{
+A tibble with columns \code{id}, \code{alias}, \code{category},
+\code{srp}, \code{slope} and \code{intercept}.
+}
 \description{
 If a user wants to use unicon but the unit they want is not in the package
 data, they are welcome to add their own. This function is for the base data
