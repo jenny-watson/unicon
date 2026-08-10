@@ -323,10 +323,14 @@ unicon_advance <- function(x_unit_in,
 
 operators_helper <- function() {
 
-  operators_dir <- file.path("inst", "units", "operators")
+  operators_dir <- system.file(
+    "units",
+    "operators",
+    package = "unicon"
+  )
 
   operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
-    dplyr::distinct(
+    distinct(
       operator,
       fun
     )
