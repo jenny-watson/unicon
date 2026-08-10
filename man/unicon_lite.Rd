@@ -4,7 +4,7 @@
 \alias{unicon_lite}
 \title{Universal unit conversion}
 \usage{
-unicon_lite(value_in, id_in, id_out = NA, pull = TRUE)
+unicon_lite(value_in, id_in, id_out = NA)
 }
 \arguments{
 \item{value_in}{Numeric scalar or vector, values to convert.}
@@ -16,13 +16,9 @@ unicon_lite(value_in, id_in, id_out = NA, pull = TRUE)
 Must be of \code{length(1L)} or \code{length(value_in)}. Defaults to
 \code{NA}; if default is passed, function will return the standard
 reference point (SRP), which is a standard index (SI) unit measure.}
-
-\item{pull}{Logical; should the function pull out and return the converted
-values (TRUE) or should a full table with conversion record be returned?
-Defaults to TRUE.}
 }
 \description{
-Lite/internal use function for unit conversion; supply a vector
-of input values with associated unit IDs and receive conversions to any
-required outputs.
+The function that does the actual unit conversion and heavy
+lifting. To only be used as part of unicon_full to ensure data checks
+completed.
 }
