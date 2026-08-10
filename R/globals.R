@@ -1,19 +1,36 @@
-# R/globals.R
 # instead of .data$ - tidy version
 
 utils::globalVariables(
   c(
+    "alias",
+    "alias.o",
+    "alias.x",
+    "alias.y",
+    "category",
     "error_in",
     "error_out",
     "error_srp",
+    "fun.o",
+    "id",
+    "id.o",
+    "id.x",
+    "id.y",
     "id_in",
     "id_out",
     "id_out_not_na",
+    "intercept",
     "model",
     "model_in",
     "model_out",
+    "slope",
+    "slope.x",
+    "slope.y",
+    "srp",
+    "srp.x",
+    "srp.y",
     "srp_in",
     "srp_out",
+    "type",
     "value_out",
     "value_srp"
   )
