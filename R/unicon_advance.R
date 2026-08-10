@@ -78,28 +78,28 @@ unicon_advance <- function(x_unit_in,
 
   x_category <- filter(
     unit_srp,
-    .data$srp %in% x_srp_value$srp_in
+    srp %in% x_srp_value$srp_in
   ) |>
     distinct(
-      .data$category,
-      .data$srp
+      category,
+      srp
     )
 
   y_category <- filter(
     unit_srp,
-    .data$srp %in% y_srp_value$srp_in
+    srp %in% y_srp_value$srp_in
   ) |>
     distinct(
-      .data$category,
-      .data$srp
+      category,
+      srp
     )
 
   ## figure out if a relationship exists between x and y
 
   rel <- relationships |>
     filter(
-      .data$x %in% x_category$category,
-      .data$y %in% y_category$category
+      x %in% x_category$category,
+      y %in% y_category$category
     )
 
   ## if no parent relationship, stop
@@ -118,14 +118,14 @@ unicon_advance <- function(x_unit_in,
 
   rel_check <- relationships |>
     count(
-      .data$id,
-      .data$x,
-      .data$y
+      id,
+      x,
+      y
     ) |>
     filter(
-      .data$n == 2,
-      .data$x %in% x_category$category,
-      .data$y %in% y_category$category
+      n == 2,
+      x %in% x_category$category,
+      y %in% y_category$category
     )
 
   ## check and apply operator_in - only needed for mass & volume fractions
@@ -136,7 +136,7 @@ unicon_advance <- function(x_unit_in,
 
       rel <- rel |>
         filter(
-          .data$operator == operator_in
+          operator == operator_in
         )
 
     } else {
@@ -151,13 +151,13 @@ unicon_advance <- function(x_unit_in,
   if (!all(is.na(unit_out))) {
 
     check_unit_out <- unit_alias |>
-      filter(.data$alias %in% unit_out) |>
+      filter(alias %in% unit_out) |>
       left_join(
         unit_srp,
         by = "id"
       ) |>
       filter(
-        !.data$category %in% rel$id
+        !category %in% rel$id
       )
 
     if (nrow(check_unit_out) != 0) {
