@@ -44,19 +44,19 @@ unicon_advance <- function(x_unit_in,
   n <- max(length(x_value_in), length(y_value_in))
 
   if (!length(x_unit_in) %in% c(1L, n)) {
-    stop("Length for x_unit_in argument incompatible with length(x_value_in)")
+    stop("Length for x_unit_in argument incompatible with data length")
   }
   if (!length(y_unit_in) %in% c(1L, n)) {
-    stop("Length for y_unit_in argument incompatible with length(x_value_in)")
+    stop("Length for y_unit_in argument incompatible with data length")
   }
   if (!length(x_value_in) %in% c(1L, n)) {
-    stop("Length for x_value_in argument incompatible with length(x_value_in)")
+    stop("Length for x_value_in argument incompatible with data length")
   }
   if (!length(y_value_in) %in% c(1L, n)) {
-    stop("Length for y_value_in argument incompatible with length(x_value_in)")
+    stop("Length for y_value_in argument incompatible with data length")
   }
   if (!all(is.na(unit_out)) && !length(unit_out) %in% c(1L, n)) {
-    stop("Length for unit_out argument incompatible with length(x_value_in)")
+    stop("Length for unit_out argument incompatible with data length")
   }
 
   ## --- recycle scalar inputs to length n ---
