@@ -313,9 +313,6 @@
     Code
       unicon_advance(x_unit_in = "m", y_unit_in = "kg", x_value_in = 1, y_value_in = 1,
         unit_out = NA)
-    Message
-      No output unit given. Converting all values to standard reference unit.
-      No output unit given. Converting all values to standard reference unit.
     Condition
       Error in `unicon_advance()`:
       ! There is no recorded relationship between parent units
@@ -325,9 +322,6 @@
     Code
       unicon_advance(x_unit_in = "kg", y_unit_in = "ha", x_value_in = 10, y_value_in = 2,
         unit_out = NA, operator_in = "multiply")
-    Message
-      No output unit given. Converting all values to standard reference unit.
-      No output unit given. Converting all values to standard reference unit.
     Condition
       Error in `unicon_advance()`:
       ! `operator_in` does not match the relationship derived between parent units
