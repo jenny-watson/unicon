@@ -1,0 +1,5 @@
+{
+  "value_in": [0, 100, -40],
+  "unit_in": "celsius",
+  "unit_out": "fahrenheit"
+}

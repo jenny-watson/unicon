@@ -14,6 +14,8 @@
 
 #' @title Reset the `unit_*` datasets to the package stored ones.
 #' Used when package loads or to revert after using custom data.
+#' @description Restores \code{.unicon_state} to the built-in package datasets.
+#' No parameters required.
 #' @export
 
 unicon_reset_units <- function() {
@@ -29,6 +31,10 @@ unicon_reset_units <- function() {
 
 #' @title Tells user if using their own data or package data. `TRUE` is using
 #' user's own data.
+#' @description Returns a single logical value indicating whether the package
+#' is currently using custom unit data set via \code{\link{unicon_own}}.
+#' @return Logical scalar. \code{TRUE} if custom data is active,
+#' \code{FALSE} if the built-in package data is active.
 #' @export
 
 unicon_own_status <- function() {
