@@ -1,6 +1,6 @@
 #' @title Make own unicon package data
-#' @description If data is missing from unicon, users can add there own in. They
-#' could even make a request to the authors on Github to request this data be
+#' @description If data is missing from unicon, users can add their own in. They
+#' could even make a request to the authors on GitHub to request this data be
 #' included directly if a use case is large enough.
 #'
 #' @param base_id Character scalar or vector. The default name of the base

@@ -15,7 +15,6 @@
 #' @title Reset the `unit_*` datasets to the package stored ones.
 #' Used when package loads or to revert after using custom data.
 #' @description Restores \code{.unicon_state} to the built-in package datasets.
-#' No parameters required.
 #' @export
 
 unicon_reset_units <- function() {
