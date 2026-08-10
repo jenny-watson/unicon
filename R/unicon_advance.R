@@ -57,20 +57,24 @@ unicon_advance <- function(x_unit_in,
   ## suppress warning as have own warnings here and not to confuse users
 
   x_srp_value <- suppressWarnings(
-    unicon_full(
-      value_in = x_value_in,
-      unit_in = x_unit_in,
-      unit_out = NA,
-      pull = FALSE
+    suppressMessages(
+      unicon_full(
+        value_in = x_value_in,
+        unit_in = x_unit_in,
+        unit_out = NA,
+        pull = FALSE
+      )
     )
   )
 
   y_srp_value <- suppressWarnings(
-    unicon_full(
-      value_in = y_value_in,
-      unit_in = y_unit_in,
-      unit_out = NA,
-      pull = FALSE
+    suppressMessages(
+      unicon_full(
+        value_in = y_value_in,
+        unit_in = y_unit_in,
+        unit_out = NA,
+        pull = FALSE
+      )
     )
   )
 
@@ -118,7 +122,6 @@ unicon_advance <- function(x_unit_in,
 
   rel_check <- relationships |>
     count(
-      id,
       x,
       y
     ) |>
@@ -292,7 +295,7 @@ unicon_advance <- function(x_unit_in,
 
     # provide brief warnings
 
-    if (any(is.na(workings$value_out))) {
+    if (any(is.na(final$value_out))) {
       warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.") # nolint
     }
 
@@ -304,13 +307,13 @@ unicon_advance <- function(x_unit_in,
 
     # provide detailed warnings
 
-    if (any(select(workings, ends_with("error_in")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_in")), na.rm = TRUE)) {
       warning("Some input units failed to find matches.")
     }
-    if (any(select(workings, ends_with("error_out")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_out")), na.rm = TRUE)) {
       warning("Some output units failed to find matches.")
     }
-    if (any(select(workings, ends_with("error_srp")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_srp")), na.rm = TRUE)) {
       warning("Some requested conversions were not valid (unit type mismatch).")
     }
 
