@@ -151,6 +151,10 @@ unicon_own = function(base_id = NA,
 
   }
 
+  ## make every combination of unit category calculations
+
+  relationships <- unicon_make_relationships_data(derived_data)
+
   ## join datasets together
 
   ## check derived data categories and operators exist in combined data
@@ -211,6 +215,7 @@ unicon_own = function(base_id = NA,
   .unicon_state$unit_alias <- alias
   .unicon_state$unit_srp <- srp
   .unicon_state$unit_models <- models
+  .unicon_state$relationships <- relationships
 
   .unicon_state$using_custom <- TRUE
 

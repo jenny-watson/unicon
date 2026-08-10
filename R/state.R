@@ -21,6 +21,7 @@ unicon_reset_units <- function() {
   .unicon_state$unit_alias <- unit_alias
   .unicon_state$unit_srp <- unit_srp
   .unicon_state$unit_models <- unit_models
+  .unicon_state$relationships <- relationships
 
   .unicon_state$using_custom <- FALSE
 

@@ -188,6 +188,7 @@ Please raise an issue in the [GitHub](https://github.com/Agxiata/unicon/) reposi
 Other things to note are:
 
 * Area and volume are considered to be base units as well as derived units
+* Speed is listed as speed not velocity
 * Length is listed as length not distance
 * Month is **NOT** included in the package due to the variation in the number of days and weeks per month
 * Year is recorded as **365.25 days** to account for leap years.

@@ -24,6 +24,10 @@ derived_data <- unicon_make_derived_data_from_jsons(derived_dir)
 
 operators_data <- unicon_make_operators_data_from_jsons(operators_dir)
 
+## make every combination of unit category calculations
+
+relationships <- unicon_make_relationships_data(derived_data)
+
 ## join datasets together
 
 join <- unicon_join_datasets(base_data,
@@ -44,6 +48,7 @@ usethis::use_data(
   unit_alias,
   unit_models,
   unit_srp,
+  relationships,
   overwrite = TRUE,
   internal = TRUE
 )
