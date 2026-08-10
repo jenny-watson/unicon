@@ -71,14 +71,16 @@ test_that("vignette unicon_help has a one-to-one mapping between srp and categor
   unicon_reset_units()
   h <- unicon_help()
 
-  pairs <- unique(h[c("srp", "category")])
-  expect_equal(nrow(pairs), length(unique(h$srp)))
-  expect_equal(nrow(pairs), length(unique(h$category)))
+  categories_per_srp <- tapply(h$category, h$srp, function(x) length(unique(x)))
+  srps_per_category  <- tapply(h$srp, h$category, function(x) length(unique(x)))
+  expect_true(all(categories_per_srp == 1L))
+  expect_true(all(srps_per_category == 1L))
 })
 
 ## ---- unicon_own vignette example --------------------------------------------
 
 test_that("vignette unicon_own example: custom units appear in unicon_help and convert correctly", {
+  unicon_reset_units()
   on.exit(unicon_reset_units(), add = TRUE)
 
   unicon_own(
