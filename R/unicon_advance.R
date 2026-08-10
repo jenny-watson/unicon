@@ -326,7 +326,7 @@ operators_helper <- function() {
   operators_dir <- file.path("inst", "units", "operators")
 
   operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
-    distinct(
+    dplyr::distinct(
       operator,
       fun
     )

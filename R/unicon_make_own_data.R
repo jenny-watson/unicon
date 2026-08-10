@@ -14,7 +14,8 @@
 #' @param slope the difference between the unit and srp unit
 #' @param intercept defaults to 0. Only use if relationship is not linear
 #'
-#' @returns
+#' @returns A tibble with columns \code{id}, \code{alias}, \code{category},
+#' \code{srp}, \code{slope} and \code{intercept}.
 #' @export
 
 unicon_make_own_base_data = function(id,
@@ -23,6 +24,19 @@ unicon_make_own_base_data = function(id,
                                      srp,
                                      slope,
                                      intercept = 0){
+
+  if(any(is.na(id)) ||
+     any(is.na(alias)) ||
+     any(is.na(category)) ||
+     any(is.na(srp)) ||
+     any(is.na(slope)) ||
+     any(is.na(intercept))) {
+
+    stop(
+      "Base unit inputs cannot contain NA values."
+    )
+
+  }
 
   if(any(is.numeric(id)) |
      any(is.numeric(alias)) |
@@ -66,6 +80,7 @@ unicon_make_own_base_data = function(id,
   }
 
 
+
   df = tibble(id = id,
               alias = alias,
               category = category,
@@ -100,6 +115,15 @@ unicon_make_own_derived_data = function(id,
                                         x,
                                         y,
                                         operator){
+
+  if(any(is.na(id)) |
+     any(is.na(x)) |
+     any(is.na(y)) |
+     any(is.na(operator))){
+
+    stop("Derived unit inputs cannot contain NA values")
+
+  }
 
   if(any(is.numeric(id)) |
      any(is.numeric(x)) |
@@ -157,6 +181,15 @@ unicon_make_own_operators_data = function(operator,
                                           id,
                                           fun,
                                           alias){
+
+  if(any(is.na(operator)) |
+     any(is.na(id)) |
+     any(is.na(fun)) |
+     any(is.na(alias))){
+
+    stop("Operator inputs cannot contain NA values")
+
+  }
 
   if(any(is.numeric(operator)) |
      any(is.numeric(id)) |
