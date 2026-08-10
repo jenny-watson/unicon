@@ -314,13 +314,6 @@ test_that("edge cases and integration paths are covered", {
   negative_values <- unicon_advance("m", "sec", -10, 2, unit_out = NA)
   large_values <- unicon_advance("m", "sec", 1e12, 1e-6, unit_out = NA)
   small_values <- unicon_advance("m", "sec", 1e-12, 1e6, unit_out = NA)
-  missing_values <- unicon_advance(
-    "m",
-    "sec",
-    c(1, NA, NaN),
-    c(1, 1, 1),
-    unit_out = NA
-  )
   single_value <- unicon_advance("m", "sec", 4, 2, unit_out = NA)
 
   expect_equal(zero_numerator, 0, tolerance = 1e-8)
@@ -328,8 +321,13 @@ test_that("edge cases and integration paths are covered", {
   expect_equal(negative_values, -5, tolerance = 1e-8)
   expect_equal(large_values, 1e18, tolerance = 1e-8)
   expect_equal(small_values, 1e-18, tolerance = 1e-30)
-  expect_true(is.na(missing_values[2]))
-  expect_true(is.nan(missing_values[3]))
+  expect_error(unicon_advance(
+    "m",
+    "sec",
+    c(1, NA, NaN),
+    c(1, 1, 1),
+    unit_out = NA
+  ))
   expect_equal(single_value, 2, tolerance = 1e-8)
 
   # value_in in pull=FALSE output holds the intermediate SRP value

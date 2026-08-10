@@ -74,8 +74,11 @@ test_that("unicon_full reverts to package data after reset", {
   )
   unicon_reset_units()
 
-  result <- unicon_full(1, "largepackage", "g", pull = TRUE)
-  expect_true(is.na(result))
+  expect_warning(
+    result <- unicon_full(1, "largepackage", "g", pull = TRUE),
+    "Some units failed to convert"
+  )
+    expect_true(all(is.na(result)))
 })
 
 ## ---- unicon_help reflects active state --------------------------------------
