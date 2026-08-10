@@ -26,6 +26,15 @@ unicon_full <- function(value_in,
   # checks inputted data
 
   # check data type
+
+  if (any(is.na(value_in))) {
+    stop("Argument `value_in` cannot contain NA values.")
+  }
+
+  if (any(is.na(unit_in))) {
+    stop("Argument `unit_in` cannot contain NA values.")
+  }
+
   if (!is.numeric(value_in)) {
     stop("Argument `value_in` must be numeric.")
   }
