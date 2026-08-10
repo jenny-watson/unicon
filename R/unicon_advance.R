@@ -15,8 +15,9 @@
 #' be of \code{length(1L)} or \code{length(x_value_in)}. Defaults to
 #' \code{NA}; if default is passed, function will return standard reference
 #' point (SRP) units as conversion.
-#' @param operator_in 'divide' or 'multiply' input. Only needed for calculating
-#' volume from volume_fraction and mass from mass_fraction.
+#' @param operator_in Character scalar; \code{'divide'} or \code{'multiply'}.
+#' Only needed for calculating volume from volume_fraction and mass from
+#' mass_fraction.
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.

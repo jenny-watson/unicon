@@ -1,4 +1,4 @@
-#' @title make your own base data for use with unicon's functionaility
+#' @title make your own base data for use with unicon's functionality
 #' @description
 #' If a user wants to use unicon but the unit they want is not in the package
 #' data, they are welcome to add their own. This function is for the base data
@@ -59,7 +59,7 @@ unicon_make_own_base_data = function(id,
 
   }
 
-  if(any(intercept) != 0){
+  if(any(intercept != 0)){
 
     warning("`intercept` is not zero, please check this is correct")
 
@@ -76,20 +76,24 @@ unicon_make_own_base_data = function(id,
 
 }
 
+#' @title Make your own derived data for use with unicon
+#' @description
 #' If a user wants to use unicon but the derived data they want is not in the
 #' package data, they are welcome to add their own. This function is for the
 #' derived data i.e. if two measures are calculated to make another measure.
 #' When designing your own data please reference the data available using
 #' `unicon_help`. This is used at the users own discretion and they will need to
 #' conduct their own checks for data quality.
-#' @param id the new derived metric
-#' @param x the base (numerator) metric that is used to calculate the current
-#' metric
-#' @param y the base (denominator) metric that is used to calculate the current
-#' metric
-#' @param operator the operator used to calculate the metric using x and y
+#' @param id Character scalar or vector; the new derived metric
+#' @param x Character scalar or vector; the base (numerator) metric that is
+#' used to calculate the current metric
+#' @param y Character scalar or vector; the base (denominator) metric that is
+#' used to calculate the current metric
+#' @param operator Character scalar or vector; the operator used to calculate
+#' the metric using x and y
 #'
-#' @returns
+#' @returns A tibble with columns \code{id}, \code{x}, \code{y}, and
+#' \code{operator}.
 #' @export
 
 unicon_make_own_derived_data = function(id,
@@ -131,18 +135,22 @@ unicon_make_own_derived_data = function(id,
 }
 
 
+#' @title Make your own operators data for use with unicon
+#' @description
 #' If a user wants to use unicon but the operator they want is not in the
 #' package data, they are welcome to add their own. This function is for the
 #' operator data i.e. how the units are transformed. When designing your own
 #' data please reference the data available using `unicon_help`. This is used at
 #' the users own discretion and they will need to conduct their own checks for
 #' data quality. This is not likely to be required.
-#' @param operator the name of the operator
-#' @param id either __ or .
-#' @param fun the perserved R function e.g. /, *, +, -
-#' @param alias alternative names, many of these can map to id
+#' @param operator Character scalar or vector; the name of the operator
+#' @param id Character scalar or vector; either __ or .
+#' @param fun Character scalar or vector; the preserved R function e.g. /, *, +, -
+#' @param alias Character scalar or vector; alternative names, many of these
+#' can map to id
 #'
-#' @returns
+#' @returns A tibble with columns \code{operator}, \code{id}, \code{fun}, and
+#' \code{alias}.
 #' @export
 
 unicon_make_own_operators_data = function(operator,

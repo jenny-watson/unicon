@@ -7,11 +7,11 @@
 
 unicon_make_unit_alias <- function(join_dataset) {
 
-  unit_alias <- join |>
+  unit_alias <- join_dataset |>
     distinct(id, alias) |> ## ensure all unique
     ## add in id as alias to ensure all combinations captured
     bind_rows(
-      join |>
+      join_dataset |>
         distinct(id) |>
         mutate(alias = id)
     ) |>
@@ -33,7 +33,7 @@ unicon_make_unit_alias <- function(join_dataset) {
 
 unicon_make_unit_srp <- function(join_dataset) {
 
-  unit_srp <- join |>
+  unit_srp <- join_dataset |>
     distinct(
       id,
       type,
@@ -55,7 +55,7 @@ unicon_make_unit_srp <- function(join_dataset) {
 
 unicon_make_unit_models <- function(join_dataset) {
 
-  unit_models <- join |>
+  unit_models <- join_dataset |>
     distinct(
       id,
       slope,
