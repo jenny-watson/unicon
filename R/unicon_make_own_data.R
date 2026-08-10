@@ -1,4 +1,4 @@
-#' @title make your own base data for use with unicon's functionaility
+#' @title make your own base data for use with unicon's functionality
 #' @description
 #' If a user wants to use unicon but the unit they want is not in the package
 #' data, they are welcome to add their own. This function is for the base data
@@ -59,7 +59,7 @@ unicon_make_own_base_data = function(id,
 
   }
 
-  if(any(intercept) != 0){
+  if(any(intercept != 0)){
 
     warning("`intercept` is not zero, please check this is correct")
 
@@ -76,6 +76,8 @@ unicon_make_own_base_data = function(id,
 
 }
 
+#' @title Make your own derived data for use with unicon
+#' @description
 #' If a user wants to use unicon but the derived data they want is not in the
 #' package data, they are welcome to add their own. This function is for the
 #' derived data i.e. if two measures are calculated to make another measure.
@@ -89,7 +91,7 @@ unicon_make_own_base_data = function(id,
 #' metric
 #' @param operator the operator used to calculate the metric using x and y
 #'
-#' @returns
+#' @returns A tibble with columns "id", "x", "y", and "operator"
 #' @export
 
 unicon_make_own_derived_data = function(id,
@@ -131,6 +133,8 @@ unicon_make_own_derived_data = function(id,
 }
 
 
+#' @title Make your own operators data for use with unicon
+#' @description
 #' If a user wants to use unicon but the operator they want is not in the
 #' package data, they are welcome to add their own. This function is for the
 #' operator data i.e. how the units are transformed. When designing your own
@@ -139,10 +143,10 @@ unicon_make_own_derived_data = function(id,
 #' data quality. This is not likely to be required.
 #' @param operator the name of the operator
 #' @param id either __ or .
-#' @param fun the perserved R function e.g. /, *, +, -
+#' @param fun the preserved R function e.g. /, *, +, -
 #' @param alias alternative names, many of these can map to id
 #'
-#' @returns
+#' @returns A tibble with columns "operator", "id", "fun", and "alias"
 #' @export
 
 unicon_make_own_operators_data = function(operator,
