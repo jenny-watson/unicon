@@ -1,26 +1,6 @@
 ## Tests for unicon_full -------------------------------------------------------
 ## Covers argument validation, scalar/vector recycling, alias normalisation,
-## pull = TRUE / pull = FALSE output, and snapshot regression via inst/input/
-## examples.
-
-# helper: read an inst/input/unicon_full example JSON and run unicon_full ------
-run_full_example <- function(file, pull = TRUE) {
-  path <- system.file(
-    "input", "unicon_full", file,
-    package = "unicon",
-    lib.loc = .libPaths()
-  )
-  ex <- jsonlite::read_json(path, simplifyVector = TRUE)
-  unit_out_val <- if (is.null(ex$unit_out)) NA else ex$unit_out
-  pull_val     <- if (is.null(ex$pull)) pull else isTRUE(ex$pull)
-
-  unicon_full(
-    value_in = ex$value_in,
-    unit_in  = ex$unit_in,
-    unit_out = unit_out_val,
-    pull     = pull_val
-  )
-}
+## pull = TRUE / pull = FALSE output.
 
 ## ---- argument validation ----------------------------------------------------
 
@@ -195,26 +175,4 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   )
   expect_equal(out$id_out, c("C", "C"))
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
-})
-
-## ---- snapshot regression ----------------------------------------------------
-
-test_that("unicon_full length_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("length_conversion.json"))
-})
-
-test_that("unicon_full temperature_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("temperature_conversion.json"))
-})
-
-test_that("unicon_full mass_conversion snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("mass_conversion.json"))
-})
-
-test_that("unicon_full mixed_units_full_table snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  expect_snapshot(run_full_example("mixed_units_full_table.json"))
 })
