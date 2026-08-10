@@ -15,8 +15,8 @@
 #' be of \code{length(1L)} or \code{length(x_value_in)}. Defaults to
 #' \code{NA}; if default is passed, function will return standard reference
 #' point (SRP) units as conversion.
-#' @param operator_in Character scalar; 'divide' or 'multiply'. Only needed for
-#' calculating volume from volume_fraction and mass from mass_fraction.
+#' @param operator_in 'divide' or 'multiply' input. Only needed for calculating
+#' volume from volume_fraction and mass from mass_fraction.
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
@@ -34,8 +34,8 @@ unicon_advance <- function(x_unit_in,
 
   # checks are minimal as relying in unicon_full checks
 
-  l1 <- length(x_value_in)
-  l2 <- length(y_value_in)
+  l1 <- x_value_in
+  l2 <- y_value_in
 
   if (l2 != l1 ) {
     stop("Argument `x_value_in` and `y_value_in` must have same length.")
@@ -170,7 +170,7 @@ unicon_advance <- function(x_unit_in,
     ) |>
     ## join to operators function
     left_join(
-      operators_helper(),
+      operators_data,
       by = "operator"
     ) |>
     # join to x info
@@ -210,7 +210,7 @@ unicon_advance <- function(x_unit_in,
           do.call(op, list(x, y))
       ),
       # get value out in assigned units
-      value_out = unicon_full(
+      value_out <- unicon_full(
         value_in = srp_value_out,
         unit_in = srp_unit_out,
         unit_out = unit_out,
