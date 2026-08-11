@@ -26,21 +26,21 @@ paths <- list.files(
 
 split <- stringr::str_split(files, "/")
 
-unit_groups <- map_chr(split, ~ .x[[1L]])
+unit_groups <- purrr::map_chr(split, ~ .x[[1L]])
 
 unit_ids <- stringr::str_replace(
-  map_chr(split, ~ .x[[2L]]),
+  purrr::map_chr(split, ~ .x[[2L]]),
   "\\.json$", ""
 )
 
-base <- map(
+base <- purrr::map(
   paths,
   ~ jsonlite::read_json(.x,
     simplifyVector = TRUE,
     simplifyDataFrame = FALSE
   )
 ) |>
-  set_names(unit_ids)
+  rlang::set_names(unit_ids)
 
 # read in unit standard master
 # this is similar to the SI concept but adapted for our needs
