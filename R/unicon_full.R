@@ -22,7 +22,6 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
-
   # checks inputted data
 
   # check data type
@@ -66,13 +65,9 @@ unicon_full <- function(value_in,
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
-
     message("No output unit given. Converting all values to standard reference unit.") # nolint
-
   } else if (any(is.na(unit_out))) {
-
     message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
-
   }
 
   ## get aliases in right format before testing
@@ -80,21 +75,23 @@ unicon_full <- function(value_in,
   alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
   alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
-  if (any(alias_in %in% .unicon_state$unit_alias$alias) || any(alias_out %in% .unicon_state$unit_alias$alias)) {
-
+  if (
+    any(alias_in %in% .unicon_state$unit_alias$alias) ||
+      any(alias_out %in% .unicon_state$unit_alias$alias)
+  ) {
     ## if id_out is NA, replace with srp (default functionality in unicon_lite)
 
-    check_id_out = unit_alias |>
+    check_id_out <- .unicon_state$unit_alias |>
       filter(
-        alias %in% alias_in
+        .data$alias %in% alias_in
       ) |>
       left_join(
-        unit_srp,
+        .unicon_state$unit_srp,
         by = "id"
       ) |>
       distinct(
-        id_in = id,
-        id_out_not_na = srp
+        id_in = .data$id,
+        id_out_not_na = .data$srp
       )
 
     # compose output table
@@ -109,8 +106,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           .unicon_state$unit_alias,
-          alias_in = alias,
-          id_in = id
+          "alias_in" = "alias",
+          "id_in" = "id"
         ),
         by = "alias_in",
         multiple = "any"
@@ -119,8 +116,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           .unicon_state$unit_alias,
-          alias_out = alias,
-          id_out = id
+          "alias_out" = "alias",
+          "id_out" = "id"
         ),
         by = "alias_out",
         multiple = "any"
@@ -132,13 +129,13 @@ unicon_full <- function(value_in,
       ) |>
       mutate(
         id_out = if_else(
-          is.na(id_out),
-          id_out_not_na,
-          id_out
+          is.na(.data$id_out),
+          .data$id_out_not_na,
+          .data$id_out
         )
       ) |>
       select(
-        -id_out_not_na
+        -"id_out_not_na"
       )
 
     ## apply the unicon_lite function
@@ -154,7 +151,7 @@ unicon_full <- function(value_in,
     ## binding as row order preserved and if id_out is NA, cant join
     ## no row_order as upsets else{} branch
 
-    conv_tab = left_join(
+    conv_tab <- left_join(
       conv_tab_pre,
       conv_tab_lite,
       by = c(
@@ -163,9 +160,7 @@ unicon_full <- function(value_in,
         "id_out"
       )
     )
-
   } else {
-
     conv_tab <- unicon_lite(
       value_in = value_in,
       id_in = unit_in,
@@ -175,11 +170,9 @@ unicon_full <- function(value_in,
         alias_in = unit_in,
         alias_out = unit_out
       )
-
   }
 
   if (isTRUE(pull)) {
-
     # provide brief warnings
 
     if (any(is.na(conv_tab$value_out))) {
@@ -189,9 +182,7 @@ unicon_full <- function(value_in,
     # provide only value_out
 
     conv_tab$value_out
-
   } else {
-
     # provide detailed warnings
 
     if (any(conv_tab$error_in, na.rm = TRUE)) {
@@ -208,20 +199,19 @@ unicon_full <- function(value_in,
 
     conv_tab |>
       select(
-        unit_in,
-        unit_out,
-        alias_in,
-        alias_out,
-        id_in,
-        srp_in, # used to drive calcs, srp_out for check only
-        id_out,
-        error_in,
-        error_srp,
-        error_out,
-        value_in,
-        value_srp,
-        value_out
+        "unit_in",
+        "unit_out",
+        "alias_in",
+        "alias_out",
+        "id_in",
+        "srp_in", # used to drive calcs, srp_out for check only
+        "id_out",
+        "error_in",
+        "error_srp",
+        "error_out",
+        "value_in",
+        "value_srp",
+        "value_out"
       )
-
   }
 }

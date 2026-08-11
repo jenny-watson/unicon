@@ -6,9 +6,7 @@
 ## Default package logic
 
 .onLoad <- function(libname, pkgname) {
-
   unicon_reset_units()
-
 }
 
 
@@ -18,14 +16,12 @@
 #' @export
 
 unicon_reset_units <- function() {
-
   .unicon_state$unit_alias <- unit_alias
   .unicon_state$unit_srp <- unit_srp
   .unicon_state$unit_models <- unit_models
   .unicon_state$relationships <- relationships
 
   .unicon_state$using_custom <- FALSE
-
 }
 
 #' @title Tells user if using their own data or package data. `TRUE` is using
@@ -37,8 +33,5 @@ unicon_reset_units <- function() {
 #' @export
 
 unicon_own_status <- function() {
-
   .unicon_state$using_custom
-
 }
-

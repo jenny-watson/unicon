@@ -6,22 +6,20 @@
 #' @export
 
 unicon_make_unit_alias <- function(join_dataset) {
-
   unit_alias <- join_dataset |>
-    distinct(id, alias) |> ## ensure all unique
+    distinct(.data$id, .data$alias) |> ## ensure all unique
     ## add in id as alias to ensure all combinations captured
     bind_rows(
       join_dataset |>
-        distinct(id) |>
-        mutate(alias = id)
+        distinct(.data$id) |>
+        mutate(alias = .data$id)
     ) |>
     # remove whitespace and upper case
-    mutate(alias = str_replace_all(str_to_lower(alias), "\\s+", "")) |>
+    mutate(alias = str_replace_all(str_to_lower(.data$alias), "\\s+", "")) |>
     distinct() |>
-    arrange(id)
+    arrange(.data$id)
 
   unit_alias
-
 }
 
 #' @title Make unit_srp dataset
@@ -32,17 +30,15 @@ unicon_make_unit_alias <- function(join_dataset) {
 #' @export
 
 unicon_make_unit_srp <- function(join_dataset) {
-
   unit_srp <- join_dataset |>
     distinct(
-      id,
-      type,
-      category,
-      srp
+      .data$id,
+      .data$type,
+      .data$category,
+      .data$srp
     )
 
   unit_srp
-
 }
 
 #' @title Make unit_model dataset
@@ -54,22 +50,20 @@ unicon_make_unit_srp <- function(join_dataset) {
 #' @export
 
 unicon_make_unit_models <- function(join_dataset) {
-
   unit_models <- join_dataset |>
     distinct(
-      id,
-      slope,
-      intercept
+      .data$id,
+      .data$slope,
+      .data$intercept
     ) |>
     ## add in blanks
     bind_rows(
       tibble(id = NA, slope = NA, intercept = NA)
     ) |>
     ## to get list back
-    nest(model = c(slope, intercept)) |>
+    nest(model = c("slope", "intercept")) |>
     # make into list rather than mini dataframes
-    mutate(model = map(model, ~ as.list(.x)))
+    mutate(model = map(.data$model, ~ as.list(.x)))
 
   unit_models
-
 }

@@ -15,8 +15,11 @@
 
 col_types <- function(df) {
   vapply(df, function(col) {
-    if (is.list(col)) "list"
-    else paste(class(col), collapse = "/")
+    if (is.list(col)) {
+      "list"
+    } else {
+      paste(class(col), collapse = "/")
+    }
   }, character(1L))
 }
 
@@ -108,8 +111,8 @@ test_that("unicon_lite snapshot: full shape for mass conversion", {
 
 test_that("unicon_lite snapshot: shape consistent across unit categories", {
   length_out <- suppressMessages(unicon_lite(1, "m", "cm"))
-  mass_out   <- suppressMessages(unicon_lite(1, "kg", "g"))
-  temp_out   <- suppressMessages(unicon_lite(1, "celsius", "fahrenheit"))
+  mass_out <- suppressMessages(unicon_lite(1, "kg", "g"))
+  temp_out <- suppressMessages(unicon_lite(1, "celsius", "fahrenheit"))
   expect_snapshot({
     cat("length names match mass:", identical(names(length_out), names(mass_out)), "\n")
     cat("length names match temp:", identical(names(length_out), names(temp_out)), "\n")

@@ -4,7 +4,8 @@
 #' is the top level 'parent' folder; all sub folder wll also be examined for
 #' .json files
 #' @returns A dataframe with all information from .jsons inside
-#' @import jsonlite purrr stringr
+#' @importFrom jsonlite read_json
+#' @import purrr stringr
 #' @export
 
 
@@ -35,7 +36,7 @@ unicon_load_json_files <- function(file_pathway) {
 #' @import tibble purrr dplyr tidyr
 #' @export
 
-unicon_make_base_data_from_jsons <- function(dir) {
+unicon_make_base_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   base_data <- imap_dfr(
     unicon_load_json_files(dir),
@@ -47,11 +48,10 @@ unicon_make_base_data_from_jsons <- function(dir) {
       model = list(.x$model)
     )
   ) |>
-    unnest_wider(model) |> # further unlist model
-    mutate(alias = as.character(alias)) # was list before
+    unnest_wider("model") |> # further unlist model
+    mutate(alias = as.character(.data$alias)) # was list before
 
   base_data
-
 }
 
 #' @title Load derived data .jsons
@@ -62,7 +62,7 @@ unicon_make_base_data_from_jsons <- function(dir) {
 #' @import tibble purrr
 #' @export
 
-unicon_make_derived_data_from_jsons <- function(dir) {
+unicon_make_derived_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   derived_data <- imap_dfr(
     unicon_load_json_files(dir),
@@ -75,7 +75,6 @@ unicon_make_derived_data_from_jsons <- function(dir) {
   )
 
   derived_data
-
 }
 
 #' @title Load operator data .jsons
@@ -86,7 +85,7 @@ unicon_make_derived_data_from_jsons <- function(dir) {
 #' @import tibble purrr
 #' @export
 
-unicon_make_operators_data_from_jsons <- function(dir) {
+unicon_make_operators_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   operators_data <- imap_dfr(
     unicon_load_json_files(dir),
@@ -99,5 +98,4 @@ unicon_make_operators_data_from_jsons <- function(dir) {
   )
 
   operators_data
-
 }

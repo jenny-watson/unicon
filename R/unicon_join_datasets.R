@@ -11,9 +11,8 @@
 #' @export
 
 unicon_join_datasets <- function(base,
-                                derived,
-                                operators) {
-
+                                 derived,
+                                 operators) {
   join <- derived |>
     ## join to x
     left_join(
@@ -38,15 +37,20 @@ unicon_join_datasets <- function(base,
     ) |>
     ## format and calculate
     mutate(
-      category = id,
-      id = paste0(id.x, id.o, id.y),
-      alias = paste0(alias.x, alias.o, alias.y), # problem per has no spaces?
-      srp = paste0(srp.x, id.o, srp.y),
-      slope = pmap_dbl(list(fun.o,
-                            slope.x,
-                            slope.y),
-                       function(op, x, y)
-                         do.call(op, list(x, y))),
+      category = .data$id,
+      id = paste0(.data$id.x, .data$id.o, .data$id.y),
+      alias = paste0(.data$alias.x, .data$alias.o, .data$alias.y), # problem per has no spaces?
+      srp = paste0(.data$srp.x, .data$id.o, .data$srp.y),
+      slope = pmap_dbl(
+        list(
+          .data$fun.o,
+          .data$slope.x,
+          .data$slope.y
+        ),
+        function(op, x, y) {
+          do.call(op, list(x, y))
+        }
+      ),
       intercept = 0,
       type = "derived",
       .keep = "none"
@@ -58,10 +62,9 @@ unicon_join_datasets <- function(base,
     ) |>
     ## duplicate & wrong units if both base and derived unit
     filter(
-      !(category == "area" & srp == "l__m"),
-      !(category == "length" & srp == "ha__m")
+      !(.data$category == "area" & .data$srp == "l__m"),
+      !(.data$category == "length" & .data$srp == "ha__m")
     )
 
   join
-
 }

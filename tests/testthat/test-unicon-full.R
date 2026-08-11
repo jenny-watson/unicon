@@ -156,14 +156,14 @@ test_that("unicon_full fahrenheit to kelvin chain uses intercept correctly", {
 test_that("unicon_full temperature round-trip celsius->fahrenheit->celsius", {
   original <- c(0, 37, 100, -40)
   via_f <- unicon_full(original, "celsius", "fahrenheit")
-  back   <- unicon_full(via_f, "fahrenheit", "celsius")
+  back <- unicon_full(via_f, "fahrenheit", "celsius")
   expect_equal(back, original, tolerance = 0.01)
 })
 
 test_that("unicon_full temperature round-trip celsius->kelvin->celsius", {
   original <- c(0, 37, 100)
   via_k <- unicon_full(original, "celsius", "kelvin")
-  back   <- unicon_full(via_k, "kelvin", "celsius")
+  back <- unicon_full(via_k, "kelvin", "celsius")
   expect_equal(back, original, tolerance = 0.001)
 })
 
@@ -205,14 +205,14 @@ test_that("unicon_full fahrenheit to kelvin chain uses intercept correctly", {
 test_that("unicon_full temperature round-trip celsius->fahrenheit->celsius", {
   original <- c(0, 37, 100, -40)
   via_f <- unicon_full(original, "celsius", "fahrenheit")
-  back   <- unicon_full(via_f, "fahrenheit", "celsius")
+  back <- unicon_full(via_f, "fahrenheit", "celsius")
   expect_equal(back, original, tolerance = 0.01)
 })
 
 test_that("unicon_full temperature round-trip celsius->kelvin->celsius", {
   original <- c(0, 37, 100)
   via_k <- unicon_full(original, "celsius", "kelvin")
-  back   <- unicon_full(via_k, "kelvin", "celsius")
+  back <- unicon_full(via_k, "kelvin", "celsius")
   expect_equal(back, original, tolerance = 0.001)
 })
 
@@ -225,4 +225,3 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   expect_equal(out$id_out, c("C", "C"))
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
-
