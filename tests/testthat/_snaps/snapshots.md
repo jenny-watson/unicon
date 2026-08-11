@@ -349,6 +349,11 @@
     Condition
       Warning in `unicon_make_own_base_data()`:
       `intercept` is not zero, please check this is correct
+    Output
+      # A tibble: 1 x 6
+        id    alias category srp   slope intercept
+        <chr> <chr> <chr>    <chr> <dbl>     <dbl>
+      1 id    alias cat      srp       1         5
 
 # unicon_make_own_base_data error snapshot: mismatched vector lengths
 
