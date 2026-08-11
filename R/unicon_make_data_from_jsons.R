@@ -4,7 +4,8 @@
 #' is the top level 'parent' folder; all sub folder wll also be examined for
 #' .json files
 #' @returns A dataframe with all information from .jsons inside
-#' @import jsonlite purrr stringr
+#' @importFrom jsonlite read_json
+#' @import purrr stringr
 #' @export
 
 
