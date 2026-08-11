@@ -47,13 +47,13 @@ unicon_lite <- function(value_in,
     ) |>
     mutate(
       # user gave input units, but no matches
-      error_in = is.na(srp_in),
+      error_in = is.na(.data$srp_in),
       # user gave output units, but no matches
-      error_out = !is.na(id_out) & is.na(srp_out),
+      error_out = !is.na(.data$id_out) & is.na(.data$srp_out),
       # user gave incompatible unit conversion
-      error_srp = srp_in != srp_out,
+      error_srp = .data$srp_in != .data$srp_out,
       # use srp unit as output id if none given by user
-      id_out = ifelse(is.na(id_out), srp_in, id_out),
+      id_out = ifelse(is.na(.data$id_out), .data$srp_in, .data$id_out),
     ) |>
     # model for input <--> srp
     left_join(
@@ -111,9 +111,9 @@ unicon_lite <- function(value_in,
         ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
-      value_out = ifelse(error_srp %in% TRUE,
+      value_out = ifelse(.data$error_srp %in% TRUE,
         NA_real_,
-        value_out
+        .data$value_out
       )
     )
 
