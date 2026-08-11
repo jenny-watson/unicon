@@ -66,7 +66,7 @@ unicon_make_unit_models <- function(join_dataset) {
       tibble(id = NA, slope = NA, intercept = NA)
     ) |>
     ## to get list back
-    nest(model = c(.data$slope, .data$intercept)) |>
+    nest(model = c(slope, intercept)) |>
     # make into list rather than mini dataframes
     mutate(model = map(.data$model, ~ as.list(.x)))
 
