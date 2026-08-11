@@ -274,7 +274,7 @@
     Code
       snap_shape(out)
     Output
-      nrow: 8 
+      nrow: 2 
       ncol: 35 
         x_category : character 
         x_unit_in : character 
@@ -317,7 +317,7 @@
     Code
       snap_shape(out)
     Output
-      nrow: 8 
+      nrow: 2 
       ncol: 35 
         x_category : character 
         x_unit_in : character 

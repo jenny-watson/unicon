@@ -159,10 +159,10 @@ sp <- "sp"
 unicon_own(
   base_id    = c(rep(lp, 2), rep(sp, 2)),
   base_alias = c("lp", "large package", "sp", "small package"),
-  category   = "mass",
-  srp        = "g",
+  category   = c(rep("mass", 4)),
+  srp        = c(rep("g", 4)),
   slope      = c(rep(12500, 2), rep(6250, 2)),
-  intercept  = 0  # default; shown for clarity
+  intercept  = c(rep(0, 4))  # default; shown for clarity
 )
 
 unicon_own_status()
@@ -202,7 +202,7 @@ The metric relationships that are stored in the `relationships` package dataset 
 
 ```{r}
 
-relationships
+unicon:::relationships
 
 ```
 
@@ -217,8 +217,8 @@ This functionality works by:
 
 As an example to how calculate a new metric from existing data is speed from length / time. If `unit_out` is unspecified, the function will convert to the package's SRP, in this example m/s.
 
-```{r unicorn_catrel}
-unicon_catrel(
+```{r unicorn_advance}
+unicon_advance(
   x_unit_in = rep("miles", 6),
   y_unit_in = rep("hour", 6),
   x_value_in = c(1, 2, 3, 4, 5, 6),
