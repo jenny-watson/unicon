@@ -40,7 +40,7 @@ base <- purrr::map(
     simplifyDataFrame = FALSE
   )
 ) |>
-  set_names(unit_ids)
+  rlang::set_names(unit_ids)
 
 # read in unit standard master
 # this is similar to the SI concept but adapted for our needs
