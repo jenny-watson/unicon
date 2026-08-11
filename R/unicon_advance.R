@@ -15,8 +15,9 @@
 #' be of \code{length(1L)} or \code{length(x_value_in)}. Defaults to
 #' \code{NA}; if default is passed, function will return standard reference
 #' point (SRP) units as conversion.
-#' @param operator_in 'divide' or 'multiply' input. Only needed for calculating
-#' volume from volume_fraction and mass from mass_fraction.
+#' @param operator_in Character scalar; \code{'divide'} or \code{'multiply'}.
+#' Only needed for calculating volume from volume_fraction and mass from
+#' mass_fraction.
 #' @param pull Logical; should the function pull out and return the converted
 #' values (TRUE) or should a full table with conversion record be returned?
 #' Defaults to TRUE.
@@ -34,40 +35,48 @@ unicon_advance <- function(x_unit_in,
 
   # checks are minimal as relying in unicon_full checks
 
-  l1 <- x_value_in
-  l2 <- y_value_in
+  l1 <- length(x_value_in)
+  l2 <- length(y_value_in)
 
   if (l2 != l1 ) {
     stop("Argument `x_value_in` and `y_value_in` must have same length.")
   }
 
+  ## create tibble for joining
 
-  ## convert units for x and y
+  tib <- tibble(
+    x_unit_in = x_unit_in,
+    y_unit_in = y_unit_in,
+    x_value_in = x_value_in,
+    y_value_in = y_value_in,
+    unit_out = unit_out,
+    operator_in = operator_in
+  )
+
+  ## convert units for x and y to SRP
   ## suppress warning as have own warnings here and not to confuse users
 
   x_srp_value <- suppressWarnings(
-    unicon_full(
-      value_in = x_value_in,
-      unit_in = x_unit_in,
-      unit_out = NA,
-      pull = FALSE
+    suppressMessages(
+      unicon_full(
+        value_in = x_value_in,
+        unit_in = x_unit_in,
+        unit_out = NA,
+        pull = FALSE
+      )
     )
-  ) |>
-    mutate(
-      row_number = 1:n()
-    )
+  )
 
   y_srp_value <- suppressWarnings(
-    unicon_full(
-      value_in = y_value_in,
-      unit_in = y_unit_in,
-      unit_out = NA,
-      pull = FALSE
+    suppressMessages(
+      unicon_full(
+        value_in = y_value_in,
+        unit_in = y_unit_in,
+        unit_out = NA,
+        pull = FALSE
+      )
     )
-  ) |>
-    mutate(
-      row_number = 1:n()
-    )
+  )
 
   ## identify what type of metrics x and y are & their srp
 
@@ -91,7 +100,7 @@ unicon_advance <- function(x_unit_in,
 
   ## figure out if a relationship exists between x and y
 
-  rel = relationships |>
+  rel <- relationships |>
     filter(
       x %in% x_category$category,
       y %in% y_category$category
@@ -99,7 +108,13 @@ unicon_advance <- function(x_unit_in,
 
   ## if no parent relationship, stop
   if (nrow(rel) == 0) {
-    stop("There is no recorded relationship between x and y units")
+    stop("There is no recorded relationship between parent units")
+  }
+
+  ## if operator_in is given, validate it against the available relationships
+
+  if (!is.na(operator_in) && !operator_in %in% rel$operator) {
+    stop("`operator_in` does not match the relationship derived between parent units")
   }
 
   ## special case check:
@@ -107,7 +122,6 @@ unicon_advance <- function(x_unit_in,
 
   rel_check <- relationships |>
     count(
-      id,
       x,
       y
     ) |>
@@ -121,7 +135,7 @@ unicon_advance <- function(x_unit_in,
 
   if (nrow(rel_check) != 0) {
 
-    if(!is.na(operator_in)) {
+    if (!is.na(operator_in)) {
 
       rel <- rel |>
         filter(
@@ -135,15 +149,15 @@ unicon_advance <- function(x_unit_in,
     }
   }
 
-  # check that the unit_out specified is valid
+  ## check that the unit_out specified is valid
 
-  if (!any(is.na(unit_out))) {
+  if (!all(is.na(unit_out))) {
 
     check_unit_out <- unit_alias |>
       filter(alias %in% unit_out) |>
       left_join(
         unit_srp,
-        by = 'id'
+        by = "id"
       ) |>
       filter(
         !category %in% rel$id
@@ -151,55 +165,85 @@ unicon_advance <- function(x_unit_in,
 
     if (nrow(check_unit_out) != 0) {
 
-      stop("`unit_out` does not exist for the specified x and y relationship")
+      stop("`unit_out` does not exist for the relationship derived between parent units")
 
     }
 
   }
 
-  ## join all datasets together and do final unicon_full
+  ## join all datasets together and create new metric data
 
-  workings <- rel |>
-    # find srp for relationship between parent x and y
-    left_join(
-      unit_srp |>
-        distinct(category,
-                 srp_unit_out = srp
-        ),
-      by = c("id" = "category")
-    ) |>
-    ## join to operators function
-    left_join(
-      operators_data,
-      by = "operator"
-    ) |>
+  workings <- tib |>
     # join to x info
-    left_join(
-      x_category |>
-        rename(x_srp_in = srp),
-      by = c("x" = "category")
-    ) |>
     left_join(
       x_srp_value |>
         rename_with(~ paste0("x_", .x)),
+      by = c(
+        "x_unit_in",
+        "x_value_in"
+      )
+    ) |>
+    left_join(
+      x_category |>
+        rename(
+          x_srp_in = srp,
+          x_category = category
+        ),
       by = "x_srp_in"
     ) |>
     # join to y info
     left_join(
-      y_category |>
-        rename(y_srp_in = srp),
-      by = c("y" = "category")
-    ) |>
-    left_join(
       y_srp_value |>
         rename_with(~ paste0("y_", .x)),
       by = c(
-        "y_srp_in",
-        "x_row_number" = "y_row_number"
+        "y_unit_in",
+        "y_value_in"
       )
     ) |>
+    left_join(
+      y_category |>
+        rename(
+          y_srp_in = srp,
+          y_category = category
+        ),
+      by = "y_srp_in"
+    ) |>
+    # join to relationships data
+    left_join(
+      rel,
+      by = c(
+        "x_category" = "x",
+        "y_category" = "y"
+      )
+    ) |>
+    # find srp for relationship between parent x and y
+    left_join(
+      unit_srp |>
+        distinct(
+          category,
+          srp_unit_out = srp
+        ),
+      by = c("id" = "category")
+    ) |>
+    # sort operator out and get fun for map in mutate
     mutate(
-      # calculate value in srp
+      operator_in = if_else(
+        !is.na(operator_in),
+        operator_in,
+        operator
+      )
+    ) |>
+    select(
+      -operator
+    ) |>
+    left_join(
+      operators_helper(),
+      by = c(
+        "operator_in" = "operator"
+      )
+    ) |>
+    # calculate value in SRP for derived metric
+    mutate(
       srp_value_out = pmap_dbl(
         list(
           fun,
@@ -208,55 +252,73 @@ unicon_advance <- function(x_unit_in,
         ),
         function(op, x, y)
           do.call(op, list(x, y))
-      ),
-      # get value out in assigned units
-      value_out <- unicon_full(
-        value_in = srp_value_out,
-        unit_in = srp_unit_out,
-        unit_out = unit_out,
-        pull = FALSE
+      )
+    )
+
+  ## do final unicon_full
+
+  final <- unicon_full(
+    value_in = workings$srp_value_out,
+    unit_in = workings$srp_unit_out,
+    unit_out = workings$unit_out,
+    pull = FALSE
+  ) |>
+    distinct() |> # needed in case user values are duplicates, expands next join
+    left_join(
+      workings,
+      by = c(
+        "value_in" = "srp_value_out",
+        "unit_in" = "srp_unit_out",
+        "unit_out" = "unit_out"
       )
     ) |>
     ## get rid of any unneeded columns
     select(
+      x_category,
       starts_with("x"),
+      y_category,
       starts_with("y"),
+      operator_in,
+      id,
       everything(),
       -fun,
       -x_srp_in,
+      -x_unit_out,
+      -x_alias_out,
+      -x_value_out,
       -y_srp_in,
-      -srp_unit_out,
-      -srp_value_out,
-      -x_row_number
+      -y_unit_out,
+      -y_alias_out,
+      -y_value_out
     )
 
   if (isTRUE(pull)) {
 
     # provide brief warnings
 
-    if (any(is.na(workings$value_out))) {
+    if (any(is.na(final$value_out))) {
       warning("Some units failed to convert or had invalid IDs. Set `pull = FALSE` for detailed output.") # nolint
     }
 
     # provide only value_out
 
-    workings$value_out
+    final$value_out
 
   } else {
 
     # provide detailed warnings
 
-    if (any(select(workings, ends_with("error_in")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_in")), na.rm = TRUE)) {
       warning("Some input units failed to find matches.")
     }
-    if (any(select(workings, ends_with("error_out")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_out")), na.rm = TRUE)) {
       warning("Some output units failed to find matches.")
     }
-    if (any(select(workings, ends_with("error_srp")), na.rm = TRUE)) {
+    if (any(select(final, ends_with("error_srp")), na.rm = TRUE)) {
       warning("Some requested conversions were not valid (unit type mismatch).")
     }
 
-    workings
+    final
 
   }
 
@@ -265,7 +327,11 @@ unicon_advance <- function(x_unit_in,
 
 operators_helper <- function() {
 
-  operators_dir <- file.path("inst", "units", "operators")
+  operators_dir <- system.file(
+    "units",
+    "operators",
+    package = "unicon"
+  )
 
   operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
     distinct(

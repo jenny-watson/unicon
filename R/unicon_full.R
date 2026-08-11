@@ -26,6 +26,15 @@ unicon_full <- function(value_in,
   # checks inputted data
 
   # check data type
+
+  if (any(is.na(value_in))) {
+    stop("Argument `value_in` cannot contain NA values.")
+  }
+
+  if (any(is.na(unit_in))) {
+    stop("Argument `unit_in` cannot contain NA values.")
+  }
+
   if (!is.numeric(value_in)) {
     stop("Argument `value_in` must be numeric.")
   }
@@ -138,13 +147,14 @@ unicon_full <- function(value_in,
       value_in = conv_tab_pre$value_in,
       id_in = conv_tab_pre$id_in,
       id_out = conv_tab_pre$id_out
-    )
+    ) |>
+      distinct() # needed in case user values are duplicates, expands join below
 
     ## join so can present alias in output if needed
     ## binding as row order preserved and if id_out is NA, cant join
     ## no row_order as upsets else{} branch
 
-    conv_tab = full_join(
+    conv_tab = left_join(
       conv_tab_pre,
       conv_tab_lite,
       by = c(

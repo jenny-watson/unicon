@@ -7,8 +7,9 @@
 unicon_help(...)
 }
 \arguments{
-\item{...}{Optional filter parameters, named regular expressions for
-filtering by one or more variables. May be ignored if full table is required.}
+\item{...}{Optional named character scalar arguments used as regular
+expressions to filter the output table by one or more columns (e.g.
+\code{category = "mass"}). May be omitted if the full table is required.}
 }
 \description{
 Return full unit conversion table with optional filter-by-regex

@@ -10,6 +10,7 @@ utils::globalVariables(
     "error_in",
     "error_out",
     "error_srp",
+    "fun",
     "fun.o",
     "id",
     "id.o",
@@ -22,6 +23,7 @@ utils::globalVariables(
     "model",
     "model_in",
     "model_out",
+    "operator",
     "slope",
     "slope.x",
     "slope.y",
@@ -32,6 +34,16 @@ utils::globalVariables(
     "srp_out",
     "type",
     "value_out",
-    "value_srp"
+    "value_srp",
+    "x",
+    "x_alias_out",
+    "x_srp_in",
+    "x_unit_out",
+    "x_value_out",
+    "y",
+    "y_alias_out",
+    "y_srp_in",
+    "y_unit_out",
+    "y_value_out"
   )
 )

@@ -10,11 +10,23 @@ env_in <- ls()
 
 ## folders
 
-base_dir <- file.path("inst", "units", "base")
+base_dir <- file.path(
+  "inst",
+  "units",
+  "base"
+)
 
-derived_dir <- file.path("inst", "units", "derived")
+derived_dir <- file.path(
+  "inst",
+  "units",
+  "derived"
+)
 
-operators_dir <- file.path("inst", "units", "operators")
+operators_dir <- file.path(
+  "inst",
+  "units",
+  "operators"
+)
 
 ## load data
 
@@ -30,9 +42,11 @@ relationships <- unicon_make_relationships_data(derived_data)
 
 ## join datasets together
 
-join <- unicon_join_datasets(base_data,
-                             derived_data,
-                             operators_data)
+join <- unicon_join_datasets(
+  base_data,
+  derived_data,
+  operators_data
+)
 
 ## final datasets
 

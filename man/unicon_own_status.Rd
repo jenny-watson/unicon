@@ -7,7 +7,11 @@ user's own data.}
 \usage{
 unicon_own_status()
 }
+\value{
+Logical scalar. \code{TRUE} if custom data is active,
+\code{FALSE} if the built-in package data is active.
+}
 \description{
-Tells user if using their own data or package data. \code{TRUE} is using
-user's own data.
+Returns a single logical value indicating whether the package
+is currently using custom unit data set via \code{\link{unicon_own}}.
 }
