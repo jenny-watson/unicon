@@ -48,7 +48,7 @@ unicon_make_base_data_from_jsons <- function(dir) {
     )
   ) |>
     unnest_wider("model") |> # further unlist model
-    mutate(alias = as.character(alias)) # was list before
+    mutate(alias = as.character(.data$alias)) # was list before
 
   base_data
 
