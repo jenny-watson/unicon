@@ -229,8 +229,7 @@ test_that("documented relationships resolve to the correct derived categories", 
     )
     expect_equal(
       result$srp_unit_out,
-      unique(srp_lookup$srp[srp_lookup$category == case[[5]]])[1]
-      ,
+      unique(srp_lookup$srp[srp_lookup$category == case[[5]]])[1],
       info = paste0(
         "x_unit_in=", case[[1]],
         ", y_unit_in=", case[[2]],
@@ -468,8 +467,8 @@ test_that("edge cases and integration paths are covered", {
   expect_equal(zero_numerator, 0, tolerance = 1e-8, info = "x_unit_in=m, y_unit_in=sec, x_value_in=0, y_value_in=5")
   expect_true(is.infinite(zero_denominator), info = "x_unit_in=m, y_unit_in=sec, x_value_in=5, y_value_in=0")
   expect_equal(negative_values, -5, tolerance = 1e-8, info = "x_unit_in=m, y_unit_in=sec, x_value_in=-10, y_value_in=2")
-  expect_equal(large_values, 1ex8, tolerance = 1e-8, info = "x_unit_in=m, y_unit_in=sec, x_value_in=1e12, y_value_in=1e-6")
-  expect_equal(small_values, 1e-x8, tolerance = 1e-30, info = "x_unit_in=m, y_unit_in=sec, x_value_in=1e-12, y_value_in=1e6")
+  expect_equal(large_values, 1e18, tolerance = 1e8, info = "x_unit_in=m, y_unit_in=sec, x_value_in=1e12, y_value_in=1e-6")
+  expect_equal(small_values, 1e-18, tolerance = 1e-30, info = "x_unit_in=m, y_unit_in=sec, x_value_in=1e-12, y_value_in=1e6")
   expect_true(is.na(missing_values[2]), info = "x_unit_in=m, y_unit_in=sec, x_value_in=NA row=2")
   expect_true(is.nan(missing_values[3]), info = "x_unit_in=m, y_unit_in=sec, x_value_in=NaN row=3")
   expect_equal(single_value, 2, tolerance = 1e-8, info = "x_unit_in=m, y_unit_in=sec, x_value_in=4, y_value_in=2")
