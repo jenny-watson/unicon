@@ -7,14 +7,14 @@ test_that("All base unit schemas have expected attributes", {
     "alias"
   )
 
-  checks <- imap(base, ~ list(
+  checks <- purrr::imap(base, ~ list(
     full = all(fields %in% names(.x)),
     clean = all(names(.x) %in% fields),
     id = .y
   ))
 
   # summarise
-  missing <- map_chr(
+  missing <-  purrr::map_chr(
     discard(
       checks,
       "full"
@@ -22,7 +22,7 @@ test_that("All base unit schemas have expected attributes", {
     "id"
   )
 
-  messy <- map_chr(
+  messy <-  purrr::map_chr(
     discard(
       checks,
       "clean"
@@ -69,7 +69,7 @@ test_that("All srp units are present in base units for aliases and models", {
 ################################################################################
 
 test_that("srp models are as expected", {
-  srp_models <- map(srp, ~ base[[.x]]$model)
+  srp_models <-  purrr::map(srp, ~ base[[.x]]$model)
 
   iwalk(srp_models, function(model, cat) {
     expect_true(model$slope == 1,
@@ -93,7 +93,7 @@ test_that("srp models are as expected", {
 ################################################################################
 
 test_that("SRP units are covered and expected", {
-  srp_base <- map_chr(base, "srp")
+  srp_base <-  purrr::map_chr(base, "srp")
 
   srp_covered <- srp_base %in% srp
 
@@ -113,15 +113,15 @@ test_that("SRP units are covered and expected", {
 
 test_that("No unit aliases are duplicated across IDs", {
   dupes <- unit_alias |>
-    group_by(alias) |>
-    summarise(
+    dplyr::group_by(alias) |>
+    dplyr::summarise(
       n = n(),
       ids = stringr::str_c(id,
         sep = ", "
       ),
       .groups = "drop"
     ) |>
-    filter(n > 1L)
+    dplyr::filter(n > 1L)
 
   msg_content <- stringr::str_c(
     paste0(
@@ -192,12 +192,12 @@ test_that("Package data has expected null/NA structure", {
 
   # unit_models should have exactly 1 row of all NAs
   na_rows <- unit_models |>
-    mutate(
+    dplyr::mutate(
       all_na = is.na(id) &
-        map_lgl(model, ~ is.na(.x$slope)) &
-        map_lgl(model, ~ is.na(.x$intercept))
+        purrr::map_lgl(model, ~ is.na(.x$slope)) &
+        purrr::map_lgl(model, ~ is.na(.x$intercept))
     ) |>
-    filter(all_na) |>
+    dplyr::filter(all_na) |>
     nrow()
 
   expect_true(

@@ -4,13 +4,6 @@
 ## Function messages/errors: unicon_full, unicon_lite, unicon_advance,
 ##                            unicon_own (make helpers), state functions
 
-# tests/testthat/setup.R
-
-unit_alias <- get("unit_alias", envir = asNamespace("unicon"))
-unit_srp <- get("unit_srp", envir = asNamespace("unicon"))
-unit_models <- get("unit_models", envir = asNamespace("unicon"))
-relationships <- get("relationships", envir = asNamespace("unicon"))
-
 ## ---- package data: unit_alias -----------------------------------------------
 
 test_that("unit_alias snapshot: dimensions and column names", {
