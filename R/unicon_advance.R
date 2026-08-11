@@ -263,6 +263,7 @@ unicon_advance <- function(x_unit_in,
     unit_out = workings$unit_out,
     pull = FALSE
   ) |>
+    distinct() |> # needed in case user values are duplicates, expands next join
     left_join(
       workings,
       by = c(
