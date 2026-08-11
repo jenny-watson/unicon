@@ -15,7 +15,7 @@ test_that("All base unit schemas have expected attributes", {
 
   # summarise
   missing <-  purrr::map_chr(
-    discard(
+    purrr::discard(
       checks,
       "full"
     ),
@@ -71,7 +71,7 @@ test_that("All srp units are present in base units for aliases and models", {
 test_that("srp models are as expected", {
   srp_models <-  purrr::map(srp, ~ base[[.x]]$model)
 
-  iwalk(srp_models, function(model, cat) {
+  purrr::iwalk(srp_models, function(model, cat) {
     expect_true(model$slope == 1,
       info = paste0(
         "Model incorrect for ",
@@ -115,7 +115,7 @@ test_that("No unit aliases are duplicated across IDs", {
   dupes <- unit_alias |>
     dplyr::group_by(alias) |>
     dplyr::summarise(
-      n = n(),
+      n = dplyr::n(),
       ids = stringr::str_c(id,
         sep = ", "
       ),
