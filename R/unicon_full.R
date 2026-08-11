@@ -22,7 +22,6 @@ unicon_full <- function(value_in,
                         unit_in,
                         unit_out = NA,
                         pull = TRUE) {
-
   # checks inputted data
 
   # check data type
@@ -66,13 +65,9 @@ unicon_full <- function(value_in,
 
   # message to confirm conversion output if no unit_out given
   if (all(is.na(unit_out))) {
-
     message("No output unit given. Converting all values to standard reference unit.") # nolint
-
   } else if (any(is.na(unit_out))) {
-
     message("Output unit missing in some cases. Converting to standard reference unit where missing.") # nolint
-
   }
 
   ## get aliases in right format before testing
@@ -82,12 +77,11 @@ unicon_full <- function(value_in,
 
   if (
     any(alias_in %in% .unicon_state$unit_alias$alias) ||
-    any(alias_out %in% .unicon_state$unit_alias$alias)
+      any(alias_out %in% .unicon_state$unit_alias$alias)
   ) {
-
     ## if id_out is NA, replace with srp (default functionality in unicon_lite)
 
-    check_id_out = .unicon_state$unit_alias |>
+    check_id_out <- .unicon_state$unit_alias |>
       filter(
         .data$alias %in% alias_in
       ) |>
@@ -157,7 +151,7 @@ unicon_full <- function(value_in,
     ## binding as row order preserved and if id_out is NA, cant join
     ## no row_order as upsets else{} branch
 
-    conv_tab = left_join(
+    conv_tab <- left_join(
       conv_tab_pre,
       conv_tab_lite,
       by = c(
@@ -166,9 +160,7 @@ unicon_full <- function(value_in,
         "id_out"
       )
     )
-
   } else {
-
     conv_tab <- unicon_lite(
       value_in = value_in,
       id_in = unit_in,
@@ -178,11 +170,9 @@ unicon_full <- function(value_in,
         alias_in = unit_in,
         alias_out = unit_out
       )
-
   }
 
   if (isTRUE(pull)) {
-
     # provide brief warnings
 
     if (any(is.na(conv_tab$value_out))) {
@@ -192,9 +182,7 @@ unicon_full <- function(value_in,
     # provide only value_out
 
     conv_tab$value_out
-
   } else {
-
     # provide detailed warnings
 
     if (any(conv_tab$error_in, na.rm = TRUE)) {
@@ -225,6 +213,5 @@ unicon_full <- function(value_in,
         "value_srp",
         "value_out"
       )
-
   }
 }

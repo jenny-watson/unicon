@@ -13,7 +13,6 @@
 unicon_join_datasets <- function(base,
                                  derived,
                                  operators) {
-
   join <- derived |>
     ## join to x
     left_join(
@@ -42,12 +41,16 @@ unicon_join_datasets <- function(base,
       id = paste0(.data$id.x, .data$id.o, .data$id.y),
       alias = paste0(.data$alias.x, .data$alias.o, .data$alias.y), # problem per has no spaces?
       srp = paste0(.data$srp.x, .data$id.o, .data$srp.y),
-      slope = pmap_dbl(list(.data$fun.o,
-                            .data$slope.x,
-                            .data$slope.y),
-                       function(op, x, y) {
-                         do.call(op, list(x, y))
-                       }),
+      slope = pmap_dbl(
+        list(
+          .data$fun.o,
+          .data$slope.x,
+          .data$slope.y
+        ),
+        function(op, x, y) {
+          do.call(op, list(x, y))
+        }
+      ),
       intercept = 0,
       type = "derived",
       .keep = "none"
@@ -64,5 +67,4 @@ unicon_join_datasets <- function(base,
     )
 
   join
-
 }

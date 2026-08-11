@@ -6,7 +6,6 @@
 #' @export
 
 unicon_make_unit_alias <- function(join_dataset) {
-
   unit_alias <- join_dataset |>
     distinct(.data$id, .data$alias) |> ## ensure all unique
     ## add in id as alias to ensure all combinations captured
@@ -21,7 +20,6 @@ unicon_make_unit_alias <- function(join_dataset) {
     arrange(.data$id)
 
   unit_alias
-
 }
 
 #' @title Make unit_srp dataset
@@ -32,7 +30,6 @@ unicon_make_unit_alias <- function(join_dataset) {
 #' @export
 
 unicon_make_unit_srp <- function(join_dataset) {
-
   unit_srp <- join_dataset |>
     distinct(
       .data$id,
@@ -42,7 +39,6 @@ unicon_make_unit_srp <- function(join_dataset) {
     )
 
   unit_srp
-
 }
 
 #' @title Make unit_model dataset
@@ -54,7 +50,6 @@ unicon_make_unit_srp <- function(join_dataset) {
 #' @export
 
 unicon_make_unit_models <- function(join_dataset) {
-
   unit_models <- join_dataset |>
     distinct(
       .data$id,
@@ -71,5 +66,4 @@ unicon_make_unit_models <- function(join_dataset) {
     mutate(model = map(.data$model, ~ as.list(.x)))
 
   unit_models
-
 }

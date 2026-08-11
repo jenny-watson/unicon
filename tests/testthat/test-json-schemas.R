@@ -115,10 +115,10 @@ test_that("all base unit JSON files have character category and srp fields", {
 })
 
 test_that("base unit JSON snapshot: known units have expected category", {
-  m    <- read_pkg_json("units", "base", "length", "m.json")
-  kg   <- read_pkg_json("units", "base", "mass", "kg.json")
-  c_   <- read_pkg_json("units", "base", "temperature", "C.json")
-  l_   <- read_pkg_json("units", "base", "volume", "l.json")
+  m <- read_pkg_json("units", "base", "length", "m.json")
+  kg <- read_pkg_json("units", "base", "mass", "kg.json")
+  c_ <- read_pkg_json("units", "base", "temperature", "C.json")
+  l_ <- read_pkg_json("units", "base", "volume", "l.json")
   expect_snapshot({
     cat("m category:", m$category, "\n")
     cat("kg category:", kg$category, "\n")
@@ -128,9 +128,9 @@ test_that("base unit JSON snapshot: known units have expected category", {
 })
 
 test_that("base unit JSON snapshot: SRP units have slope=1 and intercept=0", {
-  m    <- read_pkg_json("units", "base", "length", "m.json")
-  kg   <- read_pkg_json("units", "base", "mass", "kg.json")
-  c_   <- read_pkg_json("units", "base", "temperature", "C.json")
+  m <- read_pkg_json("units", "base", "length", "m.json")
+  kg <- read_pkg_json("units", "base", "mass", "kg.json")
+  c_ <- read_pkg_json("units", "base", "temperature", "C.json")
   expect_snapshot({
     cat("m slope:", m$model$slope, "intercept:", m$model$intercept, "\n")
     cat("kg slope:", kg$model$slope, "intercept:", kg$model$intercept, "\n")
@@ -198,10 +198,14 @@ test_that("derived unit JSON snapshot: known derived relationships", {
   concentration <- read_pkg_json("units", "derived", "concentration.json")
   expect_snapshot({
     cat("speed: x=", speed$x, " y=", speed$y, " op=", speed$operator, "\n")
-    cat("area_density: x=", area_density$x, " y=", area_density$y,
-        " op=", area_density$operator, "\n")
-    cat("concentration: x=", concentration$x, " y=", concentration$y,
-        " op=", concentration$operator, "\n")
+    cat(
+      "area_density: x=", area_density$x, " y=", area_density$y,
+      " op=", area_density$operator, "\n"
+    )
+    cat(
+      "concentration: x=", concentration$x, " y=", concentration$y,
+      " op=", concentration$operator, "\n"
+    )
   })
 })
 

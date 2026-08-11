@@ -188,4 +188,3 @@ test_that("unicon_own stops when derived data operator is not in operator data",
     info = "derived_id=myvol, x=mass, y=length, operator=not_a_real_operator"
   )
 })
-

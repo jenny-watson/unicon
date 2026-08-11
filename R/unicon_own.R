@@ -34,33 +34,31 @@
 #' @returns Updated package data.
 #' @export
 
-unicon_own = function(base_id = NA,
-                      base_alias = NA,
-                      category = NA,
-                      srp = NA,
-                      slope = NA,
-                      intercept = NA,
-                      derived_id = NA,
-                      x = NA,
-                      y = NA,
-                      operator = NA,
-                      operator_id = NA,
-                      fun = NA,
-                      operator_alias = NA) {
-
+unicon_own <- function(base_id = NA,
+                       base_alias = NA,
+                       category = NA,
+                       srp = NA,
+                       slope = NA,
+                       intercept = NA,
+                       derived_id = NA,
+                       x = NA,
+                       y = NA,
+                       operator = NA,
+                       operator_id = NA,
+                       fun = NA,
+                       operator_alias = NA) {
   ## make data that is available
 
   own_base_data <- NULL
   own_derived_data <- NULL
   own_operators_data <- NULL
 
-  if(!all(is.na(base_id)) &&
-     !all(is.na(base_alias)) &&
-     !all(is.na(category)) &&
-     !all(is.na(srp)) &&
-     !all(is.na(slope)) &&
-     !all(is.na(intercept))) {
-
+  if (!all(is.na(base_id)) &&
+    !all(is.na(base_alias)) &&
+    !all(is.na(category)) &&
+    !all(is.na(srp)) &&
+    !all(is.na(slope)) &&
+    !all(is.na(intercept))) {
     message("Creating base data")
 
     own_base_data <- unicon_make_own_base_data(
@@ -72,11 +70,10 @@ unicon_own = function(base_id = NA,
       intercept = intercept
     )
 
-    if(!all(is.na(derived_id)) &&
-       !all(is.na(x)) &&
-       !all(is.na(y)) &&
-       !all(is.na(operator))) {
-
+    if (!all(is.na(derived_id)) &&
+      !all(is.na(x)) &&
+      !all(is.na(y)) &&
+      !all(is.na(operator))) {
       message("Creating derived data")
 
       own_derived_data <- unicon_make_own_derived_data(
@@ -86,10 +83,9 @@ unicon_own = function(base_id = NA,
         operator = operator
       )
 
-      if(!all(is.na(operator_id)) &&
-         !all(is.na(fun)) &&
-         !all(is.na(operator_alias))) {
-
+      if (!all(is.na(operator_id)) &&
+        !all(is.na(fun)) &&
+        !all(is.na(operator_alias))) {
         message("Creating operator data")
 
         own_operators_data <- unicon_make_own_operators_data(
@@ -98,21 +94,15 @@ unicon_own = function(base_id = NA,
           fun = fun,
           alias = operator_alias
         )
-
       }
-
     }
-
   } else {
-
     stop(
       "Not enough data provided to create a dataset. At minimum, `base_id`, ",
       "`base_alias`, `category`, `srp`, `slope`, and `intercept` must all be ",
       "supplied."
     )
-
   }
-
 
 
   ## folders with package .json files
@@ -138,37 +128,25 @@ unicon_own = function(base_id = NA,
 
   ## load data and join to user's data
 
-  if(!is.null(own_base_data)) {
-
+  if (!is.null(own_base_data)) {
     base_data <- unicon_make_base_data_from_jsons(base_dir) |>
       bind_rows(own_base_data)
-
   } else {
-
     base_data <- unicon_make_base_data_from_jsons(base_dir)
-
   }
 
-  if(!is.null(own_derived_data)) {
-
+  if (!is.null(own_derived_data)) {
     derived_data <- unicon_make_derived_data_from_jsons(derived_dir) |>
       bind_rows(own_derived_data)
-
   } else {
-
     derived_data <- unicon_make_derived_data_from_jsons(derived_dir)
-
   }
 
-  if(!is.null(own_operators_data)) {
-
+  if (!is.null(own_operators_data)) {
     operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
       bind_rows(own_operators_data)
-
   } else {
-
     operators_data <- unicon_make_operators_data_from_jsons(operators_dir)
-
   }
 
   ## make every combination of unit category calculations
@@ -179,8 +157,7 @@ unicon_own = function(base_id = NA,
 
   ## check derived data categories and operators exist in combined data
 
-  if(!is.null(own_derived_data)) {
-
+  if (!is.null(own_derived_data)) {
     missing_x <- unique(own_derived_data$x[
       !own_derived_data$x %in% base_data$category
     ])
@@ -189,38 +166,37 @@ unicon_own = function(base_id = NA,
       !own_derived_data$y %in% base_data$category
     ])
 
-    if(length(missing_x) > 0 || length(missing_y) > 0) {
-
+    if (length(missing_x) > 0 || length(missing_y) > 0) {
       stop(
         "The following categories used in derived data do not exist in the ",
         "base data. Please add base data for these categories first.\n",
-        if(length(missing_x) > 0)
-          paste0("  x: ", paste(missing_x, collapse = ", ")),
-        if(length(missing_y) > 0)
+        if (length(missing_x) > 0) {
+          paste0("  x: ", paste(missing_x, collapse = ", "))
+        },
+        if (length(missing_y) > 0) {
           paste0("\n  y: ", paste(missing_y, collapse = ", "))
+        }
       )
-
     }
 
     missing_operators <- unique(own_derived_data$operator[
       !own_derived_data$operator %in% operators_data$operator
     ])
 
-    if(length(missing_operators) > 0) {
-
+    if (length(missing_operators) > 0) {
       stop(
         "The following operators used in derived data do not exist in the ",
         "operator data. Please add operator data for these operators first: ",
         paste(missing_operators, collapse = ", ")
       )
-
     }
-
   }
 
-  join <- unicon_join_datasets(base_data,
-                               derived_data,
-                               operators_data)
+  join <- unicon_join_datasets(
+    base_data,
+    derived_data,
+    operators_data
+  )
 
   ## final datasets
 
@@ -238,5 +214,4 @@ unicon_own = function(base_id = NA,
   .unicon_state$relationships <- relationships
 
   .unicon_state$using_custom <- TRUE
-
 }

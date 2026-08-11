@@ -7,7 +7,6 @@
 #' @export
 
 unicon_make_relationships_data <- function(derived) {
-
   relationships <- bind_rows(
     derived,
     derived |>
@@ -36,6 +35,4 @@ unicon_make_relationships_data <- function(derived) {
     distinct()
 
   relationships
-
 }
-

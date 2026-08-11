@@ -54,10 +54,10 @@ test_that("unicon_lite and unicon_full produce identical numeric outputs when ID
   full_out <- unicon_full(c(1, 2), c("m", "kg"), c("cm", "g"), pull = FALSE)
   lite_out <- unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"))
 
-  expect_equal(full_out$value_in,  lite_out$value_in)
+  expect_equal(full_out$value_in, lite_out$value_in)
   expect_equal(full_out$value_srp, lite_out$value_srp)
   expect_equal(full_out$value_out, lite_out$value_out)
-  expect_equal(full_out$error_in,  lite_out$error_in)
+  expect_equal(full_out$error_in, lite_out$error_in)
   expect_equal(full_out$error_srp, lite_out$error_srp)
   expect_equal(full_out$error_out, lite_out$error_out)
 })

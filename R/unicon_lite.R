@@ -16,8 +16,6 @@
 unicon_lite <- function(value_in,
                         id_in,
                         id_out = NA) {
-
-
   # compose output table
 
   conv_tab_tib <- tibble(
@@ -129,5 +127,4 @@ unicon_lite <- function(value_in,
       "value_srp",
       "value_out"
     )
-
 }

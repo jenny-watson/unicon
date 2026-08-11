@@ -78,7 +78,7 @@ test_that("unicon_full reverts to package data after reset", {
     result <- unicon_full(1, "largepackage", "g", pull = TRUE),
     "Some units failed to convert"
   )
-    expect_true(all(is.na(result)))
+  expect_true(all(is.na(result)))
 })
 
 ## ---- unicon_help reflects active state --------------------------------------

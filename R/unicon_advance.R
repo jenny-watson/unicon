@@ -32,7 +32,6 @@ unicon_advance <- function(x_unit_in,
                            unit_out = NA,
                            operator_in = NA,
                            pull = TRUE) {
-
   # checks are minimal as relying in unicon_full checks
 
   l1 <- length(x_value_in)
@@ -134,25 +133,19 @@ unicon_advance <- function(x_unit_in,
   ## check and apply operator_in - only needed for mass & volume fractions
 
   if (nrow(rel_check) != 0) {
-
     if (!is.na(operator_in)) {
-
       rel <- rel |>
         filter(
           .data$operator == operator_in
         )
-
     } else {
-
       stop("Please specify `operator_in`")
-
     }
   }
 
   ## check that the unit_out specified is valid
 
   if (!all(is.na(unit_out))) {
-
     check_unit_out <- .unicon_state$unit_alias |>
       filter(.data$alias %in% unit_out) |>
       left_join(
@@ -164,11 +157,8 @@ unicon_advance <- function(x_unit_in,
       )
 
     if (nrow(check_unit_out) != 0) {
-
       stop("`unit_out` does not exist for the relationship derived between parent units")
-
     }
-
   }
 
   ## join all datasets together and create new metric data
@@ -294,7 +284,6 @@ unicon_advance <- function(x_unit_in,
     )
 
   if (isTRUE(pull)) {
-
     # provide brief warnings
 
     if (any(is.na(final$value_out))) {
@@ -304,9 +293,7 @@ unicon_advance <- function(x_unit_in,
     # provide only value_out
 
     final$value_out
-
   } else {
-
     # provide detailed warnings
 
     if (any(select(final, ends_with("error_in")), na.rm = TRUE)) {
@@ -320,14 +307,11 @@ unicon_advance <- function(x_unit_in,
     }
 
     final
-
   }
-
 }
 
 
 operators_helper <- function() {
-
   operators_dir <- system.file(
     "units",
     "operators",
@@ -341,5 +325,4 @@ operators_helper <- function() {
     )
 
   operators_data
-
 }

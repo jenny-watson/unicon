@@ -52,7 +52,6 @@ unicon_make_base_data_from_jsons <- function(dir) { # nolint: object_length_lint
     mutate(alias = as.character(.data$alias)) # was list before
 
   base_data
-
 }
 
 #' @title Load derived data .jsons
@@ -76,7 +75,6 @@ unicon_make_derived_data_from_jsons <- function(dir) { # nolint: object_length_l
   )
 
   derived_data
-
 }
 
 #' @title Load operator data .jsons
@@ -100,5 +98,4 @@ unicon_make_operators_data_from_jsons <- function(dir) { # nolint: object_length
   )
 
   operators_data
-
 }

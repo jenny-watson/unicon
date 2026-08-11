@@ -26,7 +26,6 @@ library(unicon)
 The core user-facing function of the `unicon` package is `unicon_full`. Use it like this:
 
 ```{r unicon_full-1}
-
 raw_values <- c(54.21, 71.24, 55.81, 11.33, 70.59)
 raw_units <- c("tonnes / ha", "tons per acre", "t/ha", "kg /Hectare", "g/m2")
 unit_out <- "tonnes / ha"
@@ -37,7 +36,6 @@ unicon_full(
   unit_out = unit_out,
   pull = TRUE
 )
-
 ```
 
 The function uses `unicon`'s extensive library of unit aliases to match the highly varied raw input units to their corresponding unit IDs, and subsequently converts them to the specified output unit.
@@ -152,7 +150,6 @@ Users can add to base, derived, and operator data at the same time, or just one 
 An example of use is as follows: Users could have a defined 'package' size of 12.5 kg or 6.25 kg. Users may have information about the number of packages of certain size or the weight in kg of the packages, but not an easy way to convert from one to the other.
 
 ```{r}
-
 lp <- "lp"
 sp <- "sp"
 
@@ -162,26 +159,23 @@ unicon_own(
   category   = c(rep("mass", 4)),
   srp        = c(rep("g", 4)),
   slope      = c(rep(12500, 2), rep(6250, 2)),
-  intercept  = c(rep(0, 4))  # default; shown for clarity
+  intercept  = c(rep(0, 4)) # default; shown for clarity
 )
 
 unicon_own_status()
 
 unicon_help() |>
   dplyr::filter(id %in% c("lp", "sp"))
-
 ```
 
 Then use `unicon_full` as usual:
 
 ```{r}
-
 unicon_full(
   value_in = c(3, 5),
   unit_in = c("large package", "small package"),
   unit_out = "kg"
 )
-
 ```
 
 Authors also suggest that users could use this functionality for money exchange rates between different currencies, where the exchange rate can easily be updated.
@@ -189,9 +183,7 @@ Authors also suggest that users could use this functionality for money exchange 
 If users want to revert back to the package data, all they need to do is:
 
 ```{r}
-
 unicon_reset_units()
-
 ```
 
 # `unicon_advance`
@@ -201,9 +193,7 @@ The `unicon_advance` function is for the hard-core unit converters out there - t
 The metric relationships that are stored in the `relationships` package dataset are:
 
 ```{r}
-
 unicon:::relationships
-
 ```
 
 The beady eyed user will see that the same relationship is repeated four times, so that every combination of `id`, `x`, `y`, and `operator` is included.
