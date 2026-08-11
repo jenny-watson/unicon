@@ -356,4 +356,3 @@ test_that("edge cases and integration paths are covered", {
     tolerance = 1e-8
   )
 })
-

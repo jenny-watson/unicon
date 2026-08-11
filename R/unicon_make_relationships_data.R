@@ -7,27 +7,26 @@
 #' @export
 
 unicon_make_relationships_data <- function(derived) {
-
   relationships <- bind_rows(
     derived,
     derived |>
       rename(
-        id = y,
-        y = id
+        "id" = "y",
+        "y" = "id"
       ),
     derived |>
       rename(
-        id = x,
-        x = id
+        "id" = "x",
+        "x" = "id"
       ) |>
       mutate(
         operator = "multiply"
       ),
     derived |>
       rename(
-        id = x,
-        y = id,
-        x = y
+        "id" = "x",
+        "y" = "id",
+        "x" = "y"
       ) |>
       mutate(
         operator = "multiply"
@@ -36,6 +35,4 @@ unicon_make_relationships_data <- function(derived) {
     distinct()
 
   relationships
-
 }
-

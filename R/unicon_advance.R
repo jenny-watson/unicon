@@ -32,13 +32,12 @@ unicon_advance <- function(x_unit_in,
                            unit_out = NA,
                            operator_in = NA,
                            pull = TRUE) {
-
   # checks are minimal as relying in unicon_full checks
 
   l1 <- length(x_value_in)
   l2 <- length(y_value_in)
 
-  if (l2 != l1 ) {
+  if (l2 != l1) {
     stop("Argument `x_value_in` and `y_value_in` must have same length.")
   }
 
@@ -81,29 +80,29 @@ unicon_advance <- function(x_unit_in,
   ## identify what type of metrics x and y are & their srp
 
   x_category <- filter(
-    unit_srp,
-    srp %in% x_srp_value$srp_in
+    .unicon_state$unit_srp,
+    .data$srp %in% x_srp_value$srp_in
   ) |>
     distinct(
-      category,
-      srp
+      .data$category,
+      .data$srp
     )
 
   y_category <- filter(
-    unit_srp,
-    srp %in% y_srp_value$srp_in
+    .unicon_state$unit_srp,
+    .data$srp %in% y_srp_value$srp_in
   ) |>
     distinct(
-      category,
-      srp
+      .data$category,
+      .data$srp
     )
 
   ## figure out if a relationship exists between x and y
 
-  rel <- relationships |>
+  rel <- .unicon_state$relationships |>
     filter(
-      x %in% x_category$category,
-      y %in% y_category$category
+      .data$x %in% x_category$category,
+      .data$y %in% y_category$category
     )
 
   ## if no parent relationship, stop
@@ -120,55 +119,46 @@ unicon_advance <- function(x_unit_in,
   ## special case check:
   ## does the operator need specifying?
 
-  rel_check <- relationships |>
+  rel_check <- .unicon_state$relationships |>
     count(
-      x,
-      y
+      .data$x,
+      .data$y
     ) |>
     filter(
-      n == 2,
-      x %in% x_category$category,
-      y %in% y_category$category
+      .data$n == 2,
+      .data$x %in% x_category$category,
+      .data$y %in% y_category$category
     )
 
   ## check and apply operator_in - only needed for mass & volume fractions
 
   if (nrow(rel_check) != 0) {
-
     if (!is.na(operator_in)) {
-
       rel <- rel |>
         filter(
-          operator == operator_in
+          .data$operator == operator_in
         )
-
     } else {
-
       stop("Please specify `operator_in`")
-
     }
   }
 
   ## check that the unit_out specified is valid
 
   if (!all(is.na(unit_out))) {
-
-    check_unit_out <- unit_alias |>
-      filter(alias %in% unit_out) |>
+    check_unit_out <- .unicon_state$unit_alias |>
+      filter(.data$alias %in% unit_out) |>
       left_join(
-        unit_srp,
+        .unicon_state$unit_srp,
         by = "id"
       ) |>
       filter(
-        !category %in% rel$id
+        !.data$category %in% rel$id
       )
 
     if (nrow(check_unit_out) != 0) {
-
       stop("`unit_out` does not exist for the relationship derived between parent units")
-
     }
-
   }
 
   ## join all datasets together and create new metric data
@@ -186,8 +176,8 @@ unicon_advance <- function(x_unit_in,
     left_join(
       x_category |>
         rename(
-          x_srp_in = srp,
-          x_category = category
+          "x_srp_in" = "srp",
+          "x_category" = "category"
         ),
       by = "x_srp_in"
     ) |>
@@ -203,8 +193,8 @@ unicon_advance <- function(x_unit_in,
     left_join(
       y_category |>
         rename(
-          y_srp_in = srp,
-          y_category = category
+          "y_srp_in" = "srp",
+          "y_category" = "category"
         ),
       by = "y_srp_in"
     ) |>
@@ -218,23 +208,23 @@ unicon_advance <- function(x_unit_in,
     ) |>
     # find srp for relationship between parent x and y
     left_join(
-      unit_srp |>
+      .unicon_state$unit_srp |>
         distinct(
-          category,
-          srp_unit_out = srp
+          .data$category,
+          srp_unit_out = .data$srp
         ),
       by = c("id" = "category")
     ) |>
     # sort operator out and get fun for map in mutate
     mutate(
       operator_in = if_else(
-        !is.na(operator_in),
-        operator_in,
-        operator
+        !is.na(.data$operator_in),
+        .data$operator_in,
+        .data$operator
       )
     ) |>
     select(
-      -operator
+      -"operator"
     ) |>
     left_join(
       operators_helper(),
@@ -246,12 +236,13 @@ unicon_advance <- function(x_unit_in,
     mutate(
       srp_value_out = pmap_dbl(
         list(
-          fun,
-          x_value_out,
-          y_value_out
+          .data$fun,
+          .data$x_value_out,
+          .data$y_value_out
         ),
-        function(op, x, y)
+        function(op, x, y) {
           do.call(op, list(x, y))
+        }
       )
     )
 
@@ -274,26 +265,25 @@ unicon_advance <- function(x_unit_in,
     ) |>
     ## get rid of any unneeded columns
     select(
-      x_category,
+      "x_category",
       starts_with("x"),
-      y_category,
+      "y_category",
       starts_with("y"),
-      operator_in,
-      id,
+      "operator_in",
+      "id",
       everything(),
-      -fun,
-      -x_srp_in,
-      -x_unit_out,
-      -x_alias_out,
-      -x_value_out,
-      -y_srp_in,
-      -y_unit_out,
-      -y_alias_out,
-      -y_value_out
+      -"fun",
+      -"x_srp_in",
+      -"x_unit_out",
+      -"x_alias_out",
+      -"x_value_out",
+      -"y_srp_in",
+      -"y_unit_out",
+      -"y_alias_out",
+      -"y_value_out"
     )
 
   if (isTRUE(pull)) {
-
     # provide brief warnings
 
     if (any(is.na(final$value_out))) {
@@ -303,9 +293,7 @@ unicon_advance <- function(x_unit_in,
     # provide only value_out
 
     final$value_out
-
   } else {
-
     # provide detailed warnings
 
     if (any(select(final, ends_with("error_in")), na.rm = TRUE)) {
@@ -319,14 +307,11 @@ unicon_advance <- function(x_unit_in,
     }
 
     final
-
   }
-
 }
 
 
 operators_helper <- function() {
-
   operators_dir <- system.file(
     "units",
     "operators",
@@ -335,11 +320,9 @@ operators_helper <- function() {
 
   operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
     distinct(
-      operator,
-      fun
+      .data$operator,
+      .data$fun
     )
 
   operators_data
-
 }
-
