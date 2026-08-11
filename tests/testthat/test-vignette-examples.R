@@ -15,7 +15,13 @@ test_that("documented unicon_full and unicon_lite examples stay aligned", {
       value_in = raw_values,
       id_in = raw_ids,
       id_out = id_out
-    )$value_out
+    )$value_out,
+    info = paste0(
+      "unit_out=", unit_out,
+      ", id_out=", id_out,
+      ", unit_in=", paste(raw_units, collapse = "|"),
+      ", id_in=", paste(raw_ids, collapse = "|")
+    )
   )
 })
 
@@ -34,7 +40,11 @@ test_that("documented invalid unit example keeps valid rows and flags the bad on
       unit_out = unit_out,
       pull = FALSE
     ),
-    "Some input units failed to find matches\\."
+    "Some input units failed to find matches\\.",
+    info = paste0(
+      "unit_out=", unit_out,
+      ", invalid_unit=", raw_units[[length(raw_units)]]
+    )
   )
 
   lite_out <- unicon_lite(
@@ -43,8 +53,21 @@ test_that("documented invalid unit example keeps valid rows and flags the bad on
     id_out = id_out
   )
 
-  expect_false(any(full_tbl$error_in[valid_rows]))
-  expect_true(full_tbl$error_in[[length(raw_values)]])
-  expect_equal(full_tbl$value_out[valid_rows], lite_out$value_out)
-  expect_true(is.na(full_tbl$value_out[[length(raw_values)]]))
+  expect_false(
+    any(full_tbl$error_in[valid_rows]),
+    info = paste0("valid_rows=", paste(valid_rows, collapse = ","), ", id_in=", paste(valid_ids, collapse = "|"))
+  )
+  expect_true(
+    full_tbl$error_in[[length(raw_values)]],
+    info = paste0("invalid_row=", length(raw_values), ", unit_in=", raw_units[[length(raw_values)]])
+  )
+  expect_equal(
+    full_tbl$value_out[valid_rows],
+    lite_out$value_out,
+    info = paste0("valid_rows=", paste(valid_rows, collapse = ","), ", unit_out=", unit_out, ", id_out=", id_out)
+  )
+  expect_true(
+    is.na(full_tbl$value_out[[length(raw_values)]]),
+    info = paste0("invalid_row=", length(raw_values), ", unit_in=", raw_units[[length(raw_values)]])
+  )
 })
