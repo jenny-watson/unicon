@@ -23,7 +23,7 @@ test_that("All base unit schemas have expected attributes", {
   )
 
   messy <-  purrr::map_chr(
-    discard(
+    purrr::discard(
       checks,
       "clean"
     ),
