@@ -40,21 +40,31 @@ test_that("unicon_make_own_base_data stops on mismatched vector lengths", {
       c("id1", "id2"), "a", "cat", "srp", 1, 0
     ),
     "All vectors supplied to `unicon_make_own_base_data` must be the same length",
-    info = "id_length=2, alias_length=1, category_length=1, srp_length=1, slope_length=1, intercept_length=1"
+    info = paste0(
+      "id_length=2, alias_length=1, category_length=1, ",
+      "srp_length=1, slope_length=1, intercept_length=1"
+    )
   )
   expect_error(
     unicon_make_own_base_data(
       "id", c("a", "b"), "cat", "srp", 1, 0
     ),
     "All vectors supplied to `unicon_make_own_base_data` must be the same length",
-    info = "id_length=1, alias_length=2, category_length=1, srp_length=1, slope_length=1, intercept_length=1"
+    info = paste0(
+      "id_length=1, alias_length=2, category_length=1, ",
+      "srp_length=1, slope_length=1, intercept_length=1"
+    )
   )
 })
 
 test_that("unicon_make_own_base_data returns a tibble with correct columns", {
   result <- unicon_make_own_base_data("id", "a", "cat", "srp", 1, 0)
   expect_s3_class(result, "data.frame")
-  expect_named(result, c("id", "alias", "category", "srp", "slope", "intercept"), info = "dataset=base_data_columns")
+  expect_named(
+    result,
+    c("id", "alias", "category", "srp", "slope", "intercept"),
+    info = "dataset=base_data_columns"
+  )
   expect_equal(nrow(result), 1L, info = "dataset=base_data, expected_rows=1")
 })
 
