@@ -81,29 +81,29 @@ unicon_advance <- function(x_unit_in,
   ## identify what type of metrics x and y are & their srp
 
   x_category <- filter(
-    unit_srp,
-    srp %in% x_srp_value$srp_in
+    .unicon_state$unit_srp,
+    .data$srp %in% x_srp_value$srp_in
   ) |>
     distinct(
-      category,
-      srp
+      .data$category,
+      .data$srp
     )
 
   y_category <- filter(
-    unit_srp,
-    srp %in% y_srp_value$srp_in
+    .unicon_state$unit_srp,
+    .data$srp %in% y_srp_value$srp_in
   ) |>
     distinct(
-      category,
-      srp
+      .data$category,
+      .data$srp
     )
 
   ## figure out if a relationship exists between x and y
 
-  rel <- relationships |>
+  rel <- .unicon_state$relationships |>
     filter(
-      x %in% x_category$category,
-      y %in% y_category$category
+      .data$x %in% x_category$category,
+      .data$y %in% y_category$category
     )
 
   ## if no parent relationship, stop
@@ -120,15 +120,15 @@ unicon_advance <- function(x_unit_in,
   ## special case check:
   ## does the operator need specifying?
 
-  rel_check <- relationships |>
+  rel_check <- .unicon_state$relationships |>
     count(
-      x,
-      y
+      .data$x,
+      .data$y
     ) |>
     filter(
-      n == 2,
-      x %in% x_category$category,
-      y %in% y_category$category
+      .data$n == 2,
+      .data$x %in% x_category$category,
+      .data$y %in% y_category$category
     )
 
   ## check and apply operator_in - only needed for mass & volume fractions
@@ -139,7 +139,7 @@ unicon_advance <- function(x_unit_in,
 
       rel <- rel |>
         filter(
-          operator == operator_in
+          .data$operator == operator_in
         )
 
     } else {
@@ -153,14 +153,14 @@ unicon_advance <- function(x_unit_in,
 
   if (!all(is.na(unit_out))) {
 
-    check_unit_out <- unit_alias |>
-      filter(alias %in% unit_out) |>
+    check_unit_out <- .unicon_state$unit_alias |>
+      filter(.data$alias %in% unit_out) |>
       left_join(
-        unit_srp,
+        .unicon_state$unit_srp,
         by = "id"
       ) |>
       filter(
-        !category %in% rel$id
+        !.data$category %in% rel$id
       )
 
     if (nrow(check_unit_out) != 0) {
@@ -218,10 +218,10 @@ unicon_advance <- function(x_unit_in,
     ) |>
     # find srp for relationship between parent x and y
     left_join(
-      unit_srp |>
+      .unicon_state$unit_srp |>
         distinct(
-          category,
-          srp_unit_out = srp
+          .data$category,
+          srp_unit_out = .data$srp
         ),
       by = c("id" = "category")
     ) |>

@@ -84,17 +84,17 @@ unicon_full <- function(value_in,
 
     ## if id_out is NA, replace with srp (default functionality in unicon_lite)
 
-    check_id_out = unit_alias |>
+    check_id_out = .unicon_state$unit_alias |>
       filter(
-        alias %in% alias_in
+        .data$alias %in% alias_in
       ) |>
       left_join(
-        unit_srp,
+        .unicon_state$unit_srp,
         by = "id"
       ) |>
       distinct(
-        id_in = id,
-        id_out_not_na = srp
+        id_in = .data$id,
+        id_out_not_na = .data$srp
       )
 
     # compose output table
