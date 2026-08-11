@@ -36,7 +36,7 @@ unicon_load_json_files <- function(file_pathway) {
 #' @import tibble purrr dplyr tidyr
 #' @export
 
-unicon_make_base_data_from_jsons <- function(dir) {
+unicon_make_base_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   base_data <- imap_dfr(
     unicon_load_json_files(dir),
@@ -63,7 +63,7 @@ unicon_make_base_data_from_jsons <- function(dir) {
 #' @import tibble purrr
 #' @export
 
-unicon_make_derived_data_from_jsons <- function(dir) {
+unicon_make_derived_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   derived_data <- imap_dfr(
     unicon_load_json_files(dir),
@@ -87,7 +87,7 @@ unicon_make_derived_data_from_jsons <- function(dir) {
 #' @import tibble purrr
 #' @export
 
-unicon_make_operators_data_from_jsons <- function(dir) {
+unicon_make_operators_data_from_jsons <- function(dir) { # nolint: object_length_linter.
 
   operators_data <- imap_dfr(
     unicon_load_json_files(dir),

@@ -11,8 +11,8 @@
 #' @export
 
 unicon_join_datasets <- function(base,
-                                derived,
-                                operators) {
+                                 derived,
+                                 operators) {
 
   join <- derived |>
     ## join to x
@@ -45,8 +45,9 @@ unicon_join_datasets <- function(base,
       slope = pmap_dbl(list(.data$fun.o,
                             .data$slope.x,
                             .data$slope.y),
-                       function(op, x, y)
-                         do.call(op, list(x, y))),
+                       function(op, x, y) {
+                         do.call(op, list(x, y))
+                       }),
       intercept = 0,
       type = "derived",
       .keep = "none"

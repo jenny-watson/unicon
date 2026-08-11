@@ -18,19 +18,19 @@
 #' \code{srp}, \code{slope} and \code{intercept}.
 #' @export
 
-unicon_make_own_base_data = function(id,
+unicon_make_own_base_data <- function(id,
                                      alias,
                                      category,
                                      srp,
                                      slope,
-                                     intercept = 0){
+                                     intercept = 0) {
 
-  if(any(is.na(id)) ||
-     any(is.na(alias)) ||
-     any(is.na(category)) ||
-     any(is.na(srp)) ||
-     any(is.na(slope)) ||
-     any(is.na(intercept))) {
+  if (any(is.na(id)) ||
+      any(is.na(alias)) ||
+      any(is.na(category)) ||
+      any(is.na(srp)) ||
+      any(is.na(slope)) ||
+      any(is.na(intercept))) {
 
     stop(
       "Base unit inputs cannot contain NA values."
@@ -38,17 +38,17 @@ unicon_make_own_base_data = function(id,
 
   }
 
-  if(any(is.numeric(id)) |
-     any(is.numeric(alias)) |
-     any(is.numeric(category)) |
-     any(is.numeric(srp))){
+  if (any(is.numeric(id)) ||
+      any(is.numeric(alias)) ||
+      any(is.numeric(category)) ||
+      any(is.numeric(srp))) {
 
     stop("`id`, `alias`, `category` and `srp` need to be characters")
 
   }
 
-  if(any(is.character(slope)) |
-     any(is.character(intercept))){
+  if (any(is.character(slope)) ||
+      any(is.character(intercept))) {
 
     stop("`slope` and `intercept` need to be numeric")
 
@@ -63,7 +63,7 @@ unicon_make_own_base_data = function(id,
     intercept = length(intercept)
   )
 
-  if(length(unique(lengths)) > 1){
+  if (length(unique(lengths)) > 1) {
 
     stop(
       "All vectors supplied to `unicon_make_own_base_data` must be the same ",
@@ -73,21 +73,20 @@ unicon_make_own_base_data = function(id,
 
   }
 
-  if(any(intercept != 0)){
+  if (any(intercept != 0)) {
 
     warning("`intercept` is not zero, please check this is correct")
 
   }
 
-
-
-  df = tibble(id = id,
-              alias = alias,
-              category = category,
-              srp = srp,
-              slope = slope,
-              intercept = intercept)
-
+  tibble(
+    id = id,
+    alias = alias,
+    category = category,
+    srp = srp,
+    slope = slope,
+    intercept = intercept
+  )
 
 }
 
@@ -111,24 +110,24 @@ unicon_make_own_base_data = function(id,
 #' \code{operator}.
 #' @export
 
-unicon_make_own_derived_data = function(id,
+unicon_make_own_derived_data <- function(id,
                                         x,
                                         y,
-                                        operator){
+                                        operator) {
 
-  if(any(is.na(id)) |
-     any(is.na(x)) |
-     any(is.na(y)) |
-     any(is.na(operator))){
+  if (any(is.na(id)) ||
+      any(is.na(x)) ||
+      any(is.na(y)) ||
+      any(is.na(operator))) {
 
     stop("Derived unit inputs cannot contain NA values")
 
   }
 
-  if(any(is.numeric(id)) |
-     any(is.numeric(x)) |
-     any(is.numeric(y)) |
-     any(is.numeric(operator))){
+  if (any(is.numeric(id)) ||
+      any(is.numeric(x)) ||
+      any(is.numeric(y)) ||
+      any(is.numeric(operator))) {
 
     stop("`id`, `x`, `y`, `operator` need to be characters")
 
@@ -141,7 +140,7 @@ unicon_make_own_derived_data = function(id,
     operator = length(operator)
   )
 
-  if(length(unique(lengths)) > 1){
+  if (length(unique(lengths)) > 1) {
 
     stop(
       "All vectors supplied to `unicon_make_own_derived_data` must be the ",
@@ -151,10 +150,12 @@ unicon_make_own_derived_data = function(id,
 
   }
 
-  df = tibble(id = id,
-              x = x,
-              y = y,
-              operator = operator)
+  tibble(
+    id = id,
+    x = x,
+    y = y,
+    operator = operator
+  )
 
 }
 
@@ -177,24 +178,24 @@ unicon_make_own_derived_data = function(id,
 #' \code{alias}.
 #' @export
 
-unicon_make_own_operators_data = function(operator,
+unicon_make_own_operators_data <- function(operator,
                                           id,
                                           fun,
-                                          alias){
+                                          alias) {
 
-  if(any(is.na(operator)) |
-     any(is.na(id)) |
-     any(is.na(fun)) |
-     any(is.na(alias))){
+  if (any(is.na(operator)) ||
+      any(is.na(id)) ||
+      any(is.na(fun)) ||
+      any(is.na(alias))) {
 
     stop("Operator inputs cannot contain NA values")
 
   }
 
-  if(any(is.numeric(operator)) |
-     any(is.numeric(id)) |
-     any(is.numeric(fun)) |
-     any(is.numeric(alias))){
+  if (any(is.numeric(operator)) ||
+      any(is.numeric(id)) ||
+      any(is.numeric(fun)) ||
+      any(is.numeric(alias))) {
 
     stop("`operator`, `id`, `fun` and `alias` need to be characters")
 
@@ -207,7 +208,7 @@ unicon_make_own_operators_data = function(operator,
     alias = length(alias)
   )
 
-  if(length(unique(lengths)) > 1){
+  if (length(unique(lengths)) > 1) {
 
     stop(
       "All vectors supplied to `unicon_make_own_operators_data` must be the ",
@@ -217,10 +218,11 @@ unicon_make_own_operators_data = function(operator,
 
   }
 
-  df = tibble(operator = operator,
-              id = id,
-              fun = fun,
-              alias = alias)
+  tibble(
+    operator = operator,
+    id = id,
+    fun = fun,
+    alias = alias
+  )
 
 }
-

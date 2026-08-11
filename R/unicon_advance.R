@@ -38,7 +38,7 @@ unicon_advance <- function(x_unit_in,
   l1 <- length(x_value_in)
   l2 <- length(y_value_in)
 
-  if (l2 != l1 ) {
+  if (l2 != l1) {
     stop("Argument `x_value_in` and `y_value_in` must have same length.")
   }
 
@@ -250,8 +250,9 @@ unicon_advance <- function(x_unit_in,
           .data$x_value_out,
           .data$y_value_out
         ),
-        function(op, x, y)
+        function(op, x, y) {
           do.call(op, list(x, y))
+        }
       )
     )
 
@@ -342,4 +343,3 @@ operators_helper <- function() {
   operators_data
 
 }
-

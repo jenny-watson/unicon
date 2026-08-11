@@ -41,4 +41,3 @@ unicon_own_status <- function() {
   .unicon_state$using_custom
 
 }
-
