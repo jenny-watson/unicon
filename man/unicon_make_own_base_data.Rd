@@ -2,7 +2,7 @@
 % Please edit documentation in R/unicon_make_own_data.R
 \name{unicon_make_own_base_data}
 \alias{unicon_make_own_base_data}
-\title{make your own base data for use with unicon's functionaility}
+\title{make your own base data for use with unicon's functionality}
 \usage{
 unicon_make_own_base_data(id, alias, category, srp, slope, intercept = 0)
 }
@@ -19,6 +19,10 @@ aliases}
 \item{slope}{the difference between the unit and srp unit}
 
 \item{intercept}{defaults to 0. Only use if relationship is not linear}
+}
+\value{
+A tibble with columns \code{id}, \code{alias}, \code{category},
+\code{srp}, \code{slope} and \code{intercept}.
 }
 \description{
 If a user wants to use unicon but the unit they want is not in the package

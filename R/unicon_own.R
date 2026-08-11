@@ -1,27 +1,35 @@
-#' @Title Make own unicon package data
-#' @description If data is missing from unicon, users can add there own in. They
-#' could even make a request to the authors on Github to request this data be
+#' @title Make own unicon package data
+#' @description If data is missing from unicon, users can add their own in. They
+#' could even make a request to the authors on GitHub to request this data be
 #' included directly if a use case is large enough.
 #'
-#' @param base_id the default name of the base metric, needs to be consistent
-#' across base aliases
-#' @param base_alias alternative names for the base metric, many of these can
-#' map to base id
-#' @param category what is the unit measuring?
-#' @param srp the standard reference point, the default unit of the category
-#' @param slope the difference between the unit and srp unit
-#' @param intercept defaults to 0. Only use if relationship is not linear
-#' @param derived_id the default name of the derived metric
-#' @param x the base (numerator) metric that is used to calculate the current
-#' metric
-#' @param y the base (denominator) metric that is used to calculate the current
-#' metric
-#' @param operator the default operator name used to calculate the metric using
-#' x and y
-#' @param operator_id either __ or .
-#' @param fun the preserved R function e.g. /, *, +, -
-#' @param operator_alias alternative operator names, many of these can map to
-#' operator_id
+#' @param base_id Character scalar or vector. The default name of the base
+#' metric; needs to be consistent across base aliases.
+#' @param base_alias Character scalar or vector. Alternative names for the base
+#' metric; many of these can map to \code{base_id}.
+#' @param category Character scalar or vector. What the unit is measuring (e.g.
+#' \code{"length"}, \code{"mass"}).
+#' @param srp Character scalar or vector. The standard reference point — the
+#' default unit of the category (e.g. \code{"m"} for length).
+#' @param slope Numeric scalar or vector. The multiplicative factor between the
+#' unit and its SRP unit.
+#' @param intercept Numeric scalar or vector. The additive offset between the
+#' unit and its SRP unit. Defaults to \code{0}; only non-zero for non-linear
+#' relationships such as temperature scales.
+#' @param derived_id Character scalar or vector. The default name of the derived
+#' metric (e.g. \code{"speed"}).
+#' @param x Character scalar or vector. The base (numerator) metric used to
+#' calculate the derived metric.
+#' @param y Character scalar or vector. The base (denominator) metric used to
+#' calculate the derived metric.
+#' @param operator Character scalar or vector. The operator name used to combine
+#' \code{x} and \code{y} (e.g. \code{"divide"} or \code{"multiply"}).
+#' @param operator_id Character scalar. The operator identifier; either
+#' \code{"__"} (per/divide) or \code{"."} (dot/multiply).
+#' @param fun Character scalar. The R function character corresponding to the
+#' operator (e.g. \code{"/"}, \code{"*"}, \code{"+"}, \code{"-"}).
+#' @param operator_alias Character scalar or vector. Alternative names for the
+#' operator; many of these can map to \code{operator_id}.
 #'
 #' @returns Updated package data.
 #' @export
@@ -46,12 +54,12 @@ unicon_own = function(base_id = NA,
   own_derived_data <- NULL
   own_operators_data <- NULL
 
-  if(!is.na(base_id) &&
-     !is.na(base_alias) &&
-     !is.na(category) &&
-     !is.na(srp) &&
-     !is.na(slope) &&
-     !is.na(intercept)) {
+  if(!all(is.na(base_id)) &&
+     !all(is.na(base_alias)) &&
+     !all(is.na(category)) &&
+     !all(is.na(srp)) &&
+     !all(is.na(slope)) &&
+     !all(is.na(intercept))) {
 
     message("Creating base data")
 
@@ -64,10 +72,10 @@ unicon_own = function(base_id = NA,
       intercept = intercept
     )
 
-    if(!is.na(derived_id) &&
-       !is.na(x) &&
-       !is.na(y) &&
-       !is.na(operator)) {
+    if(!all(is.na(derived_id)) &&
+       !all(is.na(x)) &&
+       !all(is.na(y)) &&
+       !all(is.na(operator))) {
 
       message("Creating derived data")
 
@@ -78,9 +86,9 @@ unicon_own = function(base_id = NA,
         operator = operator
       )
 
-      if(!is.na(operator_id) &&
-         !is.na(fun) &&
-         !is.na(operator_alias)) {
+      if(!all(is.na(operator_id)) &&
+         !all(is.na(fun)) &&
+         !all(is.na(operator_alias))) {
 
         message("Creating operator data")
 
@@ -109,11 +117,23 @@ unicon_own = function(base_id = NA,
 
   ## folders with package .json files
 
-  base_dir <- file.path("inst", "units", "base")
+  base_dir <- system.file(
+    "units",
+    "base",
+    package = "unicon"
+  )
 
-  derived_dir <- file.path("inst", "units", "derived")
+  derived_dir <- system.file(
+    "units",
+    "derived",
+    package = "unicon"
+  )
 
-  operators_dir <- file.path("inst", "units", "operators")
+  operators_dir <- system.file(
+    "units",
+    "operators",
+    package = "unicon"
+  )
 
 
   ## load data and join to user's data

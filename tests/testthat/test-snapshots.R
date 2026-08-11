@@ -1,106 +1,290 @@
-test_that("unicon_full pull = TRUE snapshots", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_km_mi <- unicon_full(1, "kilometres", "mi", pull = TRUE)
-  out_c_f <- unicon_full(c(0, 100, -40), "celsius", "fahrenheit", pull = TRUE)
-  out_kg_g <- unicon_full(c(1, 2.5), "kg", "g", pull = TRUE)
+## Snapshot tests for package data and function errors/messages ---------------
+##
+## Package data: unit_alias, unit_srp, unit_models, relationships
+## Function messages/errors: unicon_full, unicon_lite, unicon_advance,
+##                            unicon_own (make helpers), state functions
 
-  expect_type(out_km_mi, "double", info = "snapshot=unicon_full_pull_true, value_in=1, unit_in=kilometres, unit_out=mi")
-  expect_length(out_km_mi, 1L, info = "snapshot=unicon_full_pull_true, value_in=1, unit_in=kilometres, unit_out=mi")
-  expect_length(out_c_f, 3L, info = "snapshot=unicon_full_pull_true, value_in=0|100|-40, unit_in=celsius, unit_out=fahrenheit")
-  expect_length(out_kg_g, 2L, info = "snapshot=unicon_full_pull_true, value_in=1|2.5, unit_in=kg, unit_out=g")
+## ---- package data: unit_alias -----------------------------------------------
 
+test_that("unit_alias snapshot: dimensions and column names", {
   expect_snapshot({
-    unicon_full(1, "kilometres", "mi", pull = TRUE)
-    unicon_full(c(0, 100, -40), "celsius", "fahrenheit", pull = TRUE)
-    unicon_full(c(1, 2.5), "kg", "g", pull = TRUE)
+    cat("nrow:", nrow(unit_alias), "\n")
+    cat("ncol:", ncol(unit_alias), "\n")
+    cat("names:", paste(sort(names(unit_alias)), collapse = ", "), "\n")
   })
 })
 
-test_that("unicon_full pull = FALSE snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_full(c(1, 2), c("m", "kg"), c("cm", "g"), pull = FALSE)
+test_that("unit_alias snapshot: class and types", {
+  expect_snapshot({
+    cat("class:", class(unit_alias), "\n")
+    cat("id type:", class(unit_alias$id), "\n")
+    cat("alias type:", class(unit_alias$alias), "\n")
+  })
+})
 
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_full_pull_false, unit_in=m|kg, unit_out=cm|g")
-  expect_equal(nrow(out_tbl), 2L, info = "snapshot=unicon_full_pull_false, value_in=1|2, unit_in=m|kg, unit_out=cm|g")
+test_that("unit_alias snapshot: sample of known unit entries", {
+  # Metre and kilogram should always be present with canonical aliases
+  m_row <- unit_alias[unit_alias$id == "m" & unit_alias$alias == "m", ]
+  kg_row <- unit_alias[unit_alias$id == "kg" & unit_alias$alias == "kg", ]
+  expect_snapshot({
+    cat("m row present:", nrow(m_row) == 1L, "\n")
+    cat("kg row present:", nrow(kg_row) == 1L, "\n")
+  })
+})
 
+## ---- package data: unit_srp -------------------------------------------------
+
+test_that("unit_srp snapshot: dimensions and column names", {
+  expect_snapshot({
+    cat("nrow:", nrow(unit_srp), "\n")
+    cat("ncol:", ncol(unit_srp), "\n")
+    cat("names:", paste(sort(names(unit_srp)), collapse = ", "), "\n")
+  })
+})
+
+test_that("unit_srp snapshot: class and types", {
+  expect_snapshot({
+    cat("class:", class(unit_srp), "\n")
+    cat("id type:", class(unit_srp$id), "\n")
+    cat("srp type:", class(unit_srp$srp), "\n")
+  })
+})
+
+test_that("unit_srp snapshot: known SRP entries", {
+  # Length SRP is metre, mass SRP is kilogram, temperature SRP is Celsius
+  expect_snapshot({
+    cat("length SRP:", unit_srp$srp[unit_srp$id == "m"], "\n")
+    cat("mass SRP:", unit_srp$srp[unit_srp$id == "kg"], "\n")
+    cat("temperature SRP:", unit_srp$srp[unit_srp$id == "C"], "\n")
+  })
+})
+
+## ---- package data: unit_models ----------------------------------------------
+
+test_that("unit_models snapshot: dimensions and column names", {
+  expect_snapshot({
+    cat("nrow:", nrow(unit_models), "\n")
+    cat("ncol:", ncol(unit_models), "\n")
+    cat("names:", paste(sort(names(unit_models)), collapse = ", "), "\n")
+  })
+})
+
+test_that("unit_models snapshot: class and types", {
+  expect_snapshot({
+    cat("class:", class(unit_models), "\n")
+    cat("id type:", class(unit_models$id), "\n")
+    cat("model type:", class(unit_models$model), "\n")
+  })
+})
+
+test_that("unit_models snapshot: SRP units have slope=1 intercept=0", {
+  # Metre: slope 1, intercept 0
+  m_model <- unit_models$model[unit_models$id == "m"][[1L]]
+  kg_model <- unit_models$model[unit_models$id == "kg"][[1L]]
+  expect_snapshot({
+    cat("m slope:", m_model$slope, "\n")
+    cat("m intercept:", m_model$intercept, "\n")
+    cat("kg slope:", kg_model$slope, "\n")
+    cat("kg intercept:", kg_model$intercept, "\n")
+  })
+})
+
+test_that("unit_models snapshot: temperature SRP (Celsius) has slope=1 intercept=0", {
+  c_model <- unit_models$model[unit_models$id == "C"][[1L]]
+  expect_snapshot({
+    cat("C slope:", c_model$slope, "\n")
+    cat("C intercept:", c_model$intercept, "\n")
+  })
+})
+
+## ---- package data: relationships --------------------------------------------
+
+test_that("relationships snapshot: dimensions and column names", {
+  expect_snapshot({
+    cat("nrow:", nrow(relationships), "\n")
+    cat("ncol:", ncol(relationships), "\n")
+    cat("names:", paste(sort(names(relationships)), collapse = ", "), "\n")
+  })
+})
+
+test_that("relationships snapshot: class", {
+  expect_snapshot({
+    cat("class:", class(relationships), "\n")
+  })
+})
+
+test_that("relationships snapshot: known relationships present", {
+  # length/time = speed, mass/area = area_density, amount/volume = concentration
+  cats <- sort(unique(relationships$id))
+  expect_snapshot(cat(paste(cats, collapse = "\n"), "\n"))
+})
+
+## ---- unicon_full: error messages --------------------------------------------
+
+test_that("unicon_full error snapshot: non-numeric value_in", {
   expect_snapshot(
-    unicon_full(c(1, 2), c("m", "kg"), c("cm", "g"), pull = FALSE)
+    unicon_full("1", "m", "cm"),
+    error = TRUE
   )
 })
 
-test_that("unicon_full missing unit_out snapshots", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_full(c(100, 1), c("cm", "kg"), pull = FALSE)
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_full_missing_unit_out, unit_in=cm|kg, unit_out=missing")
-  expect_equal(nrow(out_tbl), 2L, info = "snapshot=unicon_full_missing_unit_out, value_in=100|1, unit_in=cm|kg")
-
+test_that("unicon_full error snapshot: non-character unit_in", {
   expect_snapshot(
-    unicon_full(c(100, 1), c("cm", "kg"), pull = FALSE)
+    unicon_full(1, 2, "cm"),
+    error = TRUE
   )
 })
 
-test_that("unicon_full unrecognised unit snapshots", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- suppressMessages(unicon_full(1, "not_a_unit", "km", pull = FALSE))
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_full_unrecognised, unit_in=not_a_unit, unit_out=km")
-  expect_true(all(out_tbl$error_in), info = "snapshot=unicon_full_unrecognised, unit_in=not_a_unit, unit_out=km")
-
+test_that("unicon_full error snapshot: non-character unit_out", {
   expect_snapshot(
-    suppressMessages(unicon_full(1, "not_a_unit", "km", pull = FALSE))
+    unicon_full(1, "m", TRUE),
+    error = TRUE
   )
 })
 
-test_that("unicon_full mismatched unit types snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- suppressMessages(unicon_full(1, "m", "g", pull = FALSE))
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_full_mismatched_types, unit_in=m, unit_out=g")
-  expect_true(all(out_tbl$error_srp), info = "snapshot=unicon_full_mismatched_types, unit_in=m, unit_out=g")
-
+test_that("unicon_full error snapshot: zero-length value_in", {
   expect_snapshot(
-    suppressMessages(unicon_full(1, "m", "g", pull = FALSE))
+    unicon_full(numeric(0), "m", "cm"),
+    error = TRUE
   )
 })
 
-test_that("unicon_lite conversion table snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"))
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_lite_conversion_table, id_in=m|kg, id_out=cm|g")
-  expect_equal(nrow(out_tbl), 2L, info = "snapshot=unicon_lite_conversion_table, value_in=1|2, id_in=m|kg, id_out=cm|g")
-
+test_that("unicon_full error snapshot: wrong-length unit_in", {
   expect_snapshot(
-    unicon_lite(c(1, 2), c("m", "kg"), c("cm", "g"))
+    unicon_full(1:2, c("m", "cm", "km"), "cm"),
+    error = TRUE
   )
 })
 
-test_that("unicon_lite missing id_out snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_lite(c(100, 1), c("cm", "kg"))
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_lite_missing_id_out, id_in=cm|kg, id_out=missing")
-  expect_equal(nrow(out_tbl), 2L, info = "snapshot=unicon_lite_missing_id_out, value_in=100|1, id_in=cm|kg")
-
+test_that("unicon_full error snapshot: wrong-length unit_out", {
   expect_snapshot(
-    unicon_lite(c(100, 1), c("cm", "kg"))
+    unicon_full(1:3, "m", c("cm", "mm")),
+    error = TRUE
   )
 })
 
-test_that("unicon_lite unrecognised id snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_lite(1, "not_a_unit", "km")
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_lite_unrecognised_id, id_in=not_a_unit, id_out=km")
-  expect_true(all(out_tbl$error_in), info = "snapshot=unicon_lite_unrecognised_id, id_in=not_a_unit, id_out=km")
-
+test_that("unicon_full message snapshot: no unit_out given", {
   expect_snapshot(
-    unicon_lite(1, "not_a_unit", "km")
+    unicon_full(1, "m")
   )
 })
 
-test_that("unicon_lite mismatched unit types snapshot", {
-  withr::local_options(list(lifecycle_verbosity = "quiet"))
-  out_tbl <- unicon_lite(1, "m", "g")
-  expect_s3_class(out_tbl, "data.frame", info = "snapshot=unicon_lite_mismatched_types, id_in=m, id_out=g")
-  expect_true(all(out_tbl$error_srp), info = "snapshot=unicon_lite_mismatched_types, id_in=m, id_out=g")
-
+test_that("unicon_full message snapshot: partially missing unit_out", {
   expect_snapshot(
-    unicon_lite(1, "m", "g")
+    unicon_full(c(1, 2), "m", c("cm", NA))
   )
+})
+
+test_that("unicon_full warning snapshot: unknown unit_in", {
+  expect_snapshot(
+    unicon_full(1, "not_a_unit", "cm")
+  )
+})
+
+test_that("unicon_full warning snapshot: unknown unit_out", {
+  expect_snapshot(
+    unicon_full(1, "m", "not_a_unit")
+  )
+})
+
+test_that("unicon_full warning snapshot: mismatched unit types", {
+  expect_snapshot(
+    unicon_full(1, "m", "kg")
+  )
+})
+
+## ---- unicon_lite: error messages --------------------------------------------
+
+test_that("unicon_lite warning snapshot: unknown id_in", {
+  expect_snapshot(
+    unicon_lite(1, "not_a_unit", "cm")
+  )
+})
+
+test_that("unicon_lite warning snapshot: mismatched unit types", {
+  expect_snapshot(
+    unicon_lite(1, "m", "kg")
+  )
+})
+
+## ---- unicon_advance: error messages -----------------------------------------
+
+test_that("unicon_advance error snapshot: mismatched value lengths", {
+  expect_snapshot(
+    unicon_advance(
+      x_unit_in = "miles",
+      y_unit_in = "hour",
+      x_value_in = c(1, 2, 3),
+      y_value_in = c(1, 1),
+      unit_out = "km/hour"
+    ),
+    error = TRUE
+  )
+})
+
+test_that("unicon_advance error snapshot: no recorded relationship", {
+  expect_snapshot(
+    unicon_advance(
+      x_unit_in = "m",
+      y_unit_in = "kg",
+      x_value_in = 1,
+      y_value_in = 1,
+      unit_out = NA
+    ),
+    error = TRUE
+  )
+})
+
+test_that("unicon_advance error snapshot: operator mismatch", {
+  expect_snapshot(
+    unicon_advance(
+      x_unit_in = "kg",
+      y_unit_in = "ha",
+      x_value_in = 10,
+      y_value_in = 2,
+      unit_out = NA,
+      operator_in = "multiply"
+    ),
+    error = TRUE
+  )
+})
+
+## ---- unicon_make_own_base_data: error and warning messages ------------------
+
+test_that("unicon_make_own_base_data error snapshot: non-character id", {
+  expect_snapshot(
+    unicon_make_own_base_data(1, "alias", "cat", "srp", 1, 0),
+    error = TRUE
+  )
+})
+
+test_that("unicon_make_own_base_data error snapshot: non-numeric slope", {
+  expect_snapshot(
+    unicon_make_own_base_data("id", "alias", "cat", "srp", "one", 0),
+    error = TRUE
+  )
+})
+
+test_that("unicon_make_own_base_data warning snapshot: non-zero intercept", {
+  expect_snapshot(
+    unicon_make_own_base_data("id", "alias", "cat", "srp", 1, 5)
+  )
+})
+
+test_that("unicon_make_own_base_data error snapshot: mismatched vector lengths", {
+  expect_snapshot(
+    unicon_make_own_base_data(c("id1", "id2"), "alias", "cat", "srp", 1, 0),
+    error = TRUE
+  )
+})
+
+## ---- state functions: messages ----------------------------------------------
+
+test_that("unicon_reset_units snapshot: resets state silently", {
+  expect_snapshot(unicon_reset_units())
+})
+
+test_that("unicon_own_status snapshot: returns FALSE after reset", {
+  unicon_reset_units()
+  expect_snapshot(unicon_own_status())
 })

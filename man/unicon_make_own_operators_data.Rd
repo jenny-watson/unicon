@@ -2,23 +2,23 @@
 % Please edit documentation in R/unicon_make_own_data.R
 \name{unicon_make_own_operators_data}
 \alias{unicon_make_own_operators_data}
-\title{If a user wants to use unicon but the operator they want is not in the
-package data, they are welcome to add their own. This function is for the
-operator data i.e. how the units are transformed. When designing your own
-data please reference the data available using \code{unicon_help}. This is used at
-the users own discretion and they will need to conduct their own checks for
-data quality. This is not likely to be required.}
+\title{Make your own operators data for use with unicon}
 \usage{
 unicon_make_own_operators_data(operator, id, fun, alias)
 }
 \arguments{
-\item{operator}{the name of the operator}
+\item{operator}{Character scalar or vector; the name of the operator}
 
-\item{id}{either __ or .}
+\item{id}{Character scalar or vector; either __ or .}
 
-\item{fun}{the perserved R function e.g. /, *, +, -}
+\item{fun}{Character scalar or vector; the preserved R function e.g. /, *, +, -}
 
-\item{alias}{alternative names, many of these can map to id}
+\item{alias}{Character scalar or vector; alternative names, many of these
+can map to id}
+}
+\value{
+A tibble with columns \code{operator}, \code{id}, \code{fun}, and
+\code{alias}.
 }
 \description{
 If a user wants to use unicon but the operator they want is not in the
