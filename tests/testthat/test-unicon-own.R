@@ -53,7 +53,7 @@ test_that("unicon_make_own_base_data stops on mismatched vector lengths", {
 
 test_that("unicon_make_own_base_data returns a tibble with correct columns", {
   result <- unicon_make_own_base_data("id", "a", "cat", "srp", 1, 0)
-  expect_s3_class(result, "data.frame", info = "dataset=base_data, id=id, alias=a, category=cat, srp=srp")
+  expect_s3_class(result, "data.frame")
   expect_named(result, c("id", "alias", "category", "srp", "slope", "intercept"), info = "dataset=base_data_columns")
   expect_equal(nrow(result), 1L, info = "dataset=base_data, expected_rows=1")
 })
@@ -92,7 +92,7 @@ test_that("unicon_make_own_derived_data stops on mismatched vector lengths", {
 
 test_that("unicon_make_own_derived_data returns a tibble with correct columns", {
   result <- unicon_make_own_derived_data("id", "x", "y", "op")
-  expect_s3_class(result, "data.frame", info = "dataset=derived_data, id=id, x=x, y=y, operator=op")
+  expect_s3_class(result, "data.frame")
   expect_named(result, c("id", "x", "y", "operator"), info = "dataset=derived_data_columns")
   expect_equal(nrow(result), 1L, info = "dataset=derived_data, expected_rows=1")
 })
@@ -131,7 +131,7 @@ test_that("unicon_make_own_operators_data stops on mismatched vector lengths", {
 
 test_that("unicon_make_own_operators_data returns a tibble with correct columns", {
   result <- unicon_make_own_operators_data("op", "id", "fun", "alias")
-  expect_s3_class(result, "data.frame", info = "dataset=operators_data, operator=op, id=id, fun=fun, alias=alias")
+  expect_s3_class(result, "data.frame")
   expect_named(result, c("operator", "id", "fun", "alias"), info = "dataset=operators_data_columns")
   expect_equal(nrow(result), 1L, info = "dataset=operators_data, expected_rows=1")
 })
@@ -188,3 +188,4 @@ test_that("unicon_own stops when derived data operator is not in operator data",
     info = "derived_id=myvol, x=mass, y=length, operator=not_a_real_operator"
   )
 })
+
