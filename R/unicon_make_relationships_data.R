@@ -12,22 +12,22 @@ unicon_make_relationships_data <- function(derived) {
     derived,
     derived |>
       rename(
-        id = y,
-        y = id
+        "id" = "y",
+        "y" = "id"
       ),
     derived |>
       rename(
-        id = x,
-        x = id
+        "id" = "x",
+        "x" = "id"
       ) |>
       mutate(
         operator = "multiply"
       ),
     derived |>
       rename(
-        id = x,
-        y = id,
-        x = y
+        "id" = "x",
+        "y" = "id",
+        "x" = "y"
       ) |>
       mutate(
         operator = "multiply"

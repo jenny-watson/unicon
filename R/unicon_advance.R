@@ -186,8 +186,8 @@ unicon_advance <- function(x_unit_in,
     left_join(
       x_category |>
         rename(
-          x_srp_in = srp,
-          x_category = category
+          "x_srp_in" = "srp",
+          "x_category" = "category"
         ),
       by = "x_srp_in"
     ) |>
@@ -203,8 +203,8 @@ unicon_advance <- function(x_unit_in,
     left_join(
       y_category |>
         rename(
-          y_srp_in = srp,
-          y_category = category
+          "y_srp_in" = "srp",
+          "y_category" = "category"
         ),
       by = "y_srp_in"
     ) |>
@@ -228,13 +228,13 @@ unicon_advance <- function(x_unit_in,
     # sort operator out and get fun for map in mutate
     mutate(
       operator_in = if_else(
-        !is.na(operator_in),
-        operator_in,
-        operator
+        !is.na(.data$operator_in),
+        .data$operator_in,
+        .data$operator
       )
     ) |>
     select(
-      -operator
+      -"operator"
     ) |>
     left_join(
       operators_helper(),
@@ -246,9 +246,9 @@ unicon_advance <- function(x_unit_in,
     mutate(
       srp_value_out = pmap_dbl(
         list(
-          fun,
-          x_value_out,
-          y_value_out
+          .data$fun,
+          .data$x_value_out,
+          .data$y_value_out
         ),
         function(op, x, y)
           do.call(op, list(x, y))
@@ -274,22 +274,22 @@ unicon_advance <- function(x_unit_in,
     ) |>
     ## get rid of any unneeded columns
     select(
-      x_category,
+      "x_category",
       starts_with("x"),
-      y_category,
+      "y_category",
       starts_with("y"),
-      operator_in,
-      id,
+      "operator_in",
+      "id",
       everything(),
-      -fun,
-      -x_srp_in,
-      -x_unit_out,
-      -x_alias_out,
-      -x_value_out,
-      -y_srp_in,
-      -y_unit_out,
-      -y_alias_out,
-      -y_value_out
+      -"fun",
+      -"x_srp_in",
+      -"x_unit_out",
+      -"x_alias_out",
+      -"x_value_out",
+      -"y_srp_in",
+      -"y_unit_out",
+      -"y_alias_out",
+      -"y_value_out"
     )
 
   if (isTRUE(pull)) {
@@ -335,8 +335,8 @@ operators_helper <- function() {
 
   operators_data <- unicon_make_operators_data_from_jsons(operators_dir) |>
     distinct(
-      operator,
-      fun
+      .data$operator,
+      .data$fun
     )
 
   operators_data

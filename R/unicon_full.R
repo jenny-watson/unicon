@@ -109,8 +109,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           .unicon_state$unit_alias,
-          alias_in = alias,
-          id_in = id
+          "alias_in" = "alias",
+          "id_in" = "id"
         ),
         by = "alias_in",
         multiple = "any"
@@ -119,8 +119,8 @@ unicon_full <- function(value_in,
       left_join(
         select(
           .unicon_state$unit_alias,
-          alias_out = alias,
-          id_out = id
+          "alias_out" = "alias",
+          "id_out" = "id"
         ),
         by = "alias_out",
         multiple = "any"
@@ -132,13 +132,13 @@ unicon_full <- function(value_in,
       ) |>
       mutate(
         id_out = if_else(
-          is.na(id_out),
-          id_out_not_na,
-          id_out
+          is.na(.data$id_out),
+          .data$id_out_not_na,
+          .data$id_out
         )
       ) |>
       select(
-        -id_out_not_na
+        -"id_out_not_na"
       )
 
     ## apply the unicon_lite function
@@ -208,19 +208,19 @@ unicon_full <- function(value_in,
 
     conv_tab |>
       select(
-        unit_in,
-        unit_out,
-        alias_in,
-        alias_out,
-        id_in,
-        srp_in, # used to drive calcs, srp_out for check only
-        id_out,
-        error_in,
-        error_srp,
-        error_out,
-        value_in,
-        value_srp,
-        value_out
+        "unit_in",
+        "unit_out",
+        "alias_in",
+        "alias_out",
+        "id_in",
+        "srp_in", # used to drive calcs, srp_out for check only
+        "id_out",
+        "error_in",
+        "error_srp",
+        "error_out",
+        "value_in",
+        "value_srp",
+        "value_out"
       )
 
   }

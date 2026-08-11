@@ -29,8 +29,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         .unicon_state$unit_srp,
-        id_in = id,
-        srp_in = srp
+        "id_in" = "id",
+        "srp_in" = "srp"
       ),
       by = "id_in",
       multiple = "any"
@@ -39,8 +39,8 @@ unicon_lite <- function(value_in,
     left_join(
       select(
         .unicon_state$unit_srp,
-        id_out = id,
-        srp_out = srp
+        "id_out" = "id",
+        "srp_out" = "srp"
       ),
       by = "id_out",
       multiple = "any"
@@ -59,8 +59,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         .unicon_state$unit_models,
-        id_in = id,
-        model_in = model
+        "id_in" = "id",
+        "model_in" = "model"
       ),
       by = "id_in",
       multiple = "any"
@@ -69,8 +69,8 @@ unicon_lite <- function(value_in,
     left_join(
       rename(
         .unicon_state$unit_models,
-        id_out = id,
-        model_out = model
+        "id_out" = "id",
+        "model_out" = "model"
       ),
       by = "id_out",
       multiple = "any"
@@ -100,14 +100,14 @@ unicon_lite <- function(value_in,
     mutate(
       # forward model, input --> srp
       value_srp = map2_dbl(
-        value_in,
-        model_in,
+        .data$value_in,
+        .data$model_in,
         ~ .x * .y$slope + .y$intercept
       ),
       # reverse model, srp --> output
       value_out = map2_dbl(
-        value_srp,
-        model_out,
+        .data$value_srp,
+        .data$model_out,
         ~ (.x - .y$intercept) * 1 / .y$slope
       ),
       # ensure no misleading results produced if unit type mismatches
@@ -119,15 +119,15 @@ unicon_lite <- function(value_in,
 
   conv_tab |>
     select(
-      id_in,
-      id_out,
-      srp_in, # used to drive calcs, srp_out for check only
-      error_in,
-      error_srp,
-      error_out,
-      value_in,
-      value_srp,
-      value_out
+      "id_in",
+      "id_out",
+      "srp_in", # used to drive calcs, srp_out for check only
+      "error_in",
+      "error_srp",
+      "error_out",
+      "value_in",
+      "value_srp",
+      "value_out"
     )
 
 }
