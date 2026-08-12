@@ -6,6 +6,7 @@ on:
       - "inst/units/**"
       - "data-raw/data-transfer.R"
       - "R/sysdata.rda"
+  pull_request:
 
 name: check-package-data
 
