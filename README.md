@@ -4,6 +4,10 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml)
+[![check-package-data](https://github.com/Agxiata/unicon/actions/workflows/check-package-data.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/check-package-data.yaml)
+[![lint](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml)
+[![test-and-snapshots](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml)
+[![test-coverage](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 *Reliable, transparent unit conversions in a `tidyverse` environment*
@@ -66,15 +70,15 @@ remotes::install_github("Agxiata/unicon@*release")
 
 ## Acknowledgements
 
-The authors would like to thank Tom Watson for designing our hex sticker. If you
-would like to use his services, please contact him via 
+The authors would like to thank Tom Watson for designing our hex
+sticker. If you would like to use his services, please contact him via
 [Instagram](https://www.instagram.com/tom_watson_art).
 
-The package is based around tidyverse ideas and functions, so thanks go also to 
-Hadley Wickham and the tidyverse team for building and maintaining this 
-incredible environment.
+The package is based around tidyverse ideas and functions, so thanks go
+also to Hadley Wickham and the tidyverse team for building and
+maintaining this incredible environment.
 
 ## Contribute
 
-If you would like to contribute to this package, please file an issue or make a 
-pull request on GitHub.
+If you would like to contribute to this package, please file an issue or
+make a pull request on GitHub.
