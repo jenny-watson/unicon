@@ -1,0 +1,13 @@
+{
+  "category": "pressure",
+  "srp": "N__ha",
+  "model": {
+    "slope": 1000,
+    "intercept": 0
+  },
+  "alias": [
+    "kpa",
+    "kilopascals",
+    "kilopascal"
+  ]
+}
