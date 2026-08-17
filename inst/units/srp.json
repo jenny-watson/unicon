@@ -4,6 +4,7 @@
   "force": "N",
   "length": "m",
   "mass": "g",
+  "pressure": "N__ha",
   "temperature": "C",
   "time": "s",
   "volume": "l"
