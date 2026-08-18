@@ -112,4 +112,3 @@ test_that("vignette unicon_own example: custom units appear in unicon_help and c
   )
   expect_equal(result, 12500)
 })
-

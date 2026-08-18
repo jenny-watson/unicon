@@ -14,7 +14,7 @@ test_that("All base unit schemas have expected attributes", {
   ))
 
   # summarise
-  missing <-  purrr::map_chr(
+  missing <- purrr::map_chr(
     purrr::discard(
       checks,
       "full"
@@ -22,7 +22,7 @@ test_that("All base unit schemas have expected attributes", {
     "id"
   )
 
-  messy <-  purrr::map_chr(
+  messy <- purrr::map_chr(
     purrr::discard(
       checks,
       "clean"
@@ -69,7 +69,7 @@ test_that("All srp units are present in base units for aliases and models", {
 ################################################################################
 
 test_that("srp models are as expected", {
-  srp_models <-  purrr::map(srp, ~ base[[.x]]$model)
+  srp_models <- purrr::map(srp, ~ base[[.x]]$model)
 
   purrr::iwalk(srp_models, function(model, cat) {
     expect_true(model$slope == 1,
@@ -93,7 +93,7 @@ test_that("srp models are as expected", {
 ################################################################################
 
 test_that("SRP units are covered and expected", {
-  srp_base <-  purrr::map_chr(base, "srp")
+  srp_base <- purrr::map_chr(base, "srp")
 
   srp_covered <- srp_base %in% srp
 

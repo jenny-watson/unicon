@@ -13,7 +13,6 @@
 unicon_join_datasets <- function(base,
                                  derived,
                                  operators) {
-
   ## as area and volume are base and derived, haven't derived them yet
   ## derive then by length^2 or length^3
 
@@ -31,7 +30,7 @@ unicon_join_datasets <- function(base,
 
   ## 1ha = 100m * 100m
 
-  area = tibble(
+  area <- tibble(
     area_alias = c(
       "2",
       "squared",
@@ -45,18 +44,18 @@ unicon_join_datasets <- function(base,
         area_alias == "square",
         paste0(area_alias, alias),
         paste0(alias, area_alias)
-        ),
+      ),
       type = "derived",
       category = "area",
       srp = "ha",
-      slope = (slope / 100) ^ 2,
+      slope = (slope / 100)^2,
       intercept = 0,
       .keep = "none"
     )
 
   # 1l = 0.1m * 0.1m * 0.1m
 
-  volume = tibble(
+  volume <- tibble(
     area_alias = c(
       "3",
       "cubed",
@@ -74,7 +73,7 @@ unicon_join_datasets <- function(base,
       type = "derived",
       category = "volume",
       srp = "l",
-      slope = (slope / 0.1) ^ 3,
+      slope = (slope / 0.1)^3,
       intercept = 0,
       .keep = "none"
     )
@@ -145,8 +144,8 @@ unicon_join_datasets <- function(base,
         category == "pressure",
         "pa",
         srp
-        )
       )
+    )
 
   join
 }
