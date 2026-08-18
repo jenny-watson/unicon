@@ -166,7 +166,7 @@ An ID for the derived unit is created by pasting together the IDs for contributi
 
 The final stage of this build process is to mathematically recombine the contributing models, so that the model for `t__ha` and all units in the `rate` category remain a simple single-factor slope model. Note that it is not possible to combine models which have a none-zero intercept in this way, and these are excluded from derived unit calculations.
 
-The package datasets created are referenced by all `unicon` functions, and may also be examined/queried by the user via the `unicon_help` function, discussed above.
+The package datasets created are referenced by all `unicon` functions, and may also be examined/queried by the user via the `unicon_help` function, discussed in `unicon_functions_vignette`.
 
 ```{r unicon-help, echo=FALSE}
 print(unicon_help(), n = 10L)

@@ -195,7 +195,7 @@ test_that("all derived unit JSON files have character x, y, and operator fields"
 test_that("derived unit JSON snapshot: known derived relationships", {
   speed <- read_pkg_json("units", "derived", "speed.json")
   area_density <- read_pkg_json("units", "derived", "area_density.json")
-  concentration <- read_pkg_json("units", "derived", "concentration.json")
+  concentration <- read_pkg_json("units", "derived", "molar_concentration.json")
   expect_snapshot({
     cat("speed: x=", speed$x, " y=", speed$y, " op=", speed$operator, "\n")
     cat(

@@ -6,7 +6,7 @@
 test_that("documented unicon_full and unicon_lite examples stay aligned", {
   raw_values <- c(54.21, 71.24, 55.81, 11.33, 70.59)
   raw_units <- c("tonnes / ha", "tons per acre", "t/ha", "kg /Hectare", "g/m2")
-  raw_ids <- c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m_2")
+  raw_ids <- c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m2")
   unit_out <- "tonnes / ha"
   id_out <- "t__ha"
 
@@ -112,3 +112,4 @@ test_that("vignette unicon_own example: custom units appear in unicon_help and c
   )
   expect_equal(result, 12500)
 })
+

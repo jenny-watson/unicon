@@ -138,7 +138,15 @@ unicon_join_datasets <- function(base,
     filter(
       !(.data$category == "area" & .data$srp == "l__m"),
       !(.data$category == "length" & .data$srp == "ha__m")
-    )
+    ) |>
+    ## make sure pressure consistent unit
+    mutate(
+      srp = if_else(
+        category == "pressure",
+        "pa",
+        srp
+        )
+      )
 
   join
 }

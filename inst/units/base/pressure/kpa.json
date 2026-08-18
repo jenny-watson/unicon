@@ -1,6 +1,6 @@
 {
   "category": "pressure",
-  "srp": "N__ha",
+  "srp": "pa",
   "model": {
     "slope": 1000,
     "intercept": 0

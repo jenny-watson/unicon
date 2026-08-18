@@ -97,7 +97,7 @@ test_that("documented relationships resolve to the correct derived categories", 
   cases <- list(
     list("kg", "ha", 10, 2, "area_density", "divide"),
     list("l", "m", 10, 2, "area", "divide"),
-    list("mol", "l", 2, 4, "concentration", "divide"),
+    list("mol", "l", 2, 4, "molar_concentration", "divide"),
     list("ha", "m", 4, 2, "length", "divide"),
     list("kg", "kg", 2, 2, "mass_fraction", "divide"),
     list("N", "ha", 10, 2, "pressure", "divide"),
