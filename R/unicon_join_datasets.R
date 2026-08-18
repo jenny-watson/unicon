@@ -20,12 +20,12 @@ unicon_join_datasets <- function(base,
 
   length <- base |>
     filter(
-      category == "length"
+      .data$category == "length"
     ) |>
     distinct(
-      id,
-      alias,
-      slope
+      .data$id,
+      .data$alias,
+      .data$slope
     )
 
   ## 1ha = 100m * 100m
@@ -39,16 +39,16 @@ unicon_join_datasets <- function(base,
   ) |>
     cross_join(length) |>
     mutate(
-      id = paste0(id, "2"),
+      id = paste0(.data$id, "2"),
       alias = if_else(
-        area_alias == "square",
-        paste0(area_alias, alias),
-        paste0(alias, area_alias)
+        .data$area_alias == "square",
+        paste0(.data$area_alias, .data$alias),
+        paste0(.data$alias, .data$area_alias)
       ),
       type = "derived",
       category = "area",
       srp = "ha",
-      slope = (slope / 100)^2,
+      slope = (.data$slope / 100)^2,
       intercept = 0,
       .keep = "none"
     )
@@ -64,16 +64,16 @@ unicon_join_datasets <- function(base,
   ) |>
     cross_join(length) |>
     mutate(
-      id = paste0(id, "3"),
+      id = paste0(.data$id, "3"),
       alias = if_else(
-        area_alias == "cubic",
-        paste0(area_alias, alias),
-        paste0(alias, area_alias)
+        .data$area_alias == "cubic",
+        paste0(.data$area_alias, .data$alias),
+        paste0(.data$alias, .data$area_alias)
       ),
       type = "derived",
       category = "volume",
       srp = "l",
-      slope = (slope / 0.1)^3,
+      slope = (.data$slope / 0.1)^3,
       intercept = 0,
       .keep = "none"
     )
@@ -141,9 +141,9 @@ unicon_join_datasets <- function(base,
     ## make sure pressure consistent unit
     mutate(
       srp = if_else(
-        category == "pressure",
+        .data$category == "pressure",
         "pa",
-        srp
+        .data$srp
       )
     )
 
