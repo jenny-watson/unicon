@@ -45,7 +45,7 @@
     Code
       cat("total base JSONs:", length(paths), "\n")
     Output
-      total base JSONs: 46 
+      total base JSONs: 47 
     Code
       cat("all pass schema:", all(results), "\n")
     Output
@@ -157,7 +157,7 @@
     Code
       cat("total derived JSONs:", length(paths), "\n")
     Output
-      total derived JSONs: 10 
+      total derived JSONs: 11 
     Code
       cat("all pass schema:", all(results), "\n")
     Output
@@ -196,7 +196,7 @@
     Code
       cat("unique operators:", paste(sort(unique(operators)), collapse = ", "), "\n")
     Output
-      unique operators: divide 
+      unique operators: divide, multiply 
     Code
       cat("all valid:", all(operators %in% valid), "\n")
     Output

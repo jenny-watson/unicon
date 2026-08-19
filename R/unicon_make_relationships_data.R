@@ -7,14 +7,29 @@
 #' @export
 
 unicon_make_relationships_data <- function(derived) {
-  relationships <- bind_rows(
-    derived,
-    derived |>
+
+  ## separate data if divide or multipy in .jsons provided
+
+  derived_divide <- derived |>
+    filter(
+      operator == "divide"
+    )
+
+  derived_multiply <- derived |>
+    filter(
+      operator == "multiply"
+    )
+
+  ## for divide supplied relationships
+
+  relationships_divide <- bind_rows(
+    derived_divide,
+    derived_divide |>
       rename(
         "id" = "y",
         "y" = "id"
       ),
-    derived |>
+    derived_divide |>
       rename(
         "id" = "x",
         "x" = "id"
@@ -22,7 +37,7 @@ unicon_make_relationships_data <- function(derived) {
       mutate(
         operator = "multiply"
       ),
-    derived |>
+    derived_divide |>
       rename(
         "id" = "x",
         "y" = "id",
@@ -31,8 +46,49 @@ unicon_make_relationships_data <- function(derived) {
       mutate(
         operator = "multiply"
       )
+  )
+
+  ## for multiply supplied relationships
+
+  relationships_multiply <- bind_rows(
+    derived_multiply,
+    derived_multiply |>
+      rename(
+        "x" = "y",
+        "y" = "x"
+      ),
+    derived_multiply |>
+      rename(
+        "id" = "x",
+        "x" = "id"
+      ) |>
+      mutate(
+        operator = "divide"
+      ),
+    derived_multiply |>
+      rename(
+        "id" = "y",
+        "y" = "x",
+        "x" = "id"
+      ) |>
+      mutate(
+        operator = "divide"
+      )
+  )
+
+  ## bind together
+
+  relationships <- bind_rows(
+    relationships_divide,
+    relationships_multiply
   ) |>
     distinct()
+
+  ## in add their own operator
+
+  if (!all(derived$operator %in% c("divide", "multiply"))) {
+    warning("Relationship could not be derived as not a multiply or divide operator") # nolint
+  }
 
   relationships
 }
