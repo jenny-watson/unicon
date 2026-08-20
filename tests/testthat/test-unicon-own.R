@@ -163,17 +163,20 @@ test_that("unicon_own stops when base data fields are missing", {
 
 test_that("unicon_own stops when derived data x/y categories are not in base data", {
   expect_error(
-    unicon_own(
-      base_id    = "density",
-      base_alias = "density",
-      category   = "density",
-      srp        = "density",
-      slope      = 1,
-      intercept  = 0,
-      derived_id = "myvol",
-      x          = "not_a_real_category",
-      y          = "length",
-      operator   = "per"
+    expect_warning(
+      unicon_own(
+        base_id    = "density",
+        base_alias = "density",
+        category   = "density",
+        srp        = "density",
+        slope      = 1,
+        intercept  = 0,
+        derived_id = "myvol",
+        x          = "not_a_real_category",
+        y          = "length",
+        operator   = "per"
+      ),
+      "Relationship could not be derived as not a multiply or divide operator"
     ),
     "do not exist in the base data",
     info = "derived_id=myvol, x=not_a_real_category, y=length, operator=per"
@@ -182,17 +185,20 @@ test_that("unicon_own stops when derived data x/y categories are not in base dat
 
 test_that("unicon_own stops when derived data operator is not in operator data", {
   expect_error(
-    unicon_own(
-      base_id    = "density",
-      base_alias = "density",
-      category   = "density",
-      srp        = "density",
-      slope      = 1,
-      intercept  = 0,
-      derived_id = "myvol",
-      x          = "mass",
-      y          = "length",
-      operator   = "not_a_real_operator"
+    expect_warning(
+      unicon_own(
+        base_id    = "density",
+        base_alias = "density",
+        category   = "density",
+        srp        = "density",
+        slope      = 1,
+        intercept  = 0,
+        derived_id = "myvol",
+        x          = "mass",
+        y          = "length",
+        operator   = "not_a_real_operator"
+      ),
+      "Relationship could not be derived as not a multiply or divide operator"
     ),
     "do not exist in the operator data",
     info = "derived_id=myvol, x=mass, y=length, operator=not_a_real_operator"

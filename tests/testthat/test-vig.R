@@ -88,13 +88,16 @@ test_that("vignette unicon_own example: custom units appear in unicon_help and c
   unicon_reset_units()
   on.exit(unicon_reset_units(), add = TRUE)
 
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ),
+    "Derived data is not just made of base units"
   )
 
   expect_true(unicon_own_status())
