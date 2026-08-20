@@ -12,12 +12,12 @@ unicon_make_relationships_data <- function(derived) {
 
   derived_divide <- derived |>
     filter(
-      operator == "divide"
+      .data$operator == "divide"
     )
 
   derived_multiply <- derived |>
     filter(
-      operator == "multiply"
+      .data$operator == "multiply"
     )
 
   ## for divide supplied relationships
