@@ -32,7 +32,6 @@ unicon_advance <- function(x_unit_in,
                            unit_out = NA,
                            operator_in = NA,
                            pull = TRUE) {
-
   # checks are minimal as relying in unicon_full checks
 
   if (length(x_value_in) != length(y_value_in)) {
@@ -56,8 +55,8 @@ unicon_advance <- function(x_unit_in,
     y_unit_in <- rep(y_unit_in, n)
   }
 
-  if (length(unit_out)  == 1L) {
-    unit_out  <- rep(unit_out,  n)
+  if (length(unit_out) == 1L) {
+    unit_out <- rep(unit_out, n)
   }
 
   ## create tibble for joining

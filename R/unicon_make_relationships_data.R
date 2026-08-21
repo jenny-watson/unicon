@@ -7,7 +7,6 @@
 #' @export
 
 unicon_make_relationships_data <- function(derived) {
-
   ## separate data if divide or multipy in .jsons provided
 
   derived_divide <- derived |>

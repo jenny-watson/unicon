@@ -19,7 +19,6 @@ unicon_option <- function(value_in,
                           unit_in,
                           unit_out,
                           extras) {
-
   if (length(unit_out) != 1L) {
     stop("Argument `unit_out` must have length 1.")
   }
@@ -41,17 +40,21 @@ unicon_option <- function(value_in,
       )
     ) |>
     pivot_longer(
-      cols = c(ends_with("_value"),
-               ends_with("_unit")),
+      cols = c(
+        ends_with("_value"),
+        ends_with("_unit")
+      ),
       names_to = c("category", ".value"),
       names_pattern = "(.*)_(value|unit)"
     ) |>
-    rename(value_y = .data$value,
-           unit_y = .data$unit)
+    rename(
+      value_y = .data$value,
+      unit_y = .data$unit
+    )
 
   ## check if categories provided in extra are recognised by unicon
 
-  chk_cat_exist = pre |>
+  chk_cat_exist <- pre |>
     distinct(
       .data$category
     ) |>
@@ -62,7 +65,7 @@ unicon_option <- function(value_in,
         )
     )
 
-  if (nrow(chk_cat_exist) !=0) {
+  if (nrow(chk_cat_exist) != 0) {
     stop("Please use category names used in unicon; see `unicon_help()`")
   }
 
@@ -98,12 +101,12 @@ unicon_option <- function(value_in,
 
   ## if category in == out
 
-  cat_same = unit_cat |>
+  cat_same <- unit_cat |>
     filter(
       .data$category_in == .data$category_out
     )
 
-  same_out = unicon_full(
+  same_out <- unicon_full(
     value_in = cat_same$value_in,
     unit_in = cat_same$unit_in,
     unit_out = cat_same$unit_out,
@@ -113,7 +116,7 @@ unicon_option <- function(value_in,
   ## if category in != out
 
 
-  cat_diff = unit_cat |>
+  cat_diff <- unit_cat |>
     filter(.data$category_in != .data$category_out) |>
     left_join(
       unicon:::relationships,
@@ -123,16 +126,16 @@ unicon_option <- function(value_in,
       )
     ) |>
     left_join(pre,
-              by = c(
-                "value_in",
-                "unit_in",
-                "unit_out",
-                "y" = "category"
-              )
+      by = c(
+        "value_in",
+        "unit_in",
+        "unit_out",
+        "y" = "category"
+      )
     )
 
 
-  diff_out = unicon_advance(
+  diff_out <- unicon_advance(
     x_value_in = cat_diff$value_in,
     x_unit_in = cat_diff$unit_in,
     y_value_in = cat_diff$value_y,
@@ -148,31 +151,33 @@ unicon_option <- function(value_in,
       .data$unit_in,
       .data$unit_out
     ) |>
-    left_join(same_out |>
-                select(
-                  .data$value_in,
-                  .data$unit_in,
-                  .data$unit_out,
-                  .data$value_out
-                ),
-              by = c(
-                "value_in",
-                "unit_in",
-                "unit_out"
-              )
+    left_join(
+      same_out |>
+        select(
+          .data$value_in,
+          .data$unit_in,
+          .data$unit_out,
+          .data$value_out
+        ),
+      by = c(
+        "value_in",
+        "unit_in",
+        "unit_out"
+      )
     ) |>
-    left_join(diff_out |>
-                select(
-                  .data$value_in = x_value_in,
-                  .data$unit_in = x_unit_in,
-                  .data$unit_out,
-                  .data$value_out
-                ),
-              by = c(
-                "value_in",
-                "unit_in",
-                "unit_out"
-              )
+    left_join(
+      diff_out |>
+        select(
+          value_in = .data$x_value_in,
+          unit_in = .data$x_unit_in,
+          .data$unit_out,
+          .data$value_out
+        ),
+      by = c(
+        "value_in",
+        "unit_in",
+        "unit_out"
+      )
     ) |>
     mutate(
       value_out = coalesce(.data$value_out.x, .data$value_out.y)
@@ -183,5 +188,4 @@ unicon_option <- function(value_in,
     )
 
   out$value_out
-
 }

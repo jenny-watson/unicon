@@ -155,8 +155,7 @@ unicon_join_datasets <- function(base,
     )
 
   if (all(derived$x %in% base$category) ||
-        all(derived$y %in% base$category)) {
-
+    all(derived$y %in% base$category)) {
     warning <- derived |>
       filter(
         !.data$x %in% base$category |
@@ -165,12 +164,10 @@ unicon_join_datasets <- function(base,
 
     warning("Derived data is not just made of base units. Please check all units are present in base data.") # nolint
     print(warning)
-
   }
 
   if (all(derived$x %in% base$category) &&
-        all(derived$y %in% base$category)) {
-
+    all(derived$y %in% base$category)) {
     warning <- derived |>
       filter(
         !.data$x %in% base$category,
@@ -179,7 +176,6 @@ unicon_join_datasets <- function(base,
 
     stop("Derived data is not made of base units. Add missing units to base data.") # nolint
     print(warning)
-
   }
 
   join

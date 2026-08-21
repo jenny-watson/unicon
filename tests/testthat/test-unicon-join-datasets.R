@@ -4,16 +4,16 @@
 
 make_base <- function() {
   tibble::tibble(
-    id        = c("m", "km", "cm", "s", "min", "kg", "pa", "kpa"),
-    alias     = c("m", "km", "cm", "s", "min", "kg", "pa", "kpa"),
-    category  = c(
+    id = c("m", "km", "cm", "s", "min", "kg", "pa", "kpa"),
+    alias = c("m", "km", "cm", "s", "min", "kg", "pa", "kpa"),
+    category = c(
       "length", "length", "length",
       "time", "time",
       "mass",
       "pressure", "pressure"
     ),
-    srp       = c("m", "m", "m", "s", "s", "kg", "pa", "pa"),
-    slope     = c(1, 1000, 0.01, 1, 60, 1, 1, 1000),
+    srp = c("m", "m", "m", "s", "s", "kg", "pa", "pa"),
+    slope = c(1, 1000, 0.01, 1, 60, 1, 1, 1000),
     intercept = rep(0, 8)
   )
 }
@@ -54,7 +54,7 @@ test_that("unicon_join_datasets output contains required columns", {
   )
   expect_true(
     all(c("id", "alias", "category", "srp", "slope", "intercept", "type") %in%
-          names(result)),
+      names(result)),
     info = "all required columns present"
   )
 })
