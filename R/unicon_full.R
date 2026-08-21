@@ -47,19 +47,16 @@ unicon_full <- function(value_in,
   }
 
   # check, all values must be either length 1 or consistent length
-  l1 <- length(value_in)
-  l2 <- length(unit_in)
-  l3 <- length(unit_out)
 
-  if (l1 == 0L) {
+  if (length(value_in) == 0L) {
     stop("Argument `value_in` must have length >= 1.")
   }
 
-  if (l2 != l1 && l2 != 1L) {
+  if (length(unit_in) != length(value_in) && length(unit_in) != 1L) {
     stop("Argument `unit_in` must have length 1 or length(value_in).")
   }
 
-  if (l3 != l1 && l3 != 1L) {
+  if (length(unit_out) != length(value_in) && length(unit_out) != 1L) {
     stop("Argument `unit_out` must have length 1 or length(value_in).")
   }
 
