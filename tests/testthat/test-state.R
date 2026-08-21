@@ -75,7 +75,7 @@ test_that("unicon_full reverts to package data after reset", {
       srp        = c("g", "g"),
       slope      = c(12500, 12500),
       intercept  = c(0, 0)
-    ), "Derived data is not just made of base units. Please check all units are present in base data."
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
 
   unicon_reset_units()
@@ -108,7 +108,7 @@ test_that("unicon_help shows custom units after unicon_own", {
       srp        = c("g", "g"),
       slope      = c(12500, 12500),
       intercept  = c(0, 0)
-    ), "Derived data is not just made of base units. Please check all units are present in base data."
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
 
   h <- unicon_help()
@@ -127,7 +127,7 @@ test_that("unicon_help reverts to package data after reset", {
       srp        = c("g", "g"),
       slope      = c(12500, 12500),
       intercept  = c(0, 0)
-    ), "Derived data is not just made of base units. Please check all units are present in base data."
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
 
   unicon_reset_units()
