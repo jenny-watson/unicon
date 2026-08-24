@@ -25,10 +25,10 @@
 #' @importFrom purrr pmap_dbl
 #' @export
 
-unicon_advance <- function(x_unit_in,
-                           y_unit_in,
-                           x_value_in,
+unicon_advance <- function(x_value_in,
                            y_value_in,
+                           x_unit_in,
+                           y_unit_in,
                            unit_out = NA,
                            operator_in = NA,
                            pull = TRUE) {
