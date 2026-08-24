@@ -74,7 +74,7 @@ test_that("pull controls whether values or full workings are returned", {
   expect_true(all(c(
     "x_category", "x_unit_in", "x_value_in", "x_value_srp",
     "y_category", "y_unit_in", "y_value_in", "y_value_srp",
-    "operator_in", "id", "unit_out", "value_out"
+    "operator_in", "category", "unit_out", "value_out"
   ) %in% names(full)))
 
   expect_equal(full$value_out, pulled)
@@ -95,35 +95,35 @@ test_that("x_value_in and y_value_in must have the same length", {
 
 test_that("documented relationships resolve to the correct derived categories", {
   cases <- list(
-    list("kg", "ha", 10, 2, "area_density", "divide"),
-    list("l", "m", 10, 2, "area", "divide"),
-    list("mol", "l", 2, 4, "molar_concentration", "divide"),
-    list("ha", "m", 4, 2, "length", "divide"),
-    list("kg", "kg", 2, 2, "mass_fraction", "divide"),
-    list("N", "ha", 10, 2, "pressure", "divide"),
-    list("kg", "l", 10, 2, "volume_density", "divide"),
-    list("l", "l", 2, 4, "volume_fraction", "divide"),
-    list("miles", "hour", 100, 2, "speed", "divide")
+    list(10, 2, "kg", "ha", "area_density", "divide"),
+    list(10, 2, "l", "m", "area", "divide"),
+    list(2, 4, "mol", "l", "molar_concentration", "divide"),
+    list(4, 2, "ha", "m", "length", "divide"),
+    list(2, 2, "kg", "kg", "mass_fraction", "divide"),
+    list(10, 2, "N", "ha", "pressure", "divide"),
+    list(10, 2, "kg", "l", "volume_density", "divide"),
+    list(2, 4, "l", "l", "volume_fraction", "divide"),
+    list(100, 2, "miles", "hour", "speed", "divide")
   )
 
   for (case in cases) {
     result <- unicon_advance(
-      x_unit_in = case[[1]],
-      y_unit_in = case[[2]],
-      x_value_in = case[[3]],
-      y_value_in = case[[4]],
+      x_value_in = case[[1]],
+      y_value_in = case[[2]],
+      x_unit_in = case[[3]],
+      y_unit_in = case[[4]],
       unit_out = NA,
       operator_in = case[[6]],
       pull = FALSE
     )
 
     # id holds the derived category
-    expect_equal(result$id, case[[5]])
+    expect_equal(result$category, case[[5]])
 
     # value_in is the srp_value_out (the intermediate SRP value before final conversion)
     expect_equal(
       result$value_in,
-      advance_expected(case[[3]], case[[1]], case[[4]], case[[2]], case[[6]]),
+      advance_expected(case[[1]], case[[3]], case[[2]], case[[4]], case[[6]]),
       tolerance = 1e-8
     )
   }
@@ -163,9 +163,9 @@ test_that("multiply, divide, ambiguity and invalid operator cases are covered", 
     pull = FALSE
   )
 
-  expect_equal(multiply_result$id, "volume")
+  expect_equal(multiply_result$category, "volume")
   expect_equal(multiply_result$value_out, 6, tolerance = 1e-8)
-  expect_equal(divide_result$id, "length")
+  expect_equal(divide_result$category, "length")
 
   # value_in holds the derived SRP value
   expect_equal(divide_result$value_in, 0.5, tolerance = 1e-8)
@@ -309,12 +309,12 @@ test_that("calculation accuracy matches known values and vignette examples", {
 })
 
 test_that("edge cases and integration paths are covered", {
-  zero_numerator <- unicon_advance("m", "sec", 0, 5, unit_out = NA)
-  zero_denominator <- unicon_advance("m", "sec", 5, 0, unit_out = NA)
-  negative_values <- unicon_advance("m", "sec", -10, 2, unit_out = NA)
-  large_values <- unicon_advance("m", "sec", 1e12, 1e-6, unit_out = NA)
-  small_values <- unicon_advance("m", "sec", 1e-12, 1e6, unit_out = NA)
-  single_value <- unicon_advance("m", "sec", 4, 2, unit_out = NA)
+  zero_numerator <- unicon_advance(0, 5, "m", "sec", unit_out = NA)
+  zero_denominator <- unicon_advance(5, 0, "m", "sec", unit_out = NA)
+  negative_values <- unicon_advance(-10, 2, "m", "sec", unit_out = NA)
+  large_values <- unicon_advance(1e12, 1e-6, "m", "sec", unit_out = NA)
+  small_values <- unicon_advance(1e-12, 1e6, "m", "sec", unit_out = NA)
+  single_value <- unicon_advance(4, 2, "m", "sec", unit_out = NA)
 
   expect_equal(zero_numerator, 0, tolerance = 1e-8)
   expect_true(is.infinite(zero_denominator))
@@ -322,10 +322,10 @@ test_that("edge cases and integration paths are covered", {
   expect_equal(large_values, 1e18, tolerance = 1e-8)
   expect_equal(small_values, 1e-18, tolerance = 1e-30)
   expect_error(unicon_advance(
-    "m",
-    "sec",
     c(1, NA, NaN),
     c(1, 1, 1),
+    "m",
+    "sec",
     unit_out = NA
   ))
   expect_equal(single_value, 2, tolerance = 1e-8)
@@ -333,10 +333,10 @@ test_that("edge cases and integration paths are covered", {
   # value_in in pull=FALSE output holds the intermediate SRP value
   direct_srp <- advance_expected(100, "miles", 2, "hour", "divide")
   advance_result <- unicon_advance(
-    "miles",
-    "hour",
     100,
     2,
+    "miles",
+    "hour",
     unit_out = NA,
     pull = FALSE
   )

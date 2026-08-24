@@ -212,18 +212,15 @@
       y_error_out
       y_value_srp
       operator_in
-      id
-      unit_in
-      unit_out
-      alias_in
-      alias_out
-      id_in
+      category
       srp_in
+      value_in
+      unit_out
+      alias_out
       id_out
       error_in
       error_srp
       error_out
-      value_in
       value_srp
       value_out 
 
@@ -254,18 +251,15 @@
       y_error_out : logical 
       y_value_srp : numeric 
       operator_in : character 
-      id : character 
-      unit_in : character 
-      unit_out : character 
-      alias_in : character 
-      alias_out : character 
-      id_in : character 
+      category : character 
       srp_in : character 
+      value_in : numeric 
+      unit_out : character 
+      alias_out : character 
       id_out : character 
       error_in : logical 
       error_srp : logical 
       error_out : logical 
-      value_in : numeric 
       value_srp : numeric 
       value_out : numeric 
 
@@ -275,7 +269,7 @@
       snap_shape(out)
     Output
       nrow: 2 
-      ncol: 35 
+      ncol: 32 
         x_category : character 
         x_unit_in : character 
         x_value_in : numeric 
@@ -297,18 +291,15 @@
         y_error_out : logical 
         y_value_srp : numeric 
         operator_in : character 
-        id : character 
-        unit_in : character 
-        unit_out : character 
-        alias_in : character 
-        alias_out : character 
-        id_in : character 
+        category : character 
         srp_in : character 
+        value_in : numeric 
+        unit_out : character 
+        alias_out : character 
         id_out : character 
         error_in : logical 
         error_srp : logical 
         error_out : logical 
-        value_in : numeric 
         value_srp : numeric 
         value_out : numeric 
 
@@ -318,7 +309,7 @@
       snap_shape(out)
     Output
       nrow: 2 
-      ncol: 35 
+      ncol: 32 
         x_category : character 
         x_unit_in : character 
         x_value_in : numeric 
@@ -340,18 +331,15 @@
         y_error_out : logical 
         y_value_srp : numeric 
         operator_in : character 
-        id : character 
-        unit_in : character 
-        unit_out : logical 
-        alias_in : character 
-        alias_out : character 
-        id_in : character 
+        category : character 
         srp_in : character 
+        value_in : numeric 
+        unit_out : logical 
+        alias_out : character 
         id_out : character 
         error_in : logical 
         error_srp : logical 
         error_out : logical 
-        value_in : numeric 
         value_srp : numeric 
         value_out : numeric 
 

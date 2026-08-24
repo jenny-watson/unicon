@@ -124,3 +124,4 @@ test_that("unicon_option returns a numeric vector", {
   expect_type(out, "double")
   expect_length(out, 2L)
 })
+
