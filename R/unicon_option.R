@@ -19,6 +19,7 @@ unicon_option <- function(value_in,
                           unit_in,
                           unit_out,
                           extras) {
+
   if (length(unit_out) != 1L) {
     stop("Argument `unit_out` must have length 1.")
   }
@@ -44,7 +45,7 @@ unicon_option <- function(value_in,
         ends_with("_value"),
         ends_with("_unit")
       ),
-      names_to = c("category", ".value"),
+      names_to = c("category_y", ".value"),
       names_pattern = "(.*)_(value|unit)"
     ) |>
     rename(
@@ -56,14 +57,18 @@ unicon_option <- function(value_in,
 
   chk_cat_exist <- pre |>
     distinct(
-      .data$category
+      .data$category_y
     ) |>
     anti_join(
       unicon_help() |>
         distinct(
           .data$category
-        )
+        ),
+      by = c(
+        "category_y" = "category"
+      )
     )
+
 
   if (nrow(chk_cat_exist) != 0) {
     stop("Please use category names used in unicon; see `unicon_help()`")
@@ -98,6 +103,34 @@ unicon_option <- function(value_in,
       by = c("alias_out" = "alias")
     )
 
+  ## check for blanks
+
+  if (any(is.na(unit_cat$category_in))) {
+
+    stop("`unit_in` does not have a recognised category, please check")
+
+    print(
+      unit_cat |>
+      filter(
+        is.na(.data$category_in)
+      ) |>
+      pull(.data$unit_in)
+    )
+  }
+
+  if (any(is.na(unit_cat$category_out))) {
+
+    stop("`unit_out` does not have a recognised category, please check")
+
+    print(
+      unit_cat |>
+        filter(
+          is.na(.data$category_out)
+        ) |>
+        pull(.data$unit_out)
+    )
+  }
+
 
   ## if category in == out
 
@@ -130,7 +163,7 @@ unicon_option <- function(value_in,
         "value_in",
         "unit_in",
         "unit_out",
-        "y" = "category"
+        "y" = "category_y"
       )
     )
 
@@ -144,6 +177,8 @@ unicon_option <- function(value_in,
     operator_in = NA,
     pull = FALSE
   )
+
+  ## join and same and diff out together so output is in right order
 
   out <- pre |>
     distinct(
