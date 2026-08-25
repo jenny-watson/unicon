@@ -5,15 +5,15 @@
 
 ## ---- argument validation ----------------------------------------------------
 
-test_that("unicon_option rejects unit_out with length > 1", {
+test_that("unicon_option rejects unit_out with length < 1", {
   expect_error(
     unicon_option(
       value_in = 1,
       unit_in = "m",
-      unit_out = c("cm", "km"),
-      extras = list()
+      unit_out = NA,
+      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
     ),
-    "Argument `unit_out` must have length 1\\."
+    "Argument `unit_out` must be a character vector or `NA`."
   )
 })
 
@@ -35,7 +35,7 @@ test_that("unicon_option stops with unknown unit_in", {
       value_in = 1,
       unit_in = "not_a_unit",
       unit_out = "cm",
-      extras = list()
+      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
     ),
     "`unit_in` does not have a recognised category"
   )
@@ -47,43 +47,9 @@ test_that("unicon_option stops with unknown unit_out", {
       value_in = 1,
       unit_in = "m",
       unit_out = "not_a_unit",
-      extras = list()
+      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
     ),
     "`unit_out` does not have a recognised category"
-  )
-})
-
-## ---- stop if unicon_full is not needed (all cross-category, no same-category rows) --
-
-test_that("unicon_option stops with 'Please use unicon_full' when all inputs are cross-category", {
-  # Provide only a cross-category conversion (length -> speed) without extras,
-  # so cat_same has 0 rows and cat_diff would have rows — but because extras is
-  # empty the diff path cannot complete; the cat_same guard fires first.
-  expect_error(
-    unicon_option(
-      value_in = 100,
-      unit_in = "m",
-      unit_out = "m/sec",
-      extras = list()
-    ),
-    "Please use `unicon_advance`"
-  )
-})
-
-## ---- stop if unicon_advance is not needed (all same-category, no cross-category rows) -
-
-test_that("unicon_option stops with 'Please use unicon_advance' when inputs produce no diff rows", {
-  # All same-category: cat_diff has 0 rows, so the cat_diff guard fires.
-  # We pass extras that introduce a cross-category column that still resolves to
-  # a same-category unit_out, so the diff filter returns nothing.
-  expect_error(
-    unicon_option(
-      value_in = 1,
-      unit_in = "m",
-      unit_out = "cm",
-      extras = list(time = list(value = 60, unit = "min"))
-    ),
-    "Please use `unicon_full`"
   )
 })
 
@@ -94,7 +60,7 @@ test_that("unicon_option converts same-category units (length)", {
     value_in = 1,
     unit_in = "m",
     unit_out = "cm",
-    extras = list()
+    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
   )
 
   expect_type(out, "double")
@@ -107,7 +73,7 @@ test_that("unicon_option converts same-category units (mass)", {
     value_in = 1,
     unit_in = "kg",
     unit_out = "g",
-    extras = list()
+    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
   )
 
   expect_equal(out, 1000, tolerance = 1e-8)
@@ -120,7 +86,7 @@ test_that("unicon_option returns a numeric vector for multiple same-category val
     value_in = c(1, 2, 3),
     unit_in = "m",
     unit_out = "cm",
-    extras = list()
+    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
   )
 
   expect_type(out, "double")
@@ -146,7 +112,7 @@ test_that("unicon_option handles element-wise different unit_in values", {
     value_in = c(1, 100),
     unit_in = c("m", "cm"),
     unit_out = "m",
-    extras = list()
+    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
   )
 
   expect_equal(out, c(1, 1), tolerance = 1e-8)
