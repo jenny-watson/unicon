@@ -82,6 +82,42 @@ test_that("vignette unicon_help has a one-to-one mapping between srp and categor
   expect_true(all(srps_per_category == 1L))
 })
 
+## ---- unicon_option vignette example -----------------------------------------
+
+test_that("vignette unicon_option same-category example converts correctly", {
+  result <- unicon_option(
+    value_in = c(1, 2, 5),
+    unit_in = "km",
+    unit_out = "m",
+    extras = list()
+  )
+
+  expect_type(result, "double")
+  expect_length(result, 3L)
+  expect_equal(result, c(1000, 2000, 5000), tolerance = 1e-8)
+})
+
+test_that("vignette unicon_option cross-category example produces same result as unicon_advance", {
+  opt_result <- unicon_option(
+    value_in = c(100, 200, 300),
+    unit_in = "miles",
+    unit_out = "km/hour",
+    extras = list(time = list(value = c(2, 4, 6), unit = "hour"))
+  )
+
+  adv_result <- unicon_advance(
+    x_value_in = c(100, 200, 300),
+    x_unit_in = "miles",
+    y_value_in = c(2, 4, 6),
+    y_unit_in = "hour",
+    unit_out = "km/hour"
+  )
+
+  expect_type(opt_result, "double")
+  expect_length(opt_result, 3L)
+  expect_equal(opt_result, adv_result, tolerance = 1e-8)
+})
+
 ## ---- unicon_own vignette example --------------------------------------------
 
 test_that("vignette unicon_own example: custom units appear in unicon_help and convert correctly", {
