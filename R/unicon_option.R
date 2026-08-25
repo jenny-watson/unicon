@@ -139,6 +139,10 @@ unicon_option <- function(value_in,
       .data$category_in == .data$category_out
     )
 
+  if (nrow(cat_same) == 0) {
+    stop("Please use `unicon_advance`")
+  }
+
   same_out <- unicon_full(
     value_in = cat_same$value_in,
     unit_in = cat_same$unit_in,
@@ -167,6 +171,9 @@ unicon_option <- function(value_in,
       )
     )
 
+  if (nrow(cat_diff) == 0) {
+    stop("Please use `unicon_full`")
+  }
 
   diff_out <- unicon_advance(
     x_value_in = cat_diff$value_in,
