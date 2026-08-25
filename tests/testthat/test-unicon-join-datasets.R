@@ -54,7 +54,7 @@ test_that("unicon_join_datasets output contains required columns", {
   )
   expect_true(
     all(c("id", "alias", "category", "srp", "slope", "intercept", "type") %in%
-      names(result)),
+          names(result)),
     info = "all required columns present"
   )
 })

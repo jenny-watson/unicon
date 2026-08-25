@@ -234,24 +234,44 @@ This function works by:
 
 ```{r unicon_option}
 
-value_in <- c(5.6, 7.97, 9.25, 5.61, 4.46, 7.11, 8.02, 2.26, 8.03, 4.04, 9.5, 0.46, 4.85, 3.74, 0.17, 5.23, 6.87)
-unit_in <- c("cubic metres", "kg", "litres", "tonnes", "cubic metres/ha", "kg/ha", "litres/ha", "tonnes/ha", "gallon", "lb", "long ton", "short ton", "gal/acre", "lb/acre", "long ton/acre", "short ton/acre", "kg")
-unit_out <- c("cubic metres", "kg", "litres", "tonnes", "cubic metres", "kg", "litres", "tonnes", "litres", "kg", "tonnes", "tonnes", "litres", "kg", "tonnes", "tonnes", "l")
+value_in <- c(
+  5.6, 7.97, 9.25, 5.61, 4.46, 7.11, 8.02, 2.26,
+  8.03, 4.04, 9.5, 0.46, 4.85, 3.74, 0.17, 5.23, 6.87
+)
+unit_in <- c(
+  "cubic metres", "kg", "litres", "tonnes",
+  "cubic metres/ha", "kg/ha", "litres/ha", "tonnes/ha",
+  "gallon", "lb", "long ton", "short ton",
+  "gal/acre", "lb/acre", "long ton/acre", "short ton/acre", "kg"
+)
+unit_out <- c(
+  "cubic metres", "kg", "litres", "tonnes",
+  "cubic metres", "kg", "litres", "tonnes",
+  "litres", "kg", "tonnes", "tonnes",
+  "litres", "kg", "tonnes", "tonnes", "l"
+)
 
-extras = list(
+extras <- list(
   area = list(
     value = 1:17,
-    unit = c("acre", "ha", "m2", "ac", "hectares", "acre", "ha", "m2", "ac", "hectares", "acre", "ha", "m2", "ac", "hectares", "acre", "hectares")
+    unit = c(
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "hectares"
+    )
   ),
   volume_density = list(
     value = rep(1, 17),
     unit = rep("g_l", 17)
-  ))
+  )
+)
 
-
-unicon_option(value_in = value_in,
-              unit_in = unit_in,
-              unit_out = unit_out,
-              extras = extras)
+unicon_option(
+  value_in = value_in,
+  unit_in = unit_in,
+  unit_out = unit_out,
+  extras = extras
+)
 
 ```

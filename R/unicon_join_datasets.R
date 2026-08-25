@@ -155,7 +155,7 @@ unicon_join_datasets <- function(base,
     )
 
   if (all(derived$x %in% base$category) ||
-    all(derived$y %in% base$category)) {
+        all(derived$y %in% base$category)) {
     warning <- derived |>
       filter(
         !.data$x %in% base$category |
@@ -167,7 +167,7 @@ unicon_join_datasets <- function(base,
   }
 
   if (all(derived$x %in% base$category) &&
-    all(derived$y %in% base$category)) {
+        all(derived$y %in% base$category)) {
     warning <- derived |>
       filter(
         !.data$x %in% base$category,

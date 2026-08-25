@@ -162,7 +162,8 @@ unicon_option <- function(value_in,
       value_in = cat_same$value_in,
       unit_in = cat_same$unit_in,
       unit_out = cat_same$unit_out,
-      pull = FALSE)
+      pull = FALSE
+    )
 
   }
 
@@ -179,13 +180,14 @@ unicon_option <- function(value_in,
         "category_in" = "x"
       )
     ) |>
-    left_join(pre,
-              by = c(
-                "value_in",
-                "unit_in",
-                "unit_out",
-                "y" = "category_y"
-              )
+    left_join(
+      pre,
+      by = c(
+        "value_in",
+        "unit_in",
+        "unit_out",
+        "y" = "category_y"
+      )
     )
 
   if (nrow(cat_diff) != 0) {
@@ -197,7 +199,8 @@ unicon_option <- function(value_in,
       y_unit_in = cat_diff$unit_y,
       unit_out = cat_diff$unit_out,
       operator_in = NA,
-      pull = FALSE)
+      pull = FALSE
+    )
 
   }
 

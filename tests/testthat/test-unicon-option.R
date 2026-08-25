@@ -11,7 +11,7 @@ test_that("unicon_option rejects unit_out with length < 1", {
       value_in = 1,
       unit_in = "m",
       unit_out = NA,
-      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+      extras = list(area = list(unit = "m2", value = 3))
     ),
     "Argument `unit_out` must be a character vector or `NA`."
   )
@@ -35,7 +35,7 @@ test_that("unicon_option stops with unknown unit_in", {
       value_in = 1,
       unit_in = "not_a_unit",
       unit_out = "cm",
-      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+      extras = list(area = list(unit = "m2", value = 3))
     ),
     "`unit_in` does not have a recognised category"
   )
@@ -47,7 +47,7 @@ test_that("unicon_option stops with unknown unit_out", {
       value_in = 1,
       unit_in = "m",
       unit_out = "not_a_unit",
-      extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+      extras = list(area = list(unit = "m2", value = 3))
     ),
     "`unit_out` does not have a recognised category"
   )
@@ -60,7 +60,7 @@ test_that("unicon_option converts same-category units (length)", {
     value_in = 1,
     unit_in = "m",
     unit_out = "cm",
-    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+    extras = list(area = list(unit = "m2", value = 3))
   )
 
   expect_type(out, "double")
@@ -73,7 +73,7 @@ test_that("unicon_option converts same-category units (mass)", {
     value_in = 1,
     unit_in = "kg",
     unit_out = "g",
-    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+    extras = list(area = list(unit = "m2", value = 3))
   )
 
   expect_equal(out, 1000, tolerance = 1e-8)
@@ -86,7 +86,7 @@ test_that("unicon_option returns a numeric vector for multiple same-category val
     value_in = c(1, 2, 3),
     unit_in = "m",
     unit_out = "cm",
-    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+    extras = list(area = list(unit = "m2", value = 3))
   )
 
   expect_type(out, "double")
@@ -112,7 +112,7 @@ test_that("unicon_option handles element-wise different unit_in values", {
     value_in = c(1, 100),
     unit_in = c("m", "cm"),
     unit_out = "m",
-    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+    extras = list(area = list(unit = "m2", value = 3))
   )
 
   expect_equal(out, c(1, 1), tolerance = 1e-8)
@@ -151,6 +151,3 @@ test_that("unicon_option cross-category result matches unicon_advance directly",
 
   expect_equal(opt_out, adv_out, tolerance = 1e-8)
 })
-
-
-

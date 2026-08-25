@@ -89,7 +89,7 @@ test_that("vignette unicon_option same-category example converts correctly", {
     value_in = c(1, 2, 5),
     unit_in = "km",
     unit_out = "m",
-    extras = list(area = list(unit = "m2", value = 3)) # not needed for test but needed for function to run
+    extras = list(area = list(unit = "m2", value = 3))
   )
 
   expect_type(result, "double")

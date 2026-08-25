@@ -51,7 +51,7 @@ test_that("original divide row is preserved in output", {
   result <- unicon_make_relationships_data(input)
   expect_true(
     any(result$id == "speed" & result$x == "length" &
-      result$y == "time" & result$operator == "divide"),
+          result$y == "time" & result$operator == "divide"),
     info = "original divide row present"
   )
 })
@@ -62,7 +62,7 @@ test_that("divide: rearranged rows include inverse and swapped forms", {
   # id<->y swap, still divide
   expect_true(
     any(result$id == "time" & result$x == "length" &
-      result$y == "speed" & result$operator == "divide"),
+          result$y == "speed" & result$operator == "divide"),
     info = "id/y swapped divide row present"
   )
 
@@ -91,7 +91,7 @@ test_that("original multiply row is preserved in output", {
   result <- unicon_make_relationships_data(input)
   expect_true(
     any(result$id == "energy" & result$x == "force" &
-      result$y == "length" & result$operator == "multiply"),
+          result$y == "length" & result$operator == "multiply"),
     info = "original multiply row present"
   )
 })
@@ -100,7 +100,7 @@ test_that("multiply: x and y swap is present in output", {
   result <- unicon_make_relationships_data(make_multiply_derived())
   expect_true(
     any(result$id == "energy" & result$x == "length" &
-      result$y == "force" & result$operator == "multiply"),
+          result$y == "force" & result$operator == "multiply"),
     info = "x/y swapped multiply row present"
   )
 })

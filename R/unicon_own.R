@@ -54,11 +54,11 @@ unicon_own <- function(base_id = NA,
   own_operators_data <- NULL
 
   if (!all(is.na(base_id)) &&
-    !all(is.na(base_alias)) &&
-    !all(is.na(category)) &&
-    !all(is.na(srp)) &&
-    !all(is.na(slope)) &&
-    !all(is.na(intercept))) {
+        !all(is.na(base_alias)) &&
+        !all(is.na(category)) &&
+        !all(is.na(srp)) &&
+        !all(is.na(slope)) &&
+        !all(is.na(intercept))) {
     message("Creating base data")
 
     own_base_data <- unicon_make_own_base_data(
@@ -71,9 +71,9 @@ unicon_own <- function(base_id = NA,
     )
 
     if (!all(is.na(derived_id)) &&
-      !all(is.na(x)) &&
-      !all(is.na(y)) &&
-      !all(is.na(operator))) {
+          !all(is.na(x)) &&
+          !all(is.na(y)) &&
+          !all(is.na(operator))) {
       message("Creating derived data")
 
       own_derived_data <- unicon_make_own_derived_data(
@@ -84,8 +84,8 @@ unicon_own <- function(base_id = NA,
       )
 
       if (!all(is.na(operator_id)) &&
-        !all(is.na(fun)) &&
-        !all(is.na(operator_alias))) {
+            !all(is.na(fun)) &&
+            !all(is.na(operator_alias))) {
         message("Creating operator data")
 
         own_operators_data <- unicon_make_own_operators_data(
