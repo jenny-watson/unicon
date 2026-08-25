@@ -9,7 +9,7 @@ unicon_make_own_operators_data(operator, id, fun, alias)
 \arguments{
 \item{operator}{Character scalar or vector; the name of the operator}
 
-\item{id}{Character scalar or vector; either __ or .}
+\item{id}{Character scalar or vector; either _ or .}
 
 \item{fun}{Character scalar or vector; the preserved R function e.g. /, *, +, -}
 

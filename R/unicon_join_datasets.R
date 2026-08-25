@@ -142,8 +142,8 @@ unicon_join_datasets <- function(base,
     ) |>
     ## duplicate & wrong units if both base and derived unit
     filter(
-      !(.data$category == "area" & .data$srp == "l__m"),
-      !(.data$category == "length" & .data$srp == "ha__m")
+      !(.data$category == "area" & .data$srp == "l_m"),
+      !(.data$category == "length" & .data$srp == "ha_m")
     ) |>
     ## make sure pressure consistent unit
     mutate(

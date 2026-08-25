@@ -220,7 +220,7 @@
     Code
       cat("id:", divide$id, "\n")
     Output
-      id: __ 
+      id: _ 
     Code
       cat("fun:", divide$fun, "\n")
     Output

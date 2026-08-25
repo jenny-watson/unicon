@@ -33,7 +33,7 @@ make_derived <- function() {
 make_operators <- function() {
   tibble::tibble(
     operator = c("divide", "multiply"),
-    id       = c("__", "."),
+    id       = c("_", "."),
     fun      = c("/", "*"),
     alias    = c("/", "*")
   )
@@ -155,20 +155,20 @@ test_that("pressure units always have srp == 'pa'", {
 
 ## ---- no spurious duplicate/wrong rows ---------------------------------------
 
-test_that("area rows with srp 'l__m' are filtered out", {
+test_that("area rows with srp 'l_m' are filtered out", {
   result <- suppressWarnings(
     unicon_join_datasets(make_base(), make_derived(), make_operators())
   )
-  bad_area <- result[result$category == "area" & result$srp == "l__m", ]
-  expect_equal(nrow(bad_area), 0L, info = "no area rows with srp == 'l__m'")
+  bad_area <- result[result$category == "area" & result$srp == "l_m", ]
+  expect_equal(nrow(bad_area), 0L, info = "no area rows with srp == 'l_m'")
 })
 
-test_that("length rows with srp 'ha__m' are filtered out", {
+test_that("length rows with srp 'ha_m' are filtered out", {
   result <- suppressWarnings(
     unicon_join_datasets(make_base(), make_derived(), make_operators())
   )
-  bad_len <- result[result$category == "length" & result$srp == "ha__m", ]
-  expect_equal(nrow(bad_len), 0L, info = "no length rows with srp == 'ha__m'")
+  bad_len <- result[result$category == "length" & result$srp == "ha_m", ]
+  expect_equal(nrow(bad_len), 0L, info = "no length rows with srp == 'ha_m'")
 })
 
 ## ---- derived unit categories present only when x & y in base ----------------
