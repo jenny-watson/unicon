@@ -20,8 +20,8 @@ unicon_option <- function(value_in,
                           unit_out,
                           extras) {
 
-  if (!(is.character(unit_out)) || all(is.na(unit_out))) {
-    stop("Argument `unit_out` must be a character vector or `NA`.")
+  if (!is.character(unit_out) || any(is.na(unit_out))) {
+    stop("Argument `unit_out` must be a character vector and must not contain NA values.")
   }
 
   ## format data so have all data expanded for joins later
