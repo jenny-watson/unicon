@@ -225,3 +225,81 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   expect_equal(out$id_out, c("C", "C"))
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
+
+## ---- row-count preservation and duplicate rows ------------------------------
+
+test_that("unicon_full output row count equals input length (valid units)", {
+  values <- c(1, 2, 3, 4, 5)
+  out <- unicon_full(values, "m", "cm", pull = FALSE)
+  expect_equal(nrow(out), length(values))
+})
+
+test_that("unicon_full output row count equals input length with unknown unit", {
+  expect_warning(
+    out <- unicon_full(c(1, 2, 3), "not-a-unit", "cm", pull = FALSE),
+    "Some input units failed to find matches\\."
+  )
+  expect_equal(nrow(out), 3L)
+})
+
+test_that("unicon_full returns NA for unrecognised unit, not fewer rows", {
+  expect_warning(
+    out <- unicon_full(c(1, 2), "not-a-unit", "cm", pull = FALSE),
+    "Some input units failed to find matches\\."
+  )
+  expect_equal(nrow(out), 2L)
+  expect_true(all(is.na(out$value_out)))
+})
+
+test_that("unicon_full returns NA for mismatched unit type, not fewer rows", {
+  expect_warning(
+    out <- unicon_full(c(1, 2), "m", "g", pull = FALSE),
+    "Some requested conversions were not valid \\(unit type mismatch\\)\\."
+  )
+  expect_equal(nrow(out), 2L)
+  expect_true(all(is.na(out$value_out)))
+})
+
+test_that("unicon_full mixed valid/invalid rows returns NA not fewer rows", {
+  expect_warning(
+    out <- unicon_full(
+      c(1, 2, 3),
+      c("m", "not-a-unit", "km"),
+      "m",
+      pull = FALSE
+    ),
+    "Some input units failed to find matches\\."
+  )
+  expect_equal(nrow(out), 3L)
+  expect_false(is.na(out$value_out[1]))
+  expect_true(is.na(out$value_out[2]))
+  expect_false(is.na(out$value_out[3]))
+})
+
+test_that("unicon_full handles duplicated rows correctly", {
+  values <- c(1, 1, 2, 2)
+  out <- unicon_full(values, "m", "cm", pull = FALSE)
+  expect_equal(nrow(out), 4L)
+  expect_equal(out$value_out, c(100, 100, 200, 200))
+})
+
+test_that("unicon_full all-duplicate inputs returns same number of rows", {
+  values <- rep(5, 10)
+  out <- unicon_full(values, "km", "m", pull = FALSE)
+  expect_equal(nrow(out), 10L)
+  expect_true(all(out$value_out == 5000))
+})
+
+test_that("unicon_full pull = TRUE returns vector of same length as input", {
+  values <- c(1, 2, 3)
+  out <- unicon_full(values, "m", "cm")
+  expect_equal(length(out), length(values))
+  expect_type(out, "double")
+})
+
+test_that("unicon_full pull = TRUE same length with duplicate values", {
+  values <- c(1, 1, 1)
+  out <- unicon_full(values, "m", "cm")
+  expect_equal(length(out), 3L)
+  expect_equal(out, c(100, 100, 100))
+})
