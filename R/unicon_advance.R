@@ -82,7 +82,8 @@ unicon_advance <- function(x_value_in,
         pull = FALSE
       )
     )
-  )
+  ) |>
+    distinct()
 
   y_srp_value <- suppressWarnings(
     suppressMessages(
@@ -93,7 +94,8 @@ unicon_advance <- function(x_value_in,
         pull = FALSE
       )
     )
-  )
+  ) |>
+    distinct()
 
   ## identify what type of metrics x and y are & their srp
 
