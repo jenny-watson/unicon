@@ -25,7 +25,7 @@
 #' @param operator Character scalar or vector. The operator name used to combine
 #' \code{x} and \code{y} (e.g. \code{"divide"} or \code{"multiply"}).
 #' @param operator_id Character scalar. The operator identifier; either
-#' \code{"_"} (per/divide) or \code{"."} (dot/multiply).
+#' \code{"__"} (per/divide) or \code{"."} (dot/multiply).
 #' @param fun Character scalar. The R function character corresponding to the
 #' operator (e.g. \code{"/"}, \code{"*"}, \code{"+"}, \code{"-"}).
 #' @param operator_alias Character scalar or vector. Alternative names for the

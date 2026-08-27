@@ -149,7 +149,7 @@ unicon_make_own_derived_data <- function(id,
 #' the users own discretion and they will need to conduct their own checks for
 #' data quality. This is not likely to be required.
 #' @param operator Character scalar or vector; the name of the operator
-#' @param id Character scalar or vector; either _ or .
+#' @param id Character scalar or vector; either __ or .
 #' @param fun Character scalar or vector; the preserved R function e.g. /, *, +, -
 #' @param alias Character scalar or vector; alternative names, many of these
 #' can map to id

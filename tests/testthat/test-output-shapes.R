@@ -269,14 +269,14 @@ test_that("unicon_make_own_derived_data snapshot: column types", {
 
 test_that("unicon_make_own_operators_data snapshot: column names", {
   out <- unicon_make_own_operators_data(
-    operator = "divide", id = "_", fun = "/", alias = "per"
+    operator = "divide", id = "__", fun = "/", alias = "per"
   )
   expect_snapshot(cat(paste(names(out), collapse = "\n"), "\n"))
 })
 
 test_that("unicon_make_own_operators_data snapshot: column types", {
   out <- unicon_make_own_operators_data(
-    operator = "divide", id = "_", fun = "/", alias = "per"
+    operator = "divide", id = "__", fun = "/", alias = "per"
   )
   expect_snapshot({
     types <- col_types(out)

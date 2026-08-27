@@ -53,7 +53,7 @@ calculate the derived metric.}
 \code{x} and \code{y} (e.g. \code{"divide"} or \code{"multiply"}).}
 
 \item{operator_id}{Character scalar. The operator identifier; either
-\code{"_"} (per/divide) or \code{"."} (dot/multiply).}
+\code{"__"} (per/divide) or \code{"."} (dot/multiply).}
 
 \item{fun}{Character scalar. The R function character corresponding to the
 operator (e.g. \code{"/"}, \code{"*"}, \code{"+"}, \code{"-"}).}

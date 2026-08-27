@@ -107,8 +107,8 @@ Direct usage is discouraged for the reasons outlined above, but users can still 
 ```{r unicon_lite-1}
 unicon_lite(
   value_in = raw_values,
-  id_in = c("t_ha", "st_acre", "t_ha", "kg_ha", "g_m2"),
-  id_out = "t_ha"
+  id_in = c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m2"),
+  id_out = "t__ha"
 )
 ```
 
@@ -263,7 +263,7 @@ extras <- list(
   ),
   volume_density = list(
     value = rep(1, 17),
-    unit = rep("g_l", 17)
+    unit = rep("g__l", 17)
   )
 )
 
