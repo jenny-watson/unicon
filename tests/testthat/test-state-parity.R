@@ -39,6 +39,51 @@ test_that("json parity: key base units match internal models", {
   }
 })
 
+test_that("json parity: every base JSON model is represented in internal data", {
+  paths <- list_pkg_jsons("units/base")
+
+  # derive id/category from file path under inst/units/base/<category>/<id>.json
+  to_row <- function(p) {
+    rel <- gsub(".*inst/", "", p)
+    parts <- strsplit(rel, "/", fixed = TRUE)[[1]]
+
+    category <- parts[3]
+    id <- sub("\\.json$", "", basename(p))
+
+    j <- jsonlite::read_json(p, simplifyVector = TRUE, simplifyDataFrame = FALSE)
+
+    tibble::tibble(
+      file = rel,
+      id = id,
+      category = category,
+      srp = j$srp,
+      slope = as.numeric(j$model$slope),
+      intercept = as.numeric(j$model$intercept)
+    )
+  }
+
+  json_models <- dplyr::bind_rows(lapply(paths, to_row))
+
+  # ensure every base JSON file is represented at least once internally
+  missing <- dplyr::anti_join(
+    json_models,
+    .unicon_state$unit_models |>
+      dplyr::distinct(.data$id, .data$category, .data$srp, .data$slope, .data$intercept),
+    by = c("id", "category", "srp", "slope", "intercept")
+  )
+
+  expect_snapshot({
+    cat("base json files:", nrow(json_models), "\n")
+    cat("missing representations:", nrow(missing), "\n")
+    if (nrow(missing) > 0L) {
+      cat("missing files:\n")
+      cat(paste(missing$file, collapse = "\n"), "\n")
+    }
+  })
+
+  expect_equal(nrow(missing), 0L)
+})
+
 test_that("json parity: pressure category uses pa as SRP internally", {
   pressure <- dplyr::filter(.unicon_state$unit_models, .data$category == "pressure")
   expect_true(nrow(pressure) > 0L)

@@ -36,6 +36,17 @@
     Output
       relationships names: id,x,y,operator
 
+# json parity: every base JSON model is represented in internal data
+
+    Code
+      cat("base json files:", nrow(json_models), "\n")
+    Output
+      base json files: 47 
+    Code
+      cat("missing representations:", nrow(missing), "\n")
+    Output
+      missing representations: 0 
+
 # internal data invariants: known aliases and row counts are stable
 
     Code
