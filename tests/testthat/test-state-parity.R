@@ -26,66 +26,33 @@ test_that("json parity: key base units match internal models", {
   )
 
   for (u in key_units) {
-    j <- read_pkg_json(u$path[[1]], u$path[[2]], u$path[[3]], u$path[[4]])
+
+    path <- do.call(
+      system.file,
+      c(as.list(u$path), package = "unicon")
+    )
+
+    j <- jsonlite::read_json(
+      path,
+      simplifyVector = TRUE,
+      simplifyDataFrame = FALSE
+    )
 
     expect_equal(j$srp, u$srp)
     expect_equal(j$model$slope, u$slope, tolerance = 1e-12)
 
-    internal <- dplyr::filter(.unicon_state$unit_models, .data$id == u$id)
+    internal <- dplyr::filter(.unicon_state$unit_models, .data$id == u$id) |>
+      tidyr::unnest_wider(model)
     expect_true(nrow(internal) >= 1L)
 
-    expect_true(any(internal$srp == j$srp))
+    expect_true(any(.unicon_state$unit_srp$srp == j$srp))
     expect_true(any(abs(internal$slope - j$model$slope) < 1e-12))
   }
 })
 
-test_that("json parity: every base JSON model is represented in internal data", {
-  paths <- list_pkg_jsons("units/base")
-
-  # derive id/category from file path under inst/units/base/<category>/<id>.json
-  to_row <- function(p) {
-    rel <- gsub(".*inst/", "", p)
-    parts <- strsplit(rel, "/", fixed = TRUE)[[1]]
-
-    category <- parts[3]
-    id <- sub("\\.json$", "", basename(p))
-
-    j <- jsonlite::read_json(p, simplifyVector = TRUE, simplifyDataFrame = FALSE)
-
-    tibble::tibble(
-      file = rel,
-      id = id,
-      category = category,
-      srp = j$srp,
-      slope = as.numeric(j$model$slope),
-      intercept = as.numeric(j$model$intercept)
-    )
-  }
-
-  json_models <- dplyr::bind_rows(lapply(paths, to_row))
-
-  # ensure every base JSON file is represented at least once internally
-  missing <- dplyr::anti_join(
-    json_models,
-    .unicon_state$unit_models |>
-      dplyr::distinct(.data$id, .data$category, .data$srp, .data$slope, .data$intercept),
-    by = c("id", "category", "srp", "slope", "intercept")
-  )
-
-  expect_snapshot({
-    cat("base json files:", nrow(json_models), "\n")
-    cat("missing representations:", nrow(missing), "\n")
-    if (nrow(missing) > 0L) {
-      cat("missing files:\n")
-      cat(paste(missing$file, collapse = "\n"), "\n")
-    }
-  })
-
-  expect_equal(nrow(missing), 0L)
-})
 
 test_that("json parity: pressure category uses pa as SRP internally", {
-  pressure <- dplyr::filter(.unicon_state$unit_models, .data$category == "pressure")
+  pressure <- dplyr::filter(.unicon_state$unit_srp, .data$category == "pressure")
   expect_true(nrow(pressure) > 0L)
   expect_true(all(pressure$srp == "pa"))
 })

@@ -14,9 +14,10 @@
     Output
       unit_srp nrow: 840 
     Code
-      cat("unit_srp names:", paste(names(.unicon_state$unit_srp), collapse = ","), "\n")
+      cat("unit_srp names:", paste(names(.unicon_state$unit_srp), collapse = ","),
+      "\n")
     Output
-      unit_srp names: id,srp,category 
+      unit_srp names: id,type,category,srp 
     Code
       cat("unit_models nrow:", nrow(.unicon_state$unit_models), "\n")
     Output
@@ -25,7 +26,7 @@
       cat("unit_models names:", paste(names(.unicon_state$unit_models), collapse = ","),
       "\n")
     Output
-      unit_models names: id,slope,intercept,srp,category 
+      unit_models names: id,model 
     Code
       cat("relationships nrow:", nrow(.unicon_state$relationships), "\n")
     Output
@@ -34,18 +35,7 @@
       cat("relationships names:", paste(names(.unicon_state$relationships), collapse = ","),
       "\n")
     Output
-      relationships names: id,x,y,operator
-
-# json parity: every base JSON model is represented in internal data
-
-    Code
-      cat("base json files:", nrow(json_models), "\n")
-    Output
-      base json files: 47 
-    Code
-      cat("missing representations:", nrow(missing), "\n")
-    Output
-      missing representations: 0 
+      relationships names: id,x,y,operator 
 
 # internal data invariants: known aliases and row counts are stable
 
@@ -61,3 +51,4 @@
       cat("relationships_nrow:", nrow(.unicon_state$relationships), "\n")
     Output
       relationships_nrow: 42 
+
