@@ -13,7 +13,7 @@ test_that("unicon_option rejects unit_out with length < 1", {
       unit_out = NA,
       extras = list(area = list(unit = "m2", value = 3))
     ),
-    "Argument `unit_out` must be a character vector or `NA`."
+    "Argument `unit_out` must be a character vector and must not contain NA values."
   )
 })
 
@@ -25,7 +25,8 @@ test_that("unicon_option stops on unrecognised category name in extras", {
       unit_out = "cm",
       extras = list(not_a_category = list(value = 10, unit = "s"))
     ),
-    "Please use category names used in unicon"
+    regexp = "Please use category names used in unicon; see `unicon_help()`",
+    fixed = TRUE
   )
 })
 
@@ -37,7 +38,7 @@ test_that("unicon_option stops with unknown unit_in", {
       unit_out = "cm",
       extras = list(area = list(unit = "m2", value = 3))
     ),
-    "`unit_in` does not have a recognised category"
+    "`unit_in` does not have a recognised category: not_a_unit"
   )
 })
 
@@ -49,7 +50,7 @@ test_that("unicon_option stops with unknown unit_out", {
       unit_out = "not_a_unit",
       extras = list(area = list(unit = "m2", value = 3))
     ),
-    "`unit_out` does not have a recognised category"
+    "`unit_out` does not have a recognised category: not_a_unit"
   )
 })
 
