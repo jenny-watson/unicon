@@ -5,8 +5,7 @@
     Output
       unit_alias nrow: 70036 
     Code
-      cat("unit_alias names:", paste(names(state$unit_alias), collapse = ","),
-      "\n")
+      cat("unit_alias names:", paste(names(state$unit_alias), collapse = ","), "\n")
     Output
       unit_alias names: id,alias 
     Code
@@ -14,8 +13,7 @@
     Output
       unit_srp nrow: 840 
     Code
-      cat("unit_srp names:", paste(names(state$unit_srp), collapse = ","),
-      "\n")
+      cat("unit_srp names:", paste(names(state$unit_srp), collapse = ","), "\n")
     Output
       unit_srp names: id,type,category,srp 
     Code
@@ -23,8 +21,7 @@
     Output
       unit_models nrow: 841 
     Code
-      cat("unit_models names:", paste(names(state$unit_models), collapse = ","),
-      "\n")
+      cat("unit_models names:", paste(names(state$unit_models), collapse = ","), "\n")
     Output
       unit_models names: id,model 
     Code
