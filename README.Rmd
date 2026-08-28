@@ -6,7 +6,6 @@ output: github_document
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml)
-[![check-package-data](https://github.com/Agxiata/unicon/actions/workflows/check-package-data.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/check-package-data.yaml)
 [![lint](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml)
 [![test-and-snapshots](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml)
 [![test-coverage](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml)

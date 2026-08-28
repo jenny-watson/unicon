@@ -3,7 +3,7 @@
     Code
       cat("keys:", paste(sort(names(srp)), collapse = ", "), "\n")
     Output
-      keys: amount_of_substance, area, force, length, mass, temperature, time, volume 
+      keys: amount_of_substance, area, force, length, mass, pressure, temperature, time, volume 
     Code
       cat("all values character:", all(vapply(srp, is.character, logical(1L))), "\n")
     Output
@@ -11,7 +11,7 @@
     Code
       cat("n categories:", length(srp), "\n")
     Output
-      n categories: 8 
+      n categories: 9 
 
 # srp.json snapshot: known category SRP mappings
 
@@ -45,7 +45,7 @@
     Code
       cat("total base JSONs:", length(paths), "\n")
     Output
-      total base JSONs: 44 
+      total base JSONs: 47 
     Code
       cat("all pass schema:", all(results), "\n")
     Output
@@ -157,7 +157,7 @@
     Code
       cat("total derived JSONs:", length(paths), "\n")
     Output
-      total derived JSONs: 9 
+      total derived JSONs: 11 
     Code
       cat("all pass schema:", all(results), "\n")
     Output
@@ -196,7 +196,7 @@
     Code
       cat("unique operators:", paste(sort(unique(operators)), collapse = ", "), "\n")
     Output
-      unique operators: divide 
+      unique operators: divide, multiply 
     Code
       cat("all valid:", all(operators %in% valid), "\n")
     Output

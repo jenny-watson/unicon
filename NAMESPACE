@@ -16,6 +16,7 @@ export(unicon_make_relationships_data)
 export(unicon_make_unit_alias)
 export(unicon_make_unit_models)
 export(unicon_make_unit_srp)
+export(unicon_option)
 export(unicon_own)
 export(unicon_own_status)
 export(unicon_reset_units)
@@ -25,8 +26,13 @@ import(stringr)
 import(tibble)
 import(tidyr)
 importFrom(jsonlite,read_json)
-importFrom(purrr,pmap_dbl)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_replace_all)
-importFrom(stringr,str_to_lower)
+importFrom(purrr,
+  imap_dfc,
+  pmap_dbl
+)
+importFrom(stringr,
+  str_detect,
+  str_replace_all,
+  str_to_lower
+)
 importFrom(tidyr,replace_na)

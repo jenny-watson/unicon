@@ -1,0 +1,18 @@
+{
+  "category": "mass",
+  "srp": "g",
+  "model": {
+    "slope": 10,
+    "intercept": 0
+  },
+  "alias": [
+    "dg",
+    "dgs",
+    "decigram",
+    "decigrams",
+    "dgm",
+    "dgms",
+    "decigramme",
+    "decigrammes"
+  ]
+}

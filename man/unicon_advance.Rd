@@ -5,27 +5,27 @@
 \title{Deriving and calculating unit conversion between two metrics}
 \usage{
 unicon_advance(
-  x_unit_in,
-  y_unit_in,
   x_value_in,
   y_value_in,
+  x_unit_in,
+  y_unit_in,
   unit_out = NA,
   operator_in = NA,
   pull = TRUE
 )
 }
 \arguments{
-\item{x_unit_in}{Character scalar or vector, input units for
-\code{x_value_in}. Must be of \code{length(1L)} or \code{length(x_value_in)}.}
-
-\item{y_unit_in}{Character scalar or vector, input units for
-\code{y_value_in}. Must be of \code{length(1L)} or \code{length(y_value_in)}.}
-
 \item{x_value_in}{Numeric scalar or vector, values to convert from \code{x} and
 use in calculations of new metrics}
 
 \item{y_value_in}{Numeric scalar or vector, values to convert from \code{y} and
 use in calculations of new metric}
+
+\item{x_unit_in}{Character scalar or vector, input units for
+\code{x_value_in}. Must be of \code{length(1L)} or \code{length(x_value_in)}.}
+
+\item{y_unit_in}{Character scalar or vector, input units for
+\code{y_value_in}. Must be of \code{length(1L)} or \code{length(y_value_in)}.}
 
 \item{unit_out}{Character scalar or vector, output units for conversion. Must
 be of \code{length(1L)} or \code{length(x_value_in)}. Defaults to

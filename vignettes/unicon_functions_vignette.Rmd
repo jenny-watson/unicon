@@ -107,7 +107,7 @@ Direct usage is discouraged for the reasons outlined above, but users can still 
 ```{r unicon_lite-1}
 unicon_lite(
   value_in = raw_values,
-  id_in = c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m_2"),
+  id_in = c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m2"),
   id_out = "t__ha"
 )
 ```
@@ -131,7 +131,7 @@ Here, the core data presents:
 
 Together, these variables form the core operating dataset for the `unicon` functionality.
 
-# unicon_own
+# `unicon_own`
 
 The authors recognise that every unit conversion that users may want to use this package for may not exist within the package data. As such, `unicon_own` allows users to add their own base, derived, and operator data (please refer to `unicon_vignette.Rmd` for more information on how these data differ) and take advantage of the same functionality that builds the out of the box package data. Before users engage, it is recommended that the tibble produced by `unicon_help` be studied, as well as the `.json` files in the `inst` folder, to understand the data structure required to ensure correct functionality. 
 
@@ -209,12 +209,68 @@ As an example to how calculate a new metric from existing data is speed from len
 
 ```{r unicorn_advance}
 unicon_advance(
-  x_unit_in = rep("miles", 6),
-  y_unit_in = rep("hour", 6),
+  x_unit_in = "miles",
+  y_unit_in = "hour",
   x_value_in = c(1, 2, 3, 4, 5, 6),
   y_value_in = c(9, 8, 7, 5, 4, 2),
-  unit_out = rep("km/day", 6)
+  unit_out = "km/day"
 )
 ```
 
 Like `unicon_full`, `unicon_advance` has a `pull` argument, and it works in the same way; if set to `TRUE` (default), only the `value_out` is returned with a reduced warning. If set to `FALSE` a tibble is returned which shows all the `unicon_full` functionality for x, y, and the desired unit (we did warn you). This is useful in trouble shooting should an error in data input occur. 
+
+# `unicon_option`
+
+`unicon_option` is for users of `unicon_full` and `unicon_advance` where they don't know which function will be needed, but they want the same output unit.
+
+For example, say you have a variety of data in units that are either mass, area density, or volume but you want them all in mass, say kg. For the data already in mass format, you need `unicon_full` to convert them all to kg, but for data in area density or volume you need `unicon_advance`, but with some extra data (i.e. the `y` data).
+
+This function works by:
+- Identifying the unit category (e.g. mass) of the provided `unit_in` and `unit_out` arguments
+- Testing if the unit category of `unit_in` and `unit_out` is the same or different
+  - If it is the same, `unicon_full` is used
+  - If it is the different, `unicon_advance` is used, together with information provided in the `extras` argument
+- Data is then bound together in the correct order it was provided in
+
+```{r unicon_option}
+
+value_in <- c(
+  5.6, 7.97, 9.25, 5.61, 4.46, 7.11, 8.02, 2.26,
+  8.03, 4.04, 9.5, 0.46, 4.85, 3.74, 0.17, 5.23, 6.87
+)
+unit_in <- c(
+  "cubic metres", "kg", "litres", "tonnes",
+  "cubic metres/ha", "kg/ha", "litres/ha", "tonnes/ha",
+  "gallon", "lb", "long ton", "short ton",
+  "gal/acre", "lb/acre", "long ton/acre", "short ton/acre", "kg"
+)
+unit_out <- c(
+  "cubic metres", "kg", "litres", "tonnes",
+  "cubic metres", "kg", "litres", "tonnes",
+  "litres", "kg", "tonnes", "tonnes",
+  "litres", "kg", "tonnes", "tonnes", "l"
+)
+
+extras <- list(
+  area = list(
+    value = 1:17,
+    unit = c(
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "ha", "m2", "ac", "hectares",
+      "acre", "hectares"
+    )
+  ),
+  volume_density = list(
+    value = rep(1, 17),
+    unit = rep("g__l", 17)
+  )
+)
+
+unicon_option(
+  value_in = value_in,
+  unit_in = unit_in,
+  unit_out = unit_out,
+  extras = extras
+)
+```

@@ -6,7 +6,7 @@
 test_that("documented unicon_full and unicon_lite examples stay aligned", {
   raw_values <- c(54.21, 71.24, 55.81, 11.33, 70.59)
   raw_units <- c("tonnes / ha", "tons per acre", "t/ha", "kg /Hectare", "g/m2")
-  raw_ids <- c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m_2")
+  raw_ids <- c("t__ha", "st__acre", "t__ha", "kg__ha", "g__m2")
   unit_out <- "tonnes / ha"
   id_out <- "t__ha"
 
@@ -82,19 +82,58 @@ test_that("vignette unicon_help has a one-to-one mapping between srp and categor
   expect_true(all(srps_per_category == 1L))
 })
 
+## ---- unicon_option vignette example -----------------------------------------
+
+test_that("vignette unicon_option same-category example converts correctly", {
+  result <- unicon_option(
+    value_in = c(1, 2, 5),
+    unit_in = "km",
+    unit_out = "m",
+    extras = list(area = list(unit = "m2", value = 3))
+  )
+
+  expect_type(result, "double")
+  expect_length(result, 3L)
+  expect_equal(result, c(1000, 2000, 5000), tolerance = 1e-8)
+})
+
+test_that("vignette unicon_option cross-category example produces same result as unicon_advance", {
+  opt_result <- unicon_option(
+    value_in = c(100, 200, 300),
+    unit_in = "miles",
+    unit_out = "km/hour",
+    extras = list(time = list(value = c(2, 4, 6), unit = "hour"))
+  )
+
+  adv_result <- unicon_advance(
+    x_value_in = c(100, 200, 300),
+    x_unit_in = "miles",
+    y_value_in = c(2, 4, 6),
+    y_unit_in = "hour",
+    unit_out = "km/hour"
+  )
+
+  expect_type(opt_result, "double")
+  expect_length(opt_result, 3L)
+  expect_equal(opt_result, adv_result, tolerance = 1e-8)
+})
+
 ## ---- unicon_own vignette example --------------------------------------------
 
 test_that("vignette unicon_own example: custom units appear in unicon_help and convert correctly", {
   unicon_reset_units()
   on.exit(unicon_reset_units(), add = TRUE)
 
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ),
+    "Derived data is not just made of base units"
   )
 
   expect_true(unicon_own_status())

@@ -59,7 +59,7 @@ unicon_make_base_data_from_jsons <- function(dir) { # nolint: object_length_lint
 #' with the columns "id", "x", "y", "operator" that were formally lists.
 #' @param dir The file pathway where .json files for derived data are
 #' stored. Please refer to vignette for more information.
-#' @import tibble purrr
+#' @import tibble purrr stringr
 #' @export
 
 unicon_make_derived_data_from_jsons <- function(dir) { # nolint: object_length_linter.
@@ -72,7 +72,10 @@ unicon_make_derived_data_from_jsons <- function(dir) { # nolint: object_length_l
       y = .x$y,
       operator = .x$operator
     )
-  )
+  ) |>
+    mutate(
+      id = str_remove_all(.data$id, "[0-9]")
+    )
 
   derived_data
 }

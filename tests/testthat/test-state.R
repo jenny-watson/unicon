@@ -43,13 +43,16 @@ test_that("unicon_full uses custom alias data when set", {
   on.exit(unicon_reset_units(), add = TRUE)
 
   ## Build full custom datasets the same way unicon_own does
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ),
+    "Derived data is not just made of base units. Please check all units are present in base data."
   )
 
   result <- unicon_full(
@@ -64,14 +67,17 @@ test_that("unicon_full uses custom alias data when set", {
 test_that("unicon_full reverts to package data after reset", {
   on.exit(unicon_reset_units(), add = TRUE)
 
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
+
   unicon_reset_units()
 
   expect_warning(
@@ -94,13 +100,15 @@ test_that("unicon_help returns package data by default", {
 test_that("unicon_help shows custom units after unicon_own", {
   on.exit(unicon_reset_units(), add = TRUE)
 
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
 
   h <- unicon_help()
@@ -111,14 +119,17 @@ test_that("unicon_help shows custom units after unicon_own", {
 test_that("unicon_help reverts to package data after reset", {
   on.exit(unicon_reset_units(), add = TRUE)
 
-  unicon_own(
-    base_id    = c("lp", "lp"),
-    base_alias = c("lp", "largepackage"),
-    category   = c("mass", "mass"),
-    srp        = c("g", "g"),
-    slope      = c(12500, 12500),
-    intercept  = c(0, 0)
+  expect_warning(
+    unicon_own(
+      base_id    = c("lp", "lp"),
+      base_alias = c("lp", "largepackage"),
+      category   = c("mass", "mass"),
+      srp        = c("g", "g"),
+      slope      = c(12500, 12500),
+      intercept  = c(0, 0)
+    ), "Derived data is not just made of base units. Please check all units are present in base data." # nolint
   )
+
   unicon_reset_units()
 
   h <- unicon_help()

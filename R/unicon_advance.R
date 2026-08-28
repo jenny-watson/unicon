@@ -25,20 +25,38 @@
 #' @importFrom purrr pmap_dbl
 #' @export
 
-unicon_advance <- function(x_unit_in,
-                           y_unit_in,
-                           x_value_in,
+unicon_advance <- function(x_value_in,
                            y_value_in,
+                           x_unit_in,
+                           y_unit_in,
                            unit_out = NA,
                            operator_in = NA,
                            pull = TRUE) {
   # checks are minimal as relying in unicon_full checks
 
-  l1 <- length(x_value_in)
-  l2 <- length(y_value_in)
-
-  if (l2 != l1) {
+  if (length(x_value_in) != length(y_value_in)) {
     stop("Argument `x_value_in` and `y_value_in` must have same length.")
+  }
+
+  if (length(unit_out) != length(x_unit_in) && length(unit_out) != 1L) {
+    stop("Argument `unit_out` must have length 1 or length(x_unit_in).")
+  }
+
+
+  # if units have 1L, increase to length of values
+
+  n <- length(x_value_in)
+
+  if (length(x_unit_in) == 1L) {
+    x_unit_in <- rep(x_unit_in, n)
+  }
+
+  if (length(y_unit_in) == 1L) {
+    y_unit_in <- rep(y_unit_in, n)
+  }
+
+  if (length(unit_out) == 1L) {
+    unit_out <- rep(unit_out, n)
   }
 
   ## create tibble for joining
@@ -64,7 +82,8 @@ unicon_advance <- function(x_unit_in,
         pull = FALSE
       )
     )
-  )
+  ) |>
+    distinct()
 
   y_srp_value <- suppressWarnings(
     suppressMessages(
@@ -75,7 +94,8 @@ unicon_advance <- function(x_unit_in,
         pull = FALSE
       )
     )
-  )
+  ) |>
+    distinct()
 
   ## identify what type of metrics x and y are & their srp
 
@@ -266,21 +286,37 @@ unicon_advance <- function(x_unit_in,
     ## get rid of any unneeded columns
     select(
       "x_category",
-      starts_with("x"),
+      "x_unit_in",
+      "x_value_in",
+      "x_alias_in",
+      "x_id_in",
+      "x_id_out",
+      "x_error_in",
+      "x_error_srp",
+      "x_error_out",
+      "x_value_srp",
       "y_category",
-      starts_with("y"),
+      "y_unit_in",
+      "y_value_in",
+      "y_alias_in",
+      "y_id_in",
+      "y_id_out",
+      "y_error_in",
+      "y_error_srp",
+      "y_error_out",
+      "y_value_srp",
       "operator_in",
-      "id",
-      everything(),
-      -"fun",
-      -"x_srp_in",
-      -"x_unit_out",
-      -"x_alias_out",
-      -"x_value_out",
-      -"y_srp_in",
-      -"y_unit_out",
-      -"y_alias_out",
-      -"y_value_out"
+      category = "id",
+      "srp_in",
+      "value_in",
+      "unit_out",
+      "alias_out",
+      "id_out",
+      "error_in",
+      "error_srp",
+      "error_out",
+      "value_srp",
+      "value_out"
     )
 
   if (isTRUE(pull)) {
