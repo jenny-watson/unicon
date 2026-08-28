@@ -1,0 +1,11 @@
+{
+  "amount_of_substance": "mol",
+  "area": "ha",
+  "force": "N",
+  "length": "m",
+  "mass": "g",
+  "pressure": "pa",
+  "temperature": "C",
+  "time": "s",
+  "volume": "l"
+}

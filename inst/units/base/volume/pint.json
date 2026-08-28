@@ -1,0 +1,13 @@
+{
+  "category": "volume",
+  "srp": "l",
+  "model": {
+    "slope": 0.473176473,
+    "intercept": 0
+  },
+  "alias": [
+    "pint",
+    "pints",
+    "pt"
+  ]
+}

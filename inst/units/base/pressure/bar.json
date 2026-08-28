@@ -1,0 +1,12 @@
+{
+  "category": "pressure",
+  "srp": "pa",
+  "model": {
+    "slope": 100000,
+    "intercept": 0
+  },
+  "alias": [
+    "bar",
+    "bars"
+  ]
+}

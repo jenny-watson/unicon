@@ -1,0 +1,13 @@
+{
+  "category": "area",
+  "srp": "ha",
+  "model": {
+    "slope": 0.404686,
+    "intercept": 0
+  },
+  "alias": [
+    "ac",
+    "acre",
+    "acres"
+  ]
+}

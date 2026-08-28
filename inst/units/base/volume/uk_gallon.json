@@ -1,0 +1,13 @@
+{
+  "category": "volume",
+  "srp": "l",
+  "model": {
+    "slope": 4.54609,
+    "intercept": 0
+  },
+  "alias": [
+    "uk gallon",
+    "uk gallons",
+    "uk gal"
+  ]
+}

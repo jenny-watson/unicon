@@ -1,0 +1,14 @@
+{
+  "category": "mass",
+  "srp": "g",
+  "model": {
+    "slope": 28.349523125,
+    "intercept": 0
+  },
+  "alias": [
+    "oz",
+    "ozs",
+    "ounce",
+    "ounces"
+  ]
+}

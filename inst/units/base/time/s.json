@@ -1,0 +1,15 @@
+{
+  "category": "time",
+  "srp": "s",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "s",
+    "sec",
+    "secs",
+    "second",
+    "seconds"
+  ]
+}

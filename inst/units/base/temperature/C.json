@@ -1,0 +1,13 @@
+{
+  "category": "temperature",
+  "srp": "C",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "celcius",
+    "c",
+    "celsius"
+  ]
+}

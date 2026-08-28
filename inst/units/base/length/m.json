@@ -1,0 +1,13 @@
+{
+  "category": "length",
+  "srp": "m",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "m",
+    "metres",
+    "meters"
+  ]
+}

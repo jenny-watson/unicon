@@ -1,0 +1,13 @@
+{
+  "category": "force",
+  "srp": "N",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "N",
+    "newton",
+    "newtons"
+  ]
+}

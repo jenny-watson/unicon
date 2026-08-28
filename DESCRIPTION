@@ -1,0 +1,31 @@
+Package: unicon
+Title: Convert units using the International System of Units (SI)
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Jenny", "Watson", , "jennyblue@hotmail.co.uk", role = c("aut", "cre")),
+    person("Alasdair", "Sykes", , "alasdairsykes@gmail.com", role = "aut")
+    )
+Description: Convert units from one unit to another using the International System of Units (SI). Users can choose which units are output.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    DiagrammeR,
+    knitr,
+    rlang,
+    rmarkdown,
+    testthat,
+    usethis,
+    withr
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    dplyr,
+    jsonlite,
+    purrr,
+    stringr,
+    tibble,
+    tidyr
+Config/roxygen2/version: 8.1.0

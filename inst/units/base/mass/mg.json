@@ -1,0 +1,16 @@
+{
+  "category": "mass",
+  "srp": "g",
+  "model": {
+    "slope": 0.001,
+    "intercept": 0
+  },
+  "alias": [
+    "mg",
+    "mgs",
+    "milligram",
+    "milligrams",
+    "milligramme",
+    "milligrammes"
+  ]
+}
