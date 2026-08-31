@@ -2,7 +2,7 @@
   "category": "volume",
   "srp": "l",
   "model": {
-    "slope": 3.7854,
+    "slope": 3.785411784,
     "intercept": 0
   },
   "alias": [

@@ -3,7 +3,10 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unit_conversion/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml)
+[![lint](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml)
+[![test-and-snapshots](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml)
+[![test-coverage](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 *Reliable, transparent unit conversions in a `tidyverse` environment*
@@ -34,7 +37,7 @@ The package is designed to provide:
 
 1.  A set of commonly used units, codified by their relation to one
     another and their many human-readable aliases.
-2.  A mimimal set of functions for easily and transparently converting
+2.  A minimal set of functions for easily and transparently converting
     one unit to another.
 3.  A simple, safe system for adding to and testing the conversion
     library to maximise maintainability and usefulness.
@@ -54,8 +57,6 @@ Watson, J. & Sykes, A. J. (2026) `unicon`: Reliable, transparent unit
 conversions in a tidyverse environment. Version 0.0.0.9000. Available at
 <https://github.com/jenny-watson/unicon/>.
 
-> Zenodo DOI badge here following release
-
 ## Installation
 
 This package is hosted on GitHub and can be installed using the
@@ -68,15 +69,15 @@ remotes::install_github("jenny-watson/unicon@*release")
 
 ## Acknowledgements
 
-The authors would like to thank Tom Watson for designing our hex sticker. If you
-would like to use his services, please contact him via 
+The authors would like to thank Tom Watson for designing our hex
+sticker. If you would like to use his services, please contact him via
 [Instagram](https://www.instagram.com/tom_watson_art).
 
-The package is based around tidyverse ideas and functions, so thanks go also to 
-Hadley Wickham and the tidyverse team for building and maintaining this 
-incredible environment.
+The package is based around tidyverse ideas and functions, so thanks go
+also to Hadley Wickham and the tidyverse team for building and
+maintaining this incredible environment.
 
 ## Contribute
 
-If you would like to contribute to this package, please file an issue or make a 
-pull request on GitHub.
+If you would like to contribute to this package, please file an issue or
+make a pull request on GitHub.

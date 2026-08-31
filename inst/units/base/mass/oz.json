@@ -2,7 +2,7 @@
   "category": "mass",
   "srp": "g",
   "model": {
-    "slope": 28.3,
+    "slope": 28.349523125,
     "intercept": 0
   },
   "alias": [

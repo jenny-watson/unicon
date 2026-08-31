@@ -7,23 +7,23 @@ test_that("All base unit schemas have expected attributes", {
     "alias"
   )
 
-  checks <- imap(base, ~ list(
+  checks <- purrr::imap(base, ~ list(
     full = all(fields %in% names(.x)),
     clean = all(names(.x) %in% fields),
     id = .y
   ))
 
   # summarise
-  missing <- map_chr(
-    discard(
+  missing <- purrr::map_chr(
+    purrr::discard(
       checks,
       "full"
     ),
     "id"
   )
 
-  messy <- map_chr(
-    discard(
+  messy <- purrr::map_chr(
+    purrr::discard(
       checks,
       "clean"
     ),
@@ -69,9 +69,11 @@ test_that("All srp units are present in base units for aliases and models", {
 ################################################################################
 
 test_that("srp models are as expected", {
-  srp_models <- map(srp, ~ base[[.x]]$model)
 
-  iwalk(srp_models, function(model, cat) {
+  srp_models <- purrr::map(srp, ~ base[[.x]]$model)
+
+  purrr::iwalk(srp_models, function(model, cat) {
+
     expect_true(model$slope == 1,
       info = paste0(
         "Model incorrect for ",
@@ -93,7 +95,8 @@ test_that("srp models are as expected", {
 ################################################################################
 
 test_that("SRP units are covered and expected", {
-  srp_base <- map_chr(base, "srp")
+
+  srp_base <- purrr::map_chr(base, "srp")
 
   srp_covered <- srp_base %in% srp
 
@@ -113,15 +116,15 @@ test_that("SRP units are covered and expected", {
 
 test_that("No unit aliases are duplicated across IDs", {
   dupes <- unit_alias |>
-    group_by(alias) |>
-    summarise(
-      n = n(),
+    dplyr::group_by(alias) |>
+    dplyr::summarise(
+      n = dplyr::n(),
       ids = stringr::str_c(id,
         sep = ", "
       ),
       .groups = "drop"
     ) |>
-    filter(n > 1L)
+    dplyr::filter(n > 1L)
 
   msg_content <- stringr::str_c(
     paste0(
@@ -171,6 +174,40 @@ test_that("Unit aliases do not contain spaces or uppercase characters", {
       stringr::str_c(has_uppercase,
         sep = "; "
       )
+    )
+  )
+})
+
+################################################################################
+
+test_that("Package data has expected null/NA structure", {
+  # unit_srp should have no NAs
+  expect_true(
+    !anyNA(unit_srp),
+    info = "unit_srp contains NA values"
+  )
+
+  # unit_alias should have no NAs
+  expect_true(
+    !anyNA(unit_alias),
+    info = "unit_alias contains NA values"
+  )
+
+  # unit_models should have exactly 1 row of all NAs
+  na_rows <- unit_models |>
+    dplyr::mutate(
+      all_na = is.na(id) &
+        purrr::map_lgl(model, ~ is.na(.x$slope)) &
+        purrr::map_lgl(model, ~ is.na(.x$intercept))
+    ) |>
+    dplyr::filter(all_na) |>
+    nrow()
+
+  expect_true(
+    na_rows == 1L,
+    info = paste0(
+      "unit_models should have exactly 1 row of all NAs, found ",
+      na_rows
     )
   )
 })

@@ -1,0 +1,13 @@
+{
+  "category": "pressure",
+  "srp": "pa",
+  "model": {
+    "slope": 1,
+    "intercept": 0
+  },
+  "alias": [
+    "pa",
+    "pascals",
+    "pascal"
+  ]
+}
