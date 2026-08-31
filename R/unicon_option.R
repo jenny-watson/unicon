@@ -198,11 +198,10 @@ unicon_option <- function(value_in,
 
     if (any(missing_rel)) {
 
-      bad <- unique(
-        paste0(
-          cat_diff$category_in[missing_rel],
-          " -> ",
-          cat_diff$category_out[missing_rel]))
+      bad <- unique(paste0(
+        cat_diff$category_in[missing_rel],
+        " -> ",
+        cat_diff$category_out[missing_rel]))
 
       stop("No recorded relationship for requested conversions: ",
            paste(bad, collapse = ", "))
