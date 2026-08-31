@@ -69,9 +69,11 @@ test_that("All srp units are present in base units for aliases and models", {
 ################################################################################
 
 test_that("srp models are as expected", {
+
   srp_models <- purrr::map(srp, ~ base[[.x]]$model)
 
   purrr::iwalk(srp_models, function(model, cat) {
+
     expect_true(model$slope == 1,
       info = paste0(
         "Model incorrect for ",
@@ -93,6 +95,7 @@ test_that("srp models are as expected", {
 ################################################################################
 
 test_that("SRP units are covered and expected", {
+
   srp_base <- purrr::map_chr(base, "srp")
 
   srp_covered <- srp_base %in% srp
