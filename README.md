@@ -1,5 +1,5 @@
 
-# The `unicon` R Package <img src="man/figures/logo_trinity.png" align="right" height="138" /></a>
+# The `unicon` R Package <img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
