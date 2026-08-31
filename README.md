@@ -6,7 +6,8 @@
 [![R-CMD-check](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml)
 [![lint](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml)
 [![test-and-snapshots](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml)
-[![test-coverage](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jenny-watson/unicon/graph/badge.svg)](https://app.codecov.io/gh/jenny-watson/unicon)
 <!-- badges: end -->
 
 *Reliable, transparent unit conversions in a `tidyverse` environment*
