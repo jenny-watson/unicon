@@ -47,6 +47,12 @@ This package is hosted on GitHub and can be installed using the `remotes` packag
 remotes::install_github("jenny-watson/unicon@*release")
 ```
 
+You can also get the offical release from CRAN:
+
+```{r}
+install.packages("unicon")
+```
+
 ## Acknowledgements
 
 The authors would like to thank Tom Watson for designing our hex sticker. If you would like to use his services, please contact him via [Instagram](https://www.instagram.com/tom_watson_art).
