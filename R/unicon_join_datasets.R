@@ -93,7 +93,7 @@ unicon_join_datasets <- function(base,
     ## ensure units only derived that are in base data, NA otherwise
     filter(
       .data$x %in% base$category,
-      .data$y %in% base$category,
+      .data$y %in% base$category
     ) |>
     ## join to x
     left_join(
@@ -154,25 +154,18 @@ unicon_join_datasets <- function(base,
       )
     )
 
-  if (all(derived$x %in% base$category) ||
-        all(derived$y %in% base$category)) {
-    warning <- derived |>
-      filter(
-        !.data$x %in% base$category |
-          !.data$y %in% base$category
-      )
+  all_x_in_base <- all(derived$x %in% base$category)
+  all_y_in_base <- all(derived$y %in% base$category)
+
+  if (!all_x_in_base || !all_y_in_base) {
+    missing <- derived |>
+      filter(!.data$x %in% base$category | !.data$y %in% base$category)
 
     warning("Derived data is not just made of base units. Please check all units are present in base data.") # nolint
-    print(warning)
+    print(missing)
   }
 
-  if (all(derived$x %in% base$category) &&
-        all(derived$y %in% base$category)) {
-    warning <- derived |>
-      filter(
-        !.data$x %in% base$category,
-        !.data$y %in% base$category
-      )
+  if (!all_x_in_base && !all_y_in_base) {
 
     stop("Derived data is not made of base units. Add missing units to base data.") # nolint
     print(warning)

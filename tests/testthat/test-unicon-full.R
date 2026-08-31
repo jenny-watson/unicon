@@ -177,55 +177,6 @@ test_that("unicon_full temperature SRP fallback returns celsius values", {
   expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
 })
 
-
-test_that("unicon_full fahrenheit to celsius uses intercept correctly", {
-  # 32°F = 0°C, 212°F = 100°C, -40°F = -40°C
-  out <- unicon_full(c(32, 212, -40), "fahrenheit", "celsius")
-  expect_equal(out, c(0, 100, -40), tolerance = 0.01)
-})
-
-test_that("unicon_full celsius to kelvin uses intercept correctly", {
-  # 0°C = 273.15 K, 100°C = 373.15 K, -273.15°C = 0 K (absolute zero)
-  out <- unicon_full(c(0, 100, -273.15), "celsius", "kelvin")
-  expect_equal(out, c(273.15, 373.15, 0), tolerance = 0.001)
-})
-
-test_that("unicon_full kelvin to celsius uses intercept correctly", {
-  # 273.15 K = 0°C, 373.15 K = 100°C
-  out <- unicon_full(c(273.15, 373.15), "kelvin", "celsius")
-  expect_equal(out, c(0, 100), tolerance = 0.001)
-})
-
-test_that("unicon_full fahrenheit to kelvin chain uses intercept correctly", {
-  # 32°F = 273.15 K, 212°F = 373.15 K
-  out <- unicon_full(c(32, 212), "fahrenheit", "kelvin")
-  expect_equal(out, c(273.15, 373.15), tolerance = 0.01)
-})
-
-test_that("unicon_full temperature round-trip celsius->fahrenheit->celsius", {
-  original <- c(0, 37, 100, -40)
-  via_f <- unicon_full(original, "celsius", "fahrenheit")
-  back <- unicon_full(via_f, "fahrenheit", "celsius")
-  expect_equal(back, original, tolerance = 0.01)
-})
-
-test_that("unicon_full temperature round-trip celsius->kelvin->celsius", {
-  original <- c(0, 37, 100)
-  via_k <- unicon_full(original, "celsius", "kelvin")
-  back <- unicon_full(via_k, "kelvin", "celsius")
-  expect_equal(back, original, tolerance = 0.001)
-})
-
-test_that("unicon_full temperature SRP fallback returns celsius values", {
-  # When no unit_out given, SRP for temperature is Celsius
-  msgs <- capture.output(
-    out <- unicon_full(c(32, 212), "fahrenheit", pull = FALSE),
-    type = "message"
-  )
-  expect_equal(out$id_out, c("C", "C"))
-  expect_equal(out$value_out, c(0, 100), tolerance = 0.01)
-})
-
 ## ---- row-count preservation and duplicate rows ------------------------------
 
 test_that("unicon_full output row count equals input length (valid units)", {

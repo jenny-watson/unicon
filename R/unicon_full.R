@@ -72,10 +72,10 @@ unicon_full <- function(value_in,
   alias_in <- str_replace_all(str_to_lower(unit_in), "\\s+", "")
   alias_out <- str_replace_all(str_to_lower(unit_out), "\\s+", "")
 
-  if (
-    any(alias_in %in% .unicon_state$unit_alias$alias) ||
-      any(alias_out %in% .unicon_state$unit_alias$alias)
-  ) {
+  has_alias_in <- any(alias_in %in% .unicon_state$unit_alias$alias, na.rm = TRUE) #nolint
+  has_alias_out <- any(alias_out %in% .unicon_state$unit_alias$alias, na.rm = TRUE) #nolint
+
+  if (has_alias_in || has_alias_out) {
     ## if id_out is NA, replace with srp (default functionality in unicon_lite)
 
     check_id_out <- .unicon_state$unit_alias |>

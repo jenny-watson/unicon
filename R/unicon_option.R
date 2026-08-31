@@ -20,7 +20,9 @@ unicon_option <- function(value_in,
                           unit_out,
                           extras) {
 
-  if (!is.character(unit_out) || any(is.na(unit_out))) {
+  if (!is.character(unit_out)
+      || length(unit_out) < 1L
+      || any(is.na(unit_out))) {
     stop("Argument `unit_out` must be a character vector and must not contain NA values.")
   }
 
@@ -191,6 +193,20 @@ unicon_option <- function(value_in,
     )
 
   if (nrow(cat_diff) != 0) {
+
+    missing_rel <- is.na(cat_diff$y) | is.na(cat_diff$operator)
+
+    if (any(missing_rel)) {
+
+      bad <- unique(
+        paste0(
+          cat_diff$category_in[missing_rel],
+          " -> ",
+          cat_diff$category_out[missing_rel]))
+
+      stop("No recorded relationship for requested conversions: ",
+           paste(bad, collapse = ", "))
+    }
 
     diff_out <- unicon_advance(
       x_value_in = cat_diff$value_in,

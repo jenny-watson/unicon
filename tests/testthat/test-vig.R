@@ -14,7 +14,7 @@ test_that("documented unicon_full and unicon_lite examples stay aligned", {
     unicon_full(
       value_in = raw_values,
       unit_in  = raw_units,
-      unit_out = unit_out,
+      unit_out = unit_out
     ),
     unicon_lite(
       value_in = raw_values,
