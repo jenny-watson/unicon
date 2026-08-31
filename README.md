@@ -68,6 +68,12 @@ This package is hosted on GitHub and can be installed using the
 remotes::install_github("jenny-watson/unicon@*release")
 ```
 
+You can also get the offical release from CRAN:
+
+``` r
+install.packages("unicon")
+```
+
 ## Acknowledgements
 
 The authors would like to thank Tom Watson for designing our hex
