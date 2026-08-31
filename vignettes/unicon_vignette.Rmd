@@ -174,7 +174,7 @@ print(unicon_help(), n = 10L)
 
 # Adding missing database information
 
-Please raise an issue in the [GitHub](https://github.com/Agxiata/unicon/) repository and the authors will add these in. 
+Please raise an issue in the [GitHub](https://github.com/jenny-watson/unicon/) repository and the authors will add these in. 
 
 # Caveats
 

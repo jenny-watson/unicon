@@ -3,10 +3,10 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/R-CMD-check.yaml)
-[![lint](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/lint.yaml)
-[![test-and-snapshots](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-and-snapshots.yaml)
-[![test-coverage](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/Agxiata/unicon/actions/workflows/test-coverage.yaml)
+[![R-CMD-check](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/R-CMD-check.yaml)
+[![lint](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/lint.yaml)
+[![test-and-snapshots](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-and-snapshots.yaml)
+[![test-coverage](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jenny-watson/unicon/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 *Reliable, transparent unit conversions in a `tidyverse` environment*
@@ -55,7 +55,7 @@ work, please cite it as:
 
 Watson, J. & Sykes, A. J. (2026) `unicon`: Reliable, transparent unit
 conversions in a tidyverse environment. Version 0.0.0.9000. Available at
-<https://github.com/Agxiata/unicon/>.
+<https://github.com/jenny-watson/unicon/>.
 
 ## Installation
 
@@ -64,7 +64,7 @@ This package is hosted on GitHub and can be installed using the
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("Agxiata/unicon@*release")
+remotes::install_github("jenny-watson/unicon@*release")
 ```
 
 ## Acknowledgements
