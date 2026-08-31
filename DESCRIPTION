@@ -2,7 +2,7 @@ Package: unicon
 Title: Convert units using the International System of Units (SI)
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Jenny", "Watson", , "jennyblue@hotmail.co.uk", role = c("aut", "cre")),
+    person("Jenny", "Watson", , "jennyblue@hotmail.co.uk", role = c("aut", "cre", "cph")),
     person("Alasdair", "Sykes", , "alasdairsykes@gmail.com", role = "aut")
     )
 Description: Convert units from one unit to another using the International System of Units (SI). Users can choose which units are output.
